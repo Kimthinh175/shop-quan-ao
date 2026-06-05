@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Tồn kho | CLOSET Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 99px; }
+
+        /* ── Sidebar ── */
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #a5b4fc; transition: all 0.18s; cursor: pointer; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-link.active { background: rgba(255,255,255,0.12); color: #fff; }
+        .sidebar-link i { width: 20px; text-align: center; font-size: 14px; }
+
+        /* ── Input ── */
+        .inp { width: 100%; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-family: inherit; outline: none; background: #fff; transition: border-color 0.18s; color: #111; }
+        .inp:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.08); }
+        .inp::placeholder { color: #9ca3af; }
+        select.inp { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 14px; padding-right: 36px; }
+
+        /* ── Modal overlay ── */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal-box { background: #fff; border-radius: 20px; width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.2); transform: translateY(24px) scale(0.98); transition: transform 0.25s; }
+        .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+
+        /* ── Badge ── */
+        .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 99px; }
+
+        /* ── Receipt type tabs ── */
+        .rcpt-tab { flex: 1; padding: 14px; border-radius: 12px; border: 2px solid #e5e7eb; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .rcpt-tab.active { border-color: #6366f1; background: #eef2ff; }
+        .rcpt-tab .tab-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .rcpt-tab.active .tab-icon { background: #6366f1; color: white; }
+        .rcpt-tab:not(.active) .tab-icon { background: #f3f4f6; color: #9ca3af; }
+        .rcpt-tab p { font-size: 12px; font-weight: 800; color: #374151; }
+        .rcpt-tab span { font-size: 11px; color: #9ca3af; font-weight: 500; }
+
+        /* ── Btn ── */
+        .btn-primary { background: #6366f1; color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 13px; font-weight: 800; font-family: inherit; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-outline { background: transparent; color: #6b7280; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 11px 24px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.2s; }
+        .btn-outline:hover { border-color: #374151; color: #374151; }
+
+        /* ── Import receipt list view ── */
+        .receipt-card { border: 1.5px solid #e5e7eb; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: box-shadow 0.18s; cursor: pointer; background: #fff; }
+        .receipt-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.07); border-color: #a5b4fc; }
+
+        /* ── Stats cards ── */
+        .stat-card { background: #fff; border-radius: 16px; padding: 20px; border: 1.5px solid #f3f4f6; }
+
+        /* Animations */
+        @keyframes fadeSlideUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform:none; } }
+        .anim { animation: fadeSlideUp 0.4s ease both; }
+
+        /* Toast */
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(8px); background: #1e1b4b; color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 13px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.15); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 9999; display: flex; items-center; gap: 10px; }
+        #toast i { color: #34d399; font-size: 16px; }
+    </style>
+</head>
+<body class="bg-[#f4f5f7] text-slate-900 flex h-screen overflow-hidden">
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════════ -->
+<aside class="w-60 bg-[#1e1b4b] flex flex-col py-6 px-4 shrink-0 overflow-y-auto">
+    <!-- Logo -->
+    <div class="px-2 mb-8">
+        <div class="font-serif text-2xl font-black text-white tracking-tight" style="font-family:'Playfair Display',serif;">CLOSET.</div>
+        <div class="text-[10px] font-bold text-indigo-400 tracking-widest uppercase mt-0.5">Admin Panel</div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 space-y-1">
+        <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mb-2">Chính</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fa-solid fa-chart-pie"></i> Tổng quan</a>
+        <a href="orders.html" class="sidebar-link"><i class="fa-solid fa-receipt"></i> Đơn hàng</a>
+        <a href="pos.html" class="sidebar-link"><i class="fa-solid fa-cash-register"></i> Bán hàng (POS)</a>
+
+        <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mt-5 mb-2">Kho hàng</div>
+        <a href="products.html" class="sidebar-link"><i class="fa-solid fa-box"></i> Sản phẩm</a>
+        <a href="inventory.html" class="sidebar-link active"><i class="fa-solid fa-warehouse"></i> Tồn kho</a>
+        <a href="categories.html" class="sidebar-link"><i class="fa-solid fa-tags"></i> Danh mục</a>
+
+        <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mt-5 mb-2">Khác</div>
+        <a href="customers.html" class="sidebar-link"><i class="fa-solid fa-users"></i> Khách hàng</a>
+        <a href="settings.html" class="sidebar-link"><i class="fa-solid fa-gear"></i> Cài đặt</a>
+    </nav>
+
+    <!-- User -->
+    <div class="border-t border-indigo-900 pt-4 mt-4 flex items-center gap-3 px-2">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-black text-sm flex-shrink-0">A</div>
+        <div>
+            <p class="text-white text-xs font-bold leading-tight">Admin</p>
+            <p class="text-indigo-400 text-[10px]">admin@closet.vn</p>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════════ -->
+<main class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Top Bar -->
+    <header class="h-16 bg-white border-b border-slate-200/60 px-8 flex items-center justify-between shrink-0 gap-4">
+        <div class="flex items-center gap-3">
+            <h1 class="text-base font-black text-slate-900">Quản lý tồn kho & Phiếu nhập</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="btn-primary text-sm flex items-center gap-2" onclick="showReceiptModal(null)">
+                <i class="fa-solid fa-plus"></i> Tạo phiếu nhập mới
+            </button>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-5 gap-4 mb-6 anim">
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tổng tồn kho</span>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                        <i class="fa-solid fa-warehouse text-emerald-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-slate-900">347</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">đơn vị trong kho</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sắp hết hàng</span>
+                    <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-amber-500">3</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">tồn &lt; 10 đơn vị</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Phiếu nhập</span>
+                    <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                        <i class="fa-solid fa-file-import text-purple-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-slate-900">12</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">trong tháng này</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Giá trị kho</span>
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                        <i class="fa-solid fa-coins text-indigo-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-slate-900">2.1B</p>
+                <p class="text-xs text-emerald-500 font-bold mt-1">VNĐ</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sản phẩm lỗi</span>
+                    <div class="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center">
+                        <i class="fa-solid fa-box-open text-rose-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-rose-500">2</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">cần xử lý</p>
+            </div>
+        </div>
+
+        <h2 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-4">Danh sách phiếu nhập kho</h2>
+
+        <!-- ═══ RECEIPTS VIEW ════════════════════════════════ -->
+        <div id="view-receipts" class="anim space-y-3">
+            <div class="receipt-card" onclick="showReceiptDetailModal()">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0 text-purple-600"><i class="fa-solid fa-ruler-combined"></i></div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <p class="text-sm font-black text-slate-900">PN-2026-0012</p>
+                        <span class="badge bg-purple-50 text-purple-600">Full size</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-0.5">Classic Midnight Suit · Navy Blue · 5 size</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-black text-slate-900">120 đơn vị</p>
+                    <p class="text-[11px] text-slate-400">22/05/2026</p>
+                </div>
+                <span class="badge bg-emerald-50 text-emerald-600">Đã nhập</span>
+            </div>
+
+            <div class="receipt-card" onclick="showReceiptDetailModal()">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0 text-indigo-600"><i class="fa-solid fa-palette"></i></div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <p class="text-sm font-black text-slate-900">PN-2026-0011</p>
+                        <span class="badge bg-indigo-50 text-indigo-600">Full màu</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-0.5">Merino Knitwear · Size M · 3 màu</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-black text-slate-900">90 đơn vị</p>
+                    <p class="text-[11px] text-slate-400">20/05/2026</p>
+                </div>
+                <span class="badge bg-emerald-50 text-emerald-600">Đã nhập</span>
+            </div>
+
+            <div class="receipt-card" onclick="showReceiptDetailModal()">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0 text-amber-600"><i class="fa-solid fa-ruler-combined"></i></div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <p class="text-sm font-black text-slate-900">PN-2026-0010</p>
+                        <span class="badge bg-purple-50 text-purple-600">Full size</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-0.5">Heritage Overcoat · Camel Brown · 4 size</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-black text-slate-900">60 đơn vị</p>
+                    <p class="text-[11px] text-slate-400">15/05/2026</p>
+                </div>
+                <span class="badge bg-amber-50 text-amber-600">Chờ xác nhận</span>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: TẠO PHIẾU NHẬP
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-receipt" onclick="closeModalOnBg(event,'modal-receipt')">
+  <div class="modal-box" style="max-width:680px;">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-7 py-5 border-b border-slate-100">
+        <div>
+            <h2 class="text-base font-black text-slate-900">Tạo phiếu nhập hàng</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Nhập số ri — BE sẽ cộng số ri vào mỗi biến thể tương ứng</p>
+        </div>
+        <button onclick="closeModal('modal-receipt')" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 hover:bg-slate-200 flex items-center justify-center transition-all"><i class="fa-solid fa-xmark text-sm"></i></button>
+    </div>
+
+    <div class="p-7 space-y-6">
+
+        <!-- Select Product -->
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Sản phẩm</label>
+            <select class="inp" id="receipt-product" onchange="updatePreview()">
+                <option value="Classic Midnight Suit">Classic Midnight Suit</option>
+                <option value="Heritage Overcoat">Heritage Overcoat</option>
+                <option value="Merino Knitwear">Merino Knitwear</option>
+                <option value="Chelsea Heritage Boots">Chelsea Heritage Boots</option>
+            </select>
+        </div>
+
+        <!-- Type selection -->
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-3 block">Kiểu phiếu nhập</label>
+            <div class="flex gap-3">
+                <div class="rcpt-tab active" id="tab-fullsize" onclick="selectReceiptType('full-size')">
+                    <div class="tab-icon"><i class="fa-solid fa-ruler-combined"></i></div>
+                    <p>Nhập Full Size</p>
+                    <span>1 màu · tất cả size</span>
+                </div>
+                <div class="rcpt-tab" id="tab-fullcolor" onclick="selectReceiptType('full-color')">
+                    <div class="tab-icon"><i class="fa-solid fa-palette"></i></div>
+                    <p>Nhập Full Màu</p>
+                    <span>1 size · tất cả màu</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Size: chọn màu -->
+        <div id="panel-full-size">
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Màu sắc</label>
+            <select class="inp" id="select-color" style="max-width:220px;" onchange="updatePreview()">
+                <option>Navy Blue</option>
+                <option>Black</option>
+                <option>Charcoal</option>
+                <option>Camel Brown</option>
+                <option>White</option>
+                <option>Burgundy</option>
+            </select>
+        </div>
+
+        <!-- Full Color: chọn size -->
+        <div id="panel-full-color" class="hidden">
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Size</label>
+            <select class="inp" id="select-size" style="max-width:180px;" onchange="updatePreview()">
+                <option>S</option>
+                <option>M</option>
+                <option>L</option>
+                <option>XL</option>
+                <option>XXL</option>
+            </select>
+        </div>
+
+        <!-- Preview: 1 ri gồm gì -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">1 ri bao gồm</p>
+            <div class="flex flex-wrap gap-2" id="ri-preview">
+                <!-- JS render -->
+            </div>
+        </div>
+
+        <!-- Số ri nhập -->
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Số ri nhập</label>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center border-2 border-slate-200 rounded-xl overflow-hidden" style="width:160px;">
+                    <button type="button" onclick="changeRi(-1)" class="px-4 py-3 text-slate-400 hover:bg-slate-100 hover:text-slate-700 font-black text-lg transition-all">−</button>
+                    <input type="number" id="ri-count" value="1" min="1" max="9999"
+                        class="flex-1 text-center font-black text-lg border-none outline-none bg-transparent"
+                        oninput="updateSummary()">
+                    <button type="button" onclick="changeRi(1)" class="px-4 py-3 text-slate-400 hover:bg-slate-100 hover:text-slate-700 font-black text-lg transition-all">+</button>
+                </div>
+                <p class="text-sm text-slate-500">ri <span class="text-slate-300 mx-1">×</span> <span id="ri-variant-count" class="font-black text-slate-700">5</span> biến thể</p>
+            </div>
+        </div>
+
+        <!-- Note + Date -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Ngày nhập</label>
+                <input type="date" class="inp" id="receipt-date">
+            </div>
+            <div>
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Nhà cung cấp</label>
+                <input type="text" class="inp" placeholder="Tên nhà cung cấp..." value="Xưởng May A">
+            </div>
+        </div>
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Ghi chú</label>
+            <input type="text" class="inp" placeholder="Ghi chú phiếu nhập (tùy chọn)...">
+        </div>
+
+        <!-- Summary -->
+        <div class="bg-indigo-50 rounded-xl px-5 py-4 flex items-center justify-between">
+            <div>
+                <p class="text-xs font-bold text-indigo-600">Tổng số lượng nhập vào kho</p>
+                <p class="text-[11px] text-indigo-400 mt-0.5" id="summary-detail">1 ri × 5 biến thể</p>
+            </div>
+            <div class="text-2xl font-black text-indigo-700" id="total-qty-display">5 đơn vị</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-end gap-3 px-7 py-5 border-t border-slate-100">
+        <button class="btn-outline" onclick="closeModal('modal-receipt')">Huỷ</button>
+        <button class="btn-primary flex items-center gap-2" onclick="submitReceipt()">
+            <i class="fa-solid fa-check text-xs"></i> Lưu phiếu nhập
+        </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg"></span></div>
+
+<script>
+const SIZES = ['S','M','L','XL','XXL'];
+const COLORS = [
+    { name: 'Navy Blue',   hex: '#1e3a8a' },
+    { name: 'Black',       hex: '#000000' },
+    { name: 'Charcoal',    hex: '#374151' },
+    { name: 'Camel Brown', hex: '#b45309' },
+    { name: 'White',       hex: '#ffffff' },
+    { name: 'Burgundy',    hex: '#bf360c' },
+];
+
+let currentReceiptType = 'full-size';
+
+// ─── INIT ─────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('receipt-date').value = new Date().toISOString().split('T')[0];
+    updatePreview();
+});
+
+// ─── MODAL HELPERS ───────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+// ─── SHOW RECEIPT MODAL ──────────────────────────────────
+function showReceiptModal(type, product) {
+    if (product) document.getElementById('receipt-product').value = product;
+    document.getElementById('ri-count').value = 1;
+    selectReceiptType(type || 'full-size');
+    openModal('modal-receipt');
+}
+
+// ─── SELECT RECEIPT TYPE ─────────────────────────────────
+function selectReceiptType(type) {
+    currentReceiptType = type;
+    document.getElementById('tab-fullsize').classList.toggle('active', type === 'full-size');
+    document.getElementById('tab-fullcolor').classList.toggle('active', type === 'full-color');
+    document.getElementById('panel-full-size').classList.toggle('hidden', type !== 'full-size');
+    document.getElementById('panel-full-color').classList.toggle('hidden', type !== 'full-color');
+    updatePreview();
+}
+
+// ─── +/- ri buttons ──────────────────────────────────────
+function changeRi(delta) {
+    const inp = document.getElementById('ri-count');
+    const val = Math.max(1, (parseInt(inp.value) || 1) + delta);
+    inp.value = val;
+    updateSummary();
+}
+
+// ─── UPDATE PREVIEW (1 ri gồm gì) ────────────────────────
+function updatePreview() {
+    const preview = document.getElementById('ri-preview');
+    let tags = '';
+    let count = 0;
+
+    if (currentReceiptType === 'full-size') {
+        SIZES.forEach(s => {
+            tags += `<span class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700">
+                <i class="fa-solid fa-ruler text-indigo-400 text-[10px]"></i> ${s}
+            </span>`;
+        });
+        count = SIZES.length;
+    } else {
+        COLORS.forEach(c => {
+            tags += `<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700">
+                <span style="width:10px;height:10px;border-radius:50%;background:${c.hex};border:1px solid rgba(0,0,0,0.15);display:inline-block;flex-shrink:0;"></span>
+                ${c.name}
+            </span>`;
+        });
+        count = COLORS.length;
+    }
+
+    preview.innerHTML = tags;
+    document.getElementById('ri-variant-count').textContent = count;
+    updateSummary();
+}
+
+// ─── UPDATE SUMMARY ──────────────────────────────────────
+function updateSummary() {
+    const ri = parseInt(document.getElementById('ri-count').value) || 0;
+    const varCount = currentReceiptType === 'full-size' ? SIZES.length : COLORS.length;
+    const total = ri * varCount;
+    document.getElementById('total-qty-display').textContent = total + ' đơn vị';
+    document.getElementById('summary-detail').textContent = ri + ' ri × ' + varCount + ' biến thể';
+}
+
+// ─── SUBMIT RECEIPT ──────────────────────────────────────
+function submitReceipt() {
+    closeModal('modal-receipt');
+    showToast('Phiếu nhập đã được lưu thành công!');
+}
+
+// ─── RECEIPT DETAIL MODAL ──────────────────────────────────
+function showReceiptDetailModal() {
+    showToast('Tính năng xem chi tiết phiếu nhập đang phát triển.');
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(8px)'; }, 3000);
+}
+</script>
+
+</body>
+</html>

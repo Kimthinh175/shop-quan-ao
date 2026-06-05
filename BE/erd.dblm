@@ -1,0 +1,242 @@
+Table products {
+  id varchar [pk]
+  category_id varchar 
+  brand_id varchar 
+  season_id varchar 
+  gender_id varchar 
+  sport_id varchar 
+  material_id varchar 
+  form_id varchar 
+  name varchar 
+  main_img varchar 
+  description varchar 
+  rate varchar 
+  create_at varchar 
+}
+
+Table categories {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+  parent_id varchar 
+}
+
+Table brand {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+}
+
+Table product_variants {
+  id varchar [pk]
+  product_id varchar 
+  sku varchar 
+  quantity varchar 
+  current_lot varchar 
+  current_lot_sold varchar 
+  lots_history varchar 
+  sold varchar 
+  size varchar 
+  color varchar 
+  price varchar 
+}
+
+Table order_items {
+  id varchar [pk]
+  order_id varchar 
+  total_quantity varchar 
+  variant_snapshot varchar 
+  unit_price varchar 
+  create_at varchar 
+}
+
+Table orders {
+  id varchar [pk]
+  promotion_id varchar 
+  customer_id varchar 
+  voucher_id varchar 
+  customer_info varchar 
+  total_price varchar 
+  discount_amount varchar 
+  total_amount varchar 
+  status varchar 
+  payment_method varchar 
+  payment_status varchar 
+  receiver_address varchar 
+  receiver_name varchar 
+  receiver_phone varchar 
+  shipping_fee varchar 
+  gift_snapshot varchar 
+  create_at varchar 
+}
+
+Table customers {
+  id varchar [pk]
+  phone varchar 
+  points varchar 
+  unit_price varchar 
+  create_at varchar 
+}
+
+Table users {
+  id varchar [pk]
+  customer_id varchar 
+  username varchar 
+  password varchar 
+  name varchar 
+  avatar_url varchar 
+  avatar_url varchar 
+  google_id varchar 
+  create_at varchar 
+}
+
+Table address {
+  id varchar [pk]
+  user_id varchar 
+  index varchar 
+  address varchar 
+  phone varchar 
+  name varchar 
+}
+
+Table purchase_orders {
+  id varchar [pk]
+  supplier_id varchar 
+  total_amount varchar 
+  status varchar 
+  create_at varchar 
+}
+
+Table suppliers {
+  id varchar [pk]
+  name varchar 
+  phone varchar 
+  address varchar 
+}
+
+Table purchase_order_items {
+  id varchar [pk]
+  purchase_order_id varchar 
+  product_variant_id varchar 
+  quantity varchar 
+  status varchar 
+  create_at varchar 
+}
+
+Table order_item_lot {
+  id varchar [pk]
+  order_item_id varchar 
+  poi_id varchar 
+  quantity varchar 
+  cost_price varchar 
+}
+
+Table seasons {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+}
+
+Table genders {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+}
+
+Table sports {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+}
+
+Table materials {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+}
+
+Table form {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+}
+
+Table promotions {
+  id varchar [pk]
+  name varchar 
+  code varchar 
+  condition_type varchar 
+  min_amount varchar 
+  min_quantity varchar 
+  is_active varchar 
+  usage_limit varchar 
+  start_time varchar 
+  end_time varchar 
+}
+
+Table detail_images {
+  id varchar [pk]
+  product_variant_id varchar 
+  index varchar 
+  image_url varchar 
+}
+
+Table notification {
+  id varchar [pk]
+  user_id varchar 
+  title varchar 
+  massage varchar 
+  is_read varchar 
+  created_at varchar 
+}
+
+Table voucher {
+  id varchar [pk]
+  code varchar [pk]
+  status varchar 
+  value varchar 
+  condition varchar 
+  time_start varchar 
+  time_end varchar 
+}
+
+Table product_reviews {
+  id varchar [pk]
+  product_id varchar 
+  user_id varchar 
+  order_detail_id varchar 
+  rating varchar 
+  content varchar 
+}
+
+Table promotion_rewards {
+  id varchar [pk]
+  promotion_id varchar 
+  gift_variant_id varchar 
+  reward_type varchar 
+  discount_amount varchar 
+  discount_percent varchar 
+  max_discount_amount varchar 
+  gift_quantity varchar 
+}
+
+Table admin {
+  id varchar [pk]
+  username varchar 
+  password varchar 
+  name varchar 
+  avatar_url varchar 
+  log varchar 
+  create_at varchar 
+}
+
+Table articals {
+  id varchar [pk]
+  title varchar 
+  content varchar 
+  slug varchar 
+  imgs varchar 
+  video varchar 
+  create_at varchar 
+}
+

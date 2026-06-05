@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng | CLOSET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, .font-serif, h1, h2, h3, h4, h5, p, span, div, a { font-family: Arial, Helvetica, sans-serif !important; }
+        * { letter-spacing: normal !important; }
+        body { background-color: #faf9f6; }
+        .font-black { font-weight: 700 !important; }
+        .italic { font-style: normal !important; }
+
+        /* Input styles */
+        .input-field {
+            width: 100%;
+            border: 1.5px solid #e2e2e2;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            outline: none;
+            background: #fff;
+            transition: border-color 0.2s;
+            color: #1a1a1a;
+        }
+        .input-field:focus { border-color: #1a1a1a; }
+        .input-field::placeholder { color: #aaa; }
+
+        /* Payment method radio */
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1.5px solid #e2e2e2;
+            border-radius: 14px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fff;
+        }
+        .payment-option:hover { border-color: #1a1a1a; background: #fafaf8; }
+        .payment-option.active { border-color: #1a1a1a; background: #fafaf8; }
+        .payment-option input[type="radio"] { display: none; }
+
+        .radio-circle {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: border-color 0.2s;
+        }
+        .payment-option.active .radio-circle { border-color: #1a1a1a; }
+        .radio-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            display: none;
+        }
+        .payment-option.active .radio-dot { display: block; }
+
+        /* Quantity control */
+        .qty-btn {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 1.5px solid #e2e2e2;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            background: #fff;
+        }
+        .qty-btn:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+
+        /* Voucher input */
+        .voucher-wrap {
+            display: flex;
+            border: 1.5px solid #e2e2e2;
+            border-radius: 50px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .voucher-wrap input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: transparent;
+        }
+        .voucher-btn {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 0 24px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 0 50px 50px 0;
+            transition: background 0.2s;
+        }
+        .voucher-btn:hover { background: #4f46e5; }
+
+        /* Checkbox custom */
+        .check-wrap {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .custom-checkbox {
+            width: 18px; height: 18px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.2s;
+        }
+        .custom-checkbox.checked { border-color: #1a1a1a; background: #1a1a1a; }
+
+        /* Section separator line */
+        .section-divider { border: none; border-top: 1px solid #e8e8e4; margin: 24px 0; }
+
+        /* Sticky panel */
+        .sticky-panel { position: sticky; top: 100px; }
+
+        /* Cart item */
+        .cart-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid #f0f0ea; }
+        .cart-item:last-child { border-bottom: none; }
+
+        /* Nav */
+        .nav-scrolled { 
+            background: rgba(255,255,255,0.92); 
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        /* Place order button */
+        .btn-order {
+            width: 100%;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 18px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .btn-order:hover { background: #4f46e5; }
+
+        /* Empty cart state */
+        .empty-state { text-align: center; padding: 80px 0; }
+
+        /* Progress steps */
+        .step { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+        .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+        .step-line { flex: 1; height: 1px; background: #e0e0e0; }
+
+        /* Label */
+        .form-label { font-size: 12px; font-weight: 700; color: #666; letter-spacing: 0.05em; margin-left: 4px; margin-bottom: 6px; display: block; }
+    </style>
+</head>
+<body class="text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
+
+    <!-- Functional Navigation Header -->
+    <nav id="main-nav" class="sticky top-0 w-full z-[100] bg-white border-b border-slate-100 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-6">
+            <!-- Logo -->
+            <a href="index.html" class="font-serif text-3xl font-black tracking-tighter text-indigo-900 shrink-0">CLOSET.</a>
+            
+            <!-- Progress Steps (Desktop) -->
+            <div class="hidden md:flex items-center gap-3 flex-1 max-w-xs mx-auto">
+                <div class="step">
+                    <div class="step-dot bg-slate-900 text-white">1</div>
+                    <span class="text-slate-900">Giỏ hàng</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step text-slate-400">
+                    <div class="step-dot border border-slate-300 text-slate-400">2</div>
+                    <span>Hoàn tất</span>
+                </div>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-5 text-slate-700 shrink-0">
+                <a href="shop.html" class="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-all">← Mua sắm</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-20">
+        <div class="container mx-auto px-4 md:px-8 max-w-7xl">
+            
+            <!-- Page Title -->
+            <h1 class="font-serif text-4xl md:text-5xl font-black italic mb-10">Giỏ hàng của bạn.</h1>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-start">
+
+                <!-- ===== LEFT COLUMN: Form ===== -->
+                <div class="lg:col-span-7 space-y-6">
+
+                    <!-- Loyalty Banner -->
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-4 flex items-center gap-4">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-crown text-white text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-bold text-slate-800">Nhận ngay <span class="text-indigo-600">Voucher -15%</span> khi tham gia CLOSET Club</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Hoàn tiền trên mọi đơn hàng và nhiều ưu đãi độc quyền.</p>
+                        </div>
+                        <button class="text-[10px] font-black uppercase tracking-widest bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition-all flex-shrink-0">Tham gia</button>
+                    </div>
+
+                    <!-- Shipping Info Form -->
+                    <div class="bg-white rounded-2xl p-6 md:p-8">
+                        <h2 class="font-serif text-xl font-black italic mb-6">Thông tin vận chuyển</h2>
+
+                        <!-- Privacy consent -->
+                        <label class="check-wrap mb-5">
+                            <div class="custom-checkbox checked" id="consent-check">
+                                <i class="fa-solid fa-check text-white text-[9px]"></i>
+                            </div>
+                            <span class="text-xs text-slate-500 leading-relaxed">Bằng việc ấn nút đặt hàng, bạn xác nhận là đã đọc và hiểu về <a href="#" class="text-indigo-600 underline">chính sách bảo mật dữ liệu cá nhân</a> của chúng tôi.</span>
+                        </label>
+
+                        <div class="space-y-4">
+                            <!-- Name row -->
+                            <div class="flex gap-3">
+                                <div class="flex-1">
+                                    <label class="form-label">Họ và tên</label>
+                                    <div class="flex gap-2">
+                                        <select class="input-field" style="border-radius: 50px; width: 130px; flex-shrink: 0;">
+                                            <option>Anh</option>
+                                            <option>Chị</option>
+                                        </select>
+                                        <input type="text" class="input-field" placeholder="Nhập họ tên của bạn">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phone + Email -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="input-field" placeholder="Nhập số điện thoại">
+                                </div>
+                                <div>
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="input-field" placeholder="Nhập email của bạn">
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div>
+                                <label class="form-label">Địa chỉ</label>
+                                <input type="text" class="input-field" placeholder="Số nhà, tên đường...">
+                            </div>
+
+                            <!-- Province + District + Ward -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="form-label">Tỉnh / Thành phố</label>
+                                    <select class="input-field">
+                                        <option value="" disabled selected>Chọn tỉnh/thành phố</option>
+                                        <option>TP. Hồ Chí Minh</option>
+                                        <option>Hà Nội</option>
+                                        <option>Đà Nẵng</option>
+                                        <option>Cần Thơ</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label">Quận / Huyện</label>
+                                    <select class="input-field">
+                                        <option value="" disabled selected>Chọn quận/huyện</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label">Phường / Xã</label>
+                                    <select class="input-field">
+                                        <option value="" disabled selected>Chọn phường/xã</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Note -->
+                            <div>
+                                <label class="form-label">Ghi chú (tùy chọn)</label>
+                                <input type="text" class="input-field" placeholder="Ghi chú cho đơn hàng...">
+                            </div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <!-- Other receiver -->
+                        <label class="check-wrap cursor-pointer" id="receiver-toggle">
+                            <div class="custom-checkbox" id="receiver-check">
+                                <i class="fa-solid fa-check text-white text-[9px] hidden" id="receiver-check-icon"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-800">Gọi người khác nhận hàng (nếu có)</span>
+                        </label>
+                        <div id="receiver-form" class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 rounded-xl p-4">
+                            <input type="text" class="input-field" placeholder="Họ và tên người nhận">
+                            <input type="tel" class="input-field" placeholder="Số điện thoại người nhận">
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <!-- VAT Invoice -->
+                        <label class="check-wrap cursor-pointer">
+                            <div class="custom-checkbox" id="vat-check">
+                                <i class="fa-solid fa-check text-white text-[9px] hidden" id="vat-check-icon"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-800">Xuất hoá đơn VAT</span>
+                        </label>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="bg-white rounded-2xl p-6 md:p-8">
+                        <h2 class="font-serif text-xl font-black italic mb-6">Hình thức thanh toán</h2>
+                        <div class="space-y-3" id="payment-methods">
+                            
+                            <div class="payment-option active" data-method="cod">
+                                <input type="radio" name="payment" value="cod" checked>
+                                <div class="radio-circle"><div class="radio-dot"></div></div>
+                                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-money-bill-wave text-slate-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900">Thanh toán khi nhận hàng (COD)</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">Thanh toán bằng tiền mặt khi nhận hàng</p>
+                                </div>
+                            </div>
+
+                            <div class="payment-option" data-method="momo">
+                                <input type="radio" name="payment" value="momo">
+                                <div class="radio-circle"><div class="radio-dot"></div></div>
+                                <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style="background:#ae2070;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" class="w-full h-full object-cover" alt="MoMo" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-white text-xs font-black p-2\'>M</span>'">
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900">Ví MoMo</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">Thanh toán qua ví điện tử MoMo</p>
+                                </div>
+                            </div>
+
+                            <div class="payment-option" data-method="vnpay">
+                                <input type="radio" name="payment" value="vnpay">
+                                <div class="radio-circle"><div class="radio-dot"></div></div>
+                                <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-blue-600 flex items-center justify-center">
+                                    <span class="text-white text-[9px] font-black">VNPay</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900">VNPay</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">Thanh toán qua cổng VNPay, ATM, Internet Banking</p>
+                                </div>
+                            </div>
+
+                            <div class="payment-option" data-method="card">
+                                <input type="radio" name="payment" value="card">
+                                <div class="radio-circle"><div class="radio-dot"></div></div>
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-credit-card text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm font-bold text-slate-900">Thẻ tín dụng / Ghi nợ</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <i class="fa-brands fa-cc-visa text-blue-700 text-lg"></i>
+                                        <i class="fa-brands fa-cc-mastercard text-red-600 text-lg"></i>
+                                        <i class="fa-brands fa-cc-apple-pay text-slate-800 text-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ===== RIGHT COLUMN: Order Summary ===== -->
+                <div class="lg:col-span-5">
+                    <div class="sticky-panel space-y-5">
+
+                        <!-- Cart Items -->
+                        <div class="bg-white rounded-2xl p-6">
+                            <div class="flex items-center justify-between mb-5">
+                                <h2 class="font-serif text-lg font-black italic">Sản phẩm <span class="text-slate-400 font-normal not-italic text-sm">(2)</span></h2>
+                                <a href="shop.html" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all">+ Thêm sản phẩm</a>
+                            </div>
+
+                            <!-- Item 1 -->
+                            <div class="cart-item">
+                                <div class="w-20 h-24 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0">
+                                    <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400" class="w-full h-full object-cover" alt="Classic Midnight Suit">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs font-black uppercase tracking-wider text-slate-900 mb-1">Classic Midnight Suit</p>
+                                    <p class="text-[11px] text-slate-400 font-medium mb-3">Size: M | Navy Blue</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <button class="qty-btn" onclick="changeQty(this, -1)"><i class="fa-solid fa-minus text-[9px]"></i></button>
+                                            <span class="text-sm font-black w-5 text-center qty-value">1</span>
+                                            <button class="qty-btn" onclick="changeQty(this, 1)"><i class="fa-solid fa-plus text-[9px]"></i></button>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm font-black text-slate-900">7.500.000đ</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-300 hover:text-red-400 transition-all text-sm flex-shrink-0 mt-1" onclick="removeItem(this)" title="Xoá sản phẩm">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="cart-item">
+                                <div class="w-20 h-24 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0">
+                                    <img src="https://images.pexels.com/photos/3317434/pexels-photo-3317434.jpeg?auto=compress&cs=tinysrgb&w=400" class="w-full h-full object-cover" alt="Heritage Overcoat">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs font-black uppercase tracking-wider text-slate-900 mb-1">Heritage Overcoat</p>
+                                    <p class="text-[11px] text-slate-400 font-medium mb-3">Size: L | Camel Brown</p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <button class="qty-btn" onclick="changeQty(this, -1)"><i class="fa-solid fa-minus text-[9px]"></i></button>
+                                            <span class="text-sm font-black w-5 text-center qty-value">1</span>
+                                            <button class="qty-btn" onclick="changeQty(this, 1)"><i class="fa-solid fa-plus text-[9px]"></i></button>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm font-black text-slate-900">12.200.000đ</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-300 hover:text-red-400 transition-all text-sm flex-shrink-0 mt-1" onclick="removeItem(this)" title="Xoá sản phẩm">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Voucher -->
+                        <div class="bg-white rounded-2xl p-6">
+                            <h3 class="text-xs font-black uppercase tracking-widest text-slate-500 mb-3">Mã giảm giá</h3>
+                            <div class="voucher-wrap">
+                                <input type="text" id="voucher-input" placeholder="Nhập mã voucher của bạn">
+                                <button class="voucher-btn" onclick="applyVoucher()">Áp dụng</button>
+                            </div>
+                            <div id="voucher-msg" class="text-xs text-green-600 font-bold mt-2 hidden">
+                                <i class="fa-solid fa-check-circle mr-1"></i> Áp dụng mã thành công!
+                            </div>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="bg-white rounded-2xl p-6">
+                            <h3 class="text-xs font-black uppercase tracking-widest text-slate-500 mb-4">Tóm tắt đơn hàng</h3>
+                            
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-slate-600">Tạm tính (2 sản phẩm)</span>
+                                    <span class="text-sm font-bold text-slate-900" id="subtotal">19.700.000đ</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-slate-600">Phí vận chuyển</span>
+                                    <span class="text-sm font-bold text-green-600">Miễn phí</span>
+                                </div>
+                                <div class="flex justify-between items-center" id="discount-row" style="display:none!important;">
+                                    <span class="text-sm text-slate-600">Giảm giá</span>
+                                    <span class="text-sm font-bold text-red-500" id="discount-val">-0đ</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-slate-100 mt-4 pt-4 flex justify-between items-center">
+                                <span class="text-sm font-black uppercase tracking-widest text-slate-900">Tổng cộng</span>
+                                <span class="text-2xl font-black text-indigo-600" id="total">19.700.000đ</span>
+                            </div>
+
+                            <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">Thuế đã bao gồm. Phí vận chuyển (nếu có) sẽ được tính chính xác dựa trên địa chỉ giao hàng.</p>
+
+                            <button class="btn-order mt-5" onclick="placeOrder()">
+                                <i class="fa-solid fa-lock text-xs mr-2"></i>
+                                Đặt hàng ngay
+                            </button>
+
+                            <!-- Security badges -->
+                            <div class="flex items-center justify-center gap-5 mt-4">
+                                <div class="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+                                    <i class="fa-solid fa-shield-halved text-green-500"></i>
+                                    Bảo mật SSL
+                                </div>
+                                <div class="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+                                    <i class="fa-solid fa-rotate-left text-blue-500"></i>
+                                    Đổi trả 30 ngày
+                                </div>
+                                <div class="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+                                    <i class="fa-solid fa-truck text-orange-500"></i>
+                                    Ship toàn quốc
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Continue shopping link -->
+                        <div class="text-center">
+                            <a href="shop.html" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrow-left-long text-xs"></i>
+                                Tiếp tục mua sắm
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0b0c10] text-[#c5c6c7] pt-16 pb-10 relative overflow-hidden mt-10">
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <h3 class="font-serif text-2xl font-black text-white italic mb-2">CLOSET.</h3>
+                    <p class="text-xs text-slate-500">Quiet Luxury Fashion Store</p>
+                </div>
+                <div class="flex items-center gap-6 text-xs font-bold text-slate-400 tracking-wider">
+                    <a href="shop.html" class="hover:text-white transition-all">Cửa hàng</a>
+                    <a href="blog.html" class="hover:text-white transition-all">Blog</a>
+                    <a href="lookbook.html" class="hover:text-white transition-all">Lookbook</a>
+                    <a href="brand.html" class="hover:text-white transition-all">Thương hiệu</a>
+                </div>
+            </div>
+            <div class="border-t border-slate-800/40 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                <p>&copy; 2026 Closet Fashion Store. All Rights Reserved.</p>
+                <div class="flex gap-3 text-lg text-slate-600">
+                    <i class="fa-brands fa-cc-visa hover:text-white transition-all cursor-pointer"></i>
+                    <i class="fa-brands fa-cc-mastercard hover:text-white transition-all cursor-pointer"></i>
+                    <i class="fa-brands fa-cc-apple-pay hover:text-white transition-all cursor-pointer"></i>
+                    <i class="fa-solid fa-money-bill-transfer hover:text-white transition-all cursor-pointer"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ─── Payment Method Selection ───────────────────────────
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function () {
+                document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // ─── Quantity Control ───────────────────────────────────
+        function changeQty(btn, delta) {
+            const wrapper = btn.closest('.flex.items-center.gap-2');
+            const display = wrapper.querySelector('.qty-value');
+            let val = parseInt(display.textContent) + delta;
+            if (val < 1) val = 1;
+            display.textContent = val;
+            updateTotal();
+        }
+
+        // ─── Remove Item ────────────────────────────────────────
+        function removeItem(btn) {
+            const item = btn.closest('.cart-item');
+            item.style.transition = 'opacity 0.3s, transform 0.3s';
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(20px)';
+            setTimeout(() => item.remove(), 300);
+        }
+
+        // ─── Voucher ────────────────────────────────────────────
+        function applyVoucher() {
+            const val = document.getElementById('voucher-input').value.trim().toUpperCase();
+            const msg = document.getElementById('voucher-msg');
+            if (val === 'CLOSET15' || val === 'WELCOME') {
+                msg.classList.remove('hidden');
+            } else {
+                msg.classList.add('hidden');
+                msg.innerHTML = '';
+                if (val) alert('Mã voucher không hợp lệ hoặc đã hết hạn.');
+            }
+        }
+
+        // ─── Total (Simplified Static) ─────────────────────────
+        function updateTotal() {
+            // Static demo total
+        }
+
+        // ─── Toggle Other Receiver ──────────────────────────────
+        document.getElementById('receiver-toggle').addEventListener('click', function () {
+            const check = document.getElementById('receiver-check');
+            const icon = document.getElementById('receiver-check-icon');
+            const form = document.getElementById('receiver-form');
+            check.classList.toggle('checked');
+            icon.classList.toggle('hidden');
+            form.classList.toggle('hidden');
+        });
+
+        // ─── Toggle VAT ─────────────────────────────────────────
+        document.getElementById('vat-check').parentElement.addEventListener('click', function () {
+            const check = document.getElementById('vat-check');
+            const icon = document.getElementById('vat-check-icon');
+            check.classList.toggle('checked');
+            icon.classList.toggle('hidden');
+        });
+
+        // ─── Place Order ────────────────────────────────────────
+        function placeOrder() {
+            const btn = document.querySelector('.btn-order');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs mr-2"></i> Đang xử lý...';
+            btn.disabled = true;
+            btn.style.opacity = '0.8';
+            setTimeout(() => {
+                window.location.href = 'order-complete.html';
+            }, 1200);
+        }
+
+        // ─── Nav scroll effect ───────────────────────────────────
+        window.onscroll = function () {
+            const nav = document.getElementById('main-nav');
+            if (nav) {
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-sm');
+                } else {
+                    nav.classList.remove('shadow-sm');
+                }
+            }
+        };
+    </script>
+</body>
+</html>

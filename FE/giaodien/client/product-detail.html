@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Khám phá Áo Polo Thể Thao Nữ Promax ExDry cao cấp từ thương hiệu CLOSET. Ứng dụng công nghệ Ex-Dry thấm hút mồ hôi vượt trội, thiết kế cổ polo thanh mảnh kết hợp tay Raglan hỗ trợ vận động tối ưu (Pickleball, Tennis, Gym, Golf). Giao hàng nhanh toàn quốc.">
+    <meta name="keywords" content="Áo polo thể thao nữ, áo polo promax exdry, áo tennis nữ, áo pickleball nữ, áo polo coolmate, closet">
+    <title>Áo Polo Thể Thao Nữ Promax ExDry | CLOSET. Activewear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, .font-serif, h1, h2, h3, h4, h5, p, span, div, a { font-family: Arial, Helvetica, sans-serif !important; }
+        * { letter-spacing: normal !important; }
+        body { background-color: #faf9f6; }
+        .font-black { font-weight: 700 !important; }
+        .italic { font-style: normal !important; }
+        /* Glassmorphism navigation scroll effect */
+        .nav-scrolled { 
+            background: rgba(250, 249, 246, 0.75); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04); 
+        }
+
+        /* Active color swatch style */
+        .color-swatch.active {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Active size button style */
+        .size-btn.active {
+            background-color: #0f172a;
+            color: #ffffff;
+            border-color: #0f172a;
+        }
+    </style>
+</head>
+<body class="text-slate-900 selection:bg-indigo-100">
+
+    <!-- Navigation Header -->
+    <nav id="main-nav" class="fixed top-0 w-full z-[100] transition-all duration-500 h-24 flex items-center nav-scrolled">
+        <div class="container mx-auto px-8 flex justify-between items-center">
+            <a href="index.html" class="font-serif text-3xl font-black tracking-tighter hover:opacity-70 transition-all">CLOSET.</a>
+            <ul class="hidden lg:flex items-center gap-12 text-[10px] font-black uppercase tracking-[0.3em]">
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-all duration-300">Cửa hàng</a></li>
+                <li><a href="blog.html" class="hover:text-indigo-600 transition-all duration-300">Blog</a></li>
+                <li><a href="#" class="hover:text-indigo-600 transition-all duration-300">Lookbook</a></li>
+                <li><a href="#" class="hover:text-indigo-600 transition-all duration-300">Thương hiệu</a></li>
+            </ul>
+            <div class="flex items-center gap-8 text-sm">
+                <button class="hover:opacity-50 transition-all"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <a href="cart.html" class="relative hover:opacity-50 transition-all flex items-center gap-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest">GIỎ HÀNG</span>
+                    <span class="text-[10px] bg-slate-900 text-white w-5 h-5 flex items-center justify-center rounded-full font-black">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Size Guide Modal -->
+    <div id="size-guide-modal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl relative translate-y-4 transition-transform duration-300" id="size-guide-content">
+            <button onclick="closeSizeGuide()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-all text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="font-bold text-xl text-slate-900 mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-ruler-combined text-indigo-600"></i> Bảng Hướng Dẫn Chọn Size
+            </h3>
+            
+            <div class="overflow-x-auto rounded-2xl border border-slate-100 mb-6">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-100">
+                            <th class="p-4 font-black text-slate-500 uppercase tracking-widest">Size</th>
+                            <th class="p-4 font-black text-slate-500 uppercase tracking-widest">Chiều Cao</th>
+                            <th class="p-4 font-black text-slate-500 uppercase tracking-widest">Cân Nặng</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="p-4 font-black text-slate-900">XS</td>
+                            <td class="p-4">1m48 - 1m53</td>
+                            <td class="p-4">40 - 45 kg</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="p-4 font-black text-slate-900">S</td>
+                            <td class="p-4">1m50 - 1m58</td>
+                            <td class="p-4">45 - 52 kg</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors bg-indigo-50/20">
+                            <td class="p-4 font-black text-slate-900">M</td>
+                            <td class="p-4">1m55 - 1m62</td>
+                            <td class="p-4">52 - 58 kg</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="p-4 font-black text-slate-900">L</td>
+                            <td class="p-4">1m60 - 1m68</td>
+                            <td class="p-4">58 - 64 kg</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="p-4 font-black text-slate-900">XL</td>
+                            <td class="p-4">1m65 - 1m72</td>
+                            <td class="p-4">64 - 70 kg</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="bg-indigo-50/50 border border-indigo-100/50 rounded-2xl p-4 flex gap-4 items-start">
+                <span class="text-indigo-600 mt-0.5"><i class="fa-solid fa-circle-info text-sm"></i></span>
+                <p class="text-[11px] text-slate-500 leading-normal">
+                    <strong>Gợi ý:</strong> Nếu chiều cao của bạn thuộc size S nhưng cân nặng thuộc size M, hãy ưu tiên chọn size theo cân nặng (size M) để mặc thoải mái nhất nhé.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20">
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Main Image Container with zoom -->
+                    <div class="relative aspect-[3/4] bg-[#f3f2f0] overflow-hidden group border border-slate-100/50 rounded-xl shadow-sm">
+                        <img id="main-product-image" src="../assets/img/polo_navy_main.png" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" alt="Áo Polo Thể Thao Nữ Promax ExDry - Đẳng cấp năng động">
+                        <span class="absolute top-6 left-6 text-[9px] font-black uppercase tracking-[0.3em] bg-white px-4 py-2 border border-slate-100 shadow-sm rounded-full flex items-center gap-1.5 text-indigo-600">
+                            <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span> BÁN CHẠY
+                        </span>
+                    </div>
+                    
+                    <!-- Detailed Gallery List (Thumbnails) -->
+                    <div class="grid grid-cols-4 gap-4">
+                        <button onclick="changeMainImage('../assets/img/polo_navy_main.png', this)" class="thumbnail-btn aspect-[3/4] overflow-hidden bg-[#f3f2f0] border-2 border-black rounded-lg transition-all shadow-sm p-0 outline-none">
+                            <img src="../assets/img/polo_navy_main.png" class="w-full h-full object-cover hover:opacity-85" alt="Góc chụp chính">
+                        </button>
+                        <button onclick="changeMainImage('../assets/img/polo_navy_detail.png', this)" class="thumbnail-btn aspect-[3/4] overflow-hidden bg-[#f3f2f0] border border-slate-200 rounded-lg transition-all shadow-sm p-0 outline-none">
+                            <img src="../assets/img/polo_navy_detail.png" class="w-full h-full object-cover hover:opacity-85" alt="Cận cảnh chất liệu Ex-Dry">
+                        </button>
+                        <button onclick="changeMainImage('../assets/img/polo_navy_back.png', this)" class="thumbnail-btn aspect-[3/4] overflow-hidden bg-[#f3f2f0] border border-slate-200 rounded-lg transition-all shadow-sm p-0 outline-none">
+                            <img src="../assets/img/polo_navy_back.png" class="w-full h-full object-cover hover:opacity-85" alt="Chi tiết phom sau lưng và tay Raglan">
+                        </button>
+                        <button onclick="changeMainImage('../assets/img/polo_navy_lifestyle.png', this)" class="thumbnail-btn aspect-[3/4] overflow-hidden bg-[#f3f2f0] border border-slate-200 rounded-lg transition-all shadow-sm p-0 outline-none">
+                            <img src="../assets/img/polo_navy_lifestyle.png" class="w-full h-full object-cover hover:opacity-85" alt="Hình ảnh người mẫu thực tế">
+                        </button>
+                    </div>
+                </div>
+                <div class="lg:col-span-5">
+                    <div class="lg:sticky lg:top-40 space-y-12">
+                        <header>
+                            <nav class="flex gap-4 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6">
+                                <a href="shop.html">Cửa hàng</a><span>/</span><a href="#">Đồ Thể Thao</a><span>/</span><span class="text-slate-900">Áo Polo</span>
+                            </nav>
+                            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight text-slate-900">Áo Polo Thể Thao Nữ <br>Promax-S ExDry.</h1>
+                            <div class="flex items-center gap-4">
+                                <p class="text-3xl font-black text-indigo-600">249.000đ</p>
+                                <p class="text-lg font-medium text-slate-400 line-through">329.000đ</p>
+                                <span class="bg-red-50 text-red-600 text-[10px] font-black uppercase px-2.5 py-1 rounded-full border border-red-100">-24%</span>
+                            </div>
+                        </header>
+                        <div class="space-y-6">
+                            <p class="text-slate-500 text-sm leading-relaxed">
+                                Dòng áo polo thể thao Promax ExDry chuyên dụng cho phái nữ tập luyện cường độ cao. Tích hợp công nghệ Ex-Dry thông minh giúp thấm hút mồ hôi siêu tốc và tự làm khô tức thì. Thiết kế tay Raglan giải phóng vai, tôn vóc dáng thể thao trẻ trung, năng động.
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-10 py-10 border-y border-slate-100">
+                            <!-- Color Swatches -->
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Màu sắc: <span id="selected-color-label" class="text-slate-900 font-bold ml-1">Xanh Navy</span></h4>
+                                </div>
+                                <div class="flex gap-3">
+                                    <button onclick="selectColor('Xanh Navy', this)" class="color-swatch active w-9 h-9 rounded-full bg-[#1b2a47] border-2 border-slate-100 transition-all p-0.5" title="Xanh Navy"></button>
+                                    <button onclick="selectColor('Đen', this)" class="color-swatch w-9 h-9 rounded-full bg-[#121212] border-2 border-slate-100 transition-all p-0.5" title="Đen"></button>
+                                    <button onclick="selectColor('Xám', this)" class="color-swatch w-9 h-9 rounded-full bg-[#8e8e93] border-2 border-slate-100 transition-all p-0.5" title="Xám"></button>
+                                    <button onclick="selectColor('Hồng', this)" class="color-swatch w-9 h-9 rounded-full bg-[#fca5a5] border-2 border-slate-100 transition-all p-0.5" title="Hồng"></button>
+                                    <button onclick="selectColor('Xanh Mint', this)" class="color-swatch w-9 h-9 rounded-full bg-[#a7f3d0] border-2 border-slate-100 transition-all p-0.5" title="Xanh Mint"></button>
+                                </div>
+                            </div>
+
+                            <!-- Size Selection -->
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Kích thước: <span id="selected-size-label" class="text-slate-900 font-bold ml-1">M</span></h4>
+                                    <button onclick="openSizeGuide()" class="text-[10px] font-black uppercase tracking-[0.1em] text-indigo-600 hover:text-indigo-800 transition-all flex items-center gap-1.5">
+                                        <i class="fa-solid fa-ruler-combined"></i> Hướng dẫn chọn size
+                                    </button>
+                                </div>
+                                <div class="flex gap-4">
+                                    <button onclick="selectSize('XS', this)" class="size-btn w-12 h-12 border border-slate-200 text-xs font-black flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all rounded-lg">XS</button>
+                                    <button onclick="selectSize('S', this)" class="size-btn w-12 h-12 border border-slate-200 text-xs font-black flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all rounded-lg">S</button>
+                                    <button onclick="selectSize('M', this)" class="size-btn active w-12 h-12 border border-slate-200 text-xs font-black flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all rounded-lg">M</button>
+                                    <button onclick="selectSize('L', this)" class="size-btn w-12 h-12 border border-slate-200 text-xs font-black flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all rounded-lg">L</button>
+                                    <button onclick="selectSize('XL', this)" class="size-btn w-12 h-12 border border-slate-200 text-xs font-black flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all rounded-lg">XL</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <button onclick="addToCart()" class="w-full py-6 bg-slate-950 text-white text-[11px] font-black uppercase tracking-[0.4em] hover:bg-indigo-600 hover:shadow-lg transition-all duration-500 rounded-xl">Thêm vào giỏ hàng</button>
+                            
+                            <!-- Trust Policy Cards (Inspired by Coolmate) -->
+                            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 space-y-4 shadow-sm">
+                                <div class="flex gap-4 items-start">
+                                    <span class="text-indigo-600 mt-1"><i class="fa-solid fa-rotate text-sm"></i></span>
+                                    <div>
+                                        <h5 class="text-[10px] font-black uppercase tracking-widest text-slate-900 mb-1">Chính sách đổi trả 60 ngày</h5>
+                                        <p class="text-[11px] text-slate-500 leading-normal">Miễn phí đổi trả trong 60 ngày với bất kỳ lý do gì, bưu tá đến lấy hàng tận nhà.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 items-start">
+                                    <span class="text-indigo-600 mt-1"><i class="fa-solid fa-truck-fast text-sm"></i></span>
+                                    <div>
+                                        <h5 class="text-[10px] font-black uppercase tracking-widest text-slate-900 mb-1">Giao hàng miễn phí từ 200k</h5>
+                                        <p class="text-[11px] text-slate-500 leading-normal">Miễn phí vận chuyển toàn quốc cho đơn hàng từ 200.000đ trở lên. Giao nhanh 2 - 3 ngày.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 items-start">
+                                    <span class="text-indigo-600 mt-1"><i class="fa-solid fa-recycle text-sm"></i></span>
+                                    <div>
+                                        <h5 class="text-[10px] font-black uppercase tracking-widest text-slate-900 mb-1">Cam kết 100% hài lòng</h5>
+                                        <p class="text-[11px] text-slate-500 leading-normal">Được kiểm tra hàng trước khi thanh toán. Hỗ trợ tư vấn giải đáp thắc mắc 24/7.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Luxury Product Detail Accordion Tabs -->
+                        <div class="pt-8 border-t border-slate-100 space-y-4">
+                            <!-- Accordion Item 1 -->
+                            <div class="border-b border-slate-100 pb-4">
+                                <button onclick="toggleAccordion('acc-info', this)" class="w-full flex justify-between items-center py-2 text-left text-xs font-black uppercase tracking-[0.2em] text-slate-800 hover:text-black transition-colors focus:outline-none">
+                                    <span>Chi tiết sản phẩm</span>
+                                    <i class="fa-solid fa-minus text-[10px] transition-transform duration-300"></i>
+                                </button>
+                                <div id="acc-info" class="max-h-[300px] overflow-hidden mt-4 text-xs text-slate-500 leading-relaxed space-y-2 transition-all duration-500 ease-in-out">
+                                    <p>Áo Polo Thể Thao Nữ Promax-S ExDry là sự kết hợp hoàn hảo giữa thời trang năng động và công nghệ may mặc đỉnh cao. Thiết kế phom Slim Fit ôm nhẹ, tôn vinh đường cong thể thao khỏe khoắn.</p>
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>Cổ bẻ polo thanh lịch, nẹp nút ẩn tinh xảo</li>
+                                        <li>Thiết kế tay Raglan giải phóng vai, giúp tối ưu các cú vung tay, phát bóng</li>
+                                        <li>Đường xẻ tà nhẹ hai bên tạo sự thoải mái tối đa khi xoay người</li>
+                                        <li>Thích hợp cho Pickleball, Tennis, Golf, Gym, Chạy bộ và mặc năng động hàng ngày</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Accordion Item 2 -->
+                            <div class="border-b border-slate-100 pb-4">
+                                <button onclick="toggleAccordion('acc-material', this)" class="w-full flex justify-between items-center py-2 text-left text-xs font-black uppercase tracking-[0.2em] text-slate-800 hover:text-black transition-colors focus:outline-none">
+                                    <span>Chất liệu & Công nghệ</span>
+                                    <i class="fa-solid fa-plus text-[10px] transition-transform duration-300"></i>
+                                </button>
+                                <div id="acc-material" class="max-h-0 overflow-hidden mt-0 text-xs text-slate-500 leading-relaxed space-y-2 transition-all duration-500 ease-in-out">
+                                    <p><strong>Vải chính:</strong> 100% Sợi Polyester cao cấp, bền bỉ và siêu nhẹ.</p>
+                                    <p><strong>Công nghệ Ex-Dry độc quyền:</strong></p>
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>Kết cấu dệt vi lỗ thoáng khí giúp hút mồ hôi siêu tốc khỏi bề mặt da</li>
+                                        <li>Lớp vải ngoài khuếch tán hơi ẩm cực nhanh giúp áo khô chỉ trong vài phút</li>
+                                        <li>Tích hợp xử lý kháng khuẩn, khử mùi tự nhiên suốt cả ngày dài</li>
+                                        <li>Khả năng chống tia UV (UPF 30+) bảo vệ da khi tập ngoài trời</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Accordion Item 3 -->
+                            <div class="border-b border-slate-100 pb-4">
+                                <button onclick="toggleAccordion('acc-shipping', this)" class="w-full flex justify-between items-center py-2 text-left text-xs font-black uppercase tracking-[0.2em] text-slate-800 hover:text-black transition-colors focus:outline-none">
+                                    <span>Giao hàng & Đổi trả</span>
+                                    <i class="fa-solid fa-plus text-[10px] transition-transform duration-300"></i>
+                                </button>
+                                <div id="acc-shipping" class="max-h-0 overflow-hidden mt-0 text-xs text-slate-500 leading-relaxed space-y-2 transition-all duration-500 ease-in-out">
+                                    <p><strong>Giao hàng:</strong> Miễn phí vận chuyển cho đơn hàng từ 200k. Đơn dưới 200k phí ship đồng giá 20.000đ toàn quốc. Thời gian giao hàng Hà Nội, TP.HCM từ 1 - 2 ngày; tỉnh khác từ 2 - 4 ngày.</p>
+                                    <p><strong>Đổi trả 60 ngày:</strong> Hỗ trợ đổi trả miễn phí tận nhà. Bưu tá đến lấy hàng đổi/trả trực tiếp từ tay khách hàng, không cần ra bưu cục. Hoàn tiền mặt hoặc chuyển khoản nhanh gọn trong 24h sau khi nhận hàng.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Selling Points & Fabric Tech Grid (Inspired by Coolmate) -->
+            <section class="mt-28 py-20 border-t border-slate-100">
+                <div class="text-center max-w-xl mx-auto mb-16">
+                    <span class="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 mb-4 block">Đặc tính kỹ thuật</span>
+                    <h2 class="font-extrabold text-3xl md:text-4xl text-slate-900">Premium Tech & Craft.</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white border border-slate-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-6">
+                            <i class="fa-solid fa-droplet-slash text-xl"></i>
+                        </div>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-900 mb-3">Công Nghệ Ex-Dry</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Cơ chế mao dẫn giúp rút mồ hôi siêu tốc khỏi da và đẩy nhanh hơi ẩm ra ngoài bề mặt sợi vải để khô tức thì.</p>
+                    </div>
+                    <div class="bg-white border border-slate-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-6">
+                            <i class="fa-solid fa-feather text-xl"></i>
+                        </div>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-900 mb-3">Trọng Lượng Siêu Nhẹ</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Trọng lượng chỉ 120g/m², mang lại cảm giác nhẹ tênh, thoáng mát vượt trội trong suốt buổi tập.</p>
+                    </div>
+                    <div class="bg-white border border-slate-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-6">
+                            <i class="fa-solid fa-arrows-up-down-left-right text-xl"></i>
+                        </div>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-900 mb-3">Co Giãn Linh Hoạt</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Kết cấu dệt thun thể thao hỗ trợ co giãn 4 chiều tối ưu, không cản trở chuyển động và giữ dáng cực tốt.</p>
+                    </div>
+                    <div class="bg-white border border-slate-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-6">
+                            <i class="fa-solid fa-shield-virus text-xl"></i>
+                        </div>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-900 mb-3">Kháng Khuẩn & Chống Tia UV</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Chỉ số chống nắng UPF 30+ chặn đứng tia cực tím có hại cùng hoạt chất khử mùi tự nhiên bảo vệ da.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Story & Visual Presentation -->
+            <section class="mt-16 py-20 border-t border-slate-100">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-6">
+                        <span class="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 block">Nâng tầm vận động</span>
+                        <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">Công Nghệ Ex-Dry Đỉnh Cao <br>Hỗ Trợ Mọi Vận Động.</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                            Áo Polo Promax ExDry sử dụng cấu trúc dệt sợi Polyester cải tiến. Khác với cotton giữ ẩm và bám dính vào da gây khó chịu khi đổ mồ hôi, sợi Promax Ex-Dry nhanh chóng dẫn nước ra ngoài bề mặt sợi vải và bốc hơi trong tích tắc dưới tác động của gió và nhiệt độ cơ thể.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Thiết kế tay Raglan đặc trưng (phần tay kéo dài đến cổ áo) giải phóng hoàn toàn khớp vai khỏi các đường may cản trở, hỗ trợ tối đa khi thực hiện các động tác vung tay mạnh mẽ như đánh Pickleball, Tennis, swing gậy Golf hay đẩy tạ trong phòng Gym.
+                        </p>
+                        <ul class="space-y-3 pt-4">
+                            <li class="flex items-center gap-3 text-xs text-slate-700 font-bold">
+                                <i class="fa-solid fa-circle-check text-indigo-600 text-[10px]"></i> Cấu trúc vi sợi 100% Polyester kháng khuẩn
+                            </li>
+                            <li class="flex items-center gap-3 text-xs text-slate-700 font-bold">
+                                <i class="fa-solid fa-circle-check text-indigo-600 text-[10px]"></i> Thiết kế vai Raglan không đường may cầu vai
+                            </li>
+                            <li class="flex items-center gap-3 text-xs text-slate-700 font-bold">
+                                <i class="fa-solid fa-circle-check text-indigo-600 text-[10px]"></i> Đường may Flatlock phẳng êm dịu, không gây cọ xát da
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-5 gap-4 h-[500px]">
+                        <div class="col-span-3 overflow-hidden rounded-2xl bg-slate-100">
+                            <img src="../assets/img/polo_navy_lifestyle.png" class="w-full h-full object-cover hover:scale-105 transition-all duration-1000" alt="Ex-Dry sports action lifestyle">
+                        </div>
+                        <div class="col-span-2 flex flex-col gap-4">
+                            <div class="flex-1 overflow-hidden rounded-2xl bg-slate-100">
+                                <img src="../assets/img/polo_navy_detail.png" class="w-full h-full object-cover hover:scale-105 transition-all duration-1000" alt="Ex-Dry fabric close-up">
+                            </div>
+                            <div class="flex-1 overflow-hidden rounded-2xl bg-slate-100">
+                                <img src="../assets/img/polo_navy_back.png" class="w-full h-full object-cover hover:scale-105 transition-all duration-1000" alt="Back style detailing">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Customer Reviews Section -->
+            <section class="mt-16 py-20 border-t border-slate-100">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                    <!-- Rating Summary Column -->
+                    <div class="lg:col-span-4 space-y-8">
+                        <div>
+                            <span class="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 block mb-4">Khách hàng nhận xét</span>
+                            <h3 class="text-3xl font-extrabold text-slate-900">Đánh Giá Sản Phẩm.</h3>
+                        </div>
+                        <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm space-y-6">
+                            <div class="flex items-baseline gap-4">
+                                <span class="text-6xl font-black text-slate-900">4.9</span>
+                                <div>
+                                    <div class="flex text-amber-400 text-sm gap-1 mb-1">
+                                        <i class="fa-solid fa-star text-[11px]"></i>
+                                        <i class="fa-solid fa-star text-[11px]"></i>
+                                        <i class="fa-solid fa-star text-[11px]"></i>
+                                        <i class="fa-solid fa-star text-[11px]"></i>
+                                        <i class="fa-solid fa-star text-[11px]"></i>
+                                    </div>
+                                    <p class="text-[9px] text-slate-400 font-black uppercase tracking-wider">128 đánh giá thực tế</p>
+                                </div>
+                            </div>
+                            <!-- Rating breakdown bars -->
+                            <div class="space-y-3 pt-2">
+                                <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                                    <span class="w-10">5 sao</span>
+                                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-slate-900 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                    <span class="w-8 text-right">92%</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                                    <span class="w-10">4 sao</span>
+                                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-slate-900 rounded-full" style="width: 6%"></div>
+                                    </div>
+                                    <span class="w-8 text-right">6%</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                                    <span class="w-10">3 sao</span>
+                                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-slate-900 rounded-full" style="width: 2%"></div>
+                                    </div>
+                                    <span class="w-8 text-right">2%</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-wider text-slate-500 opacity-30">
+                                    <span class="w-10">2 sao</span>
+                                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-slate-900 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="w-8 text-right">0%</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-wider text-slate-500 opacity-30">
+                                    <span class="w-10">1 sao</span>
+                                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-slate-900 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="w-8 text-right">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Review List Column -->
+                    <div class="lg:col-span-8 space-y-8">
+                        <!-- Filters -->
+                        <div class="flex flex-wrap gap-3 pb-4 border-b border-slate-100">
+                            <button class="px-5 py-2.5 bg-slate-900 text-white rounded-full text-[9px] font-black uppercase tracking-wider shadow-sm transition-all">Tất cả (128)</button>
+                            <button class="px-5 py-2.5 bg-white border border-slate-200 text-slate-600 hover:border-slate-900 hover:text-slate-900 rounded-full text-[9px] font-black uppercase tracking-wider transition-all">Có hình ảnh (45)</button>
+                            <button class="px-5 py-2.5 bg-white border border-slate-200 text-slate-600 hover:border-slate-900 hover:text-slate-900 rounded-full text-[9px] font-black uppercase tracking-wider transition-all">5 Sao (118)</button>
+                            <button class="px-5 py-2.5 bg-white border border-slate-200 text-slate-600 hover:border-slate-900 hover:text-slate-900 rounded-full text-[9px] font-black uppercase tracking-wider transition-all">4 Sao (8)</button>
+                        </div>
+
+                        <!-- Review Items -->
+                        <div class="space-y-8 divide-y divide-slate-100">
+                            <!-- Review 1 -->
+                            <div class="pt-8 first:pt-0 space-y-4">
+                                <div class="flex justify-between items-start">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center gap-3">
+                                            <h5 class="text-xs font-black uppercase tracking-wider text-slate-900">Nguyễn Khánh Linh</h5>
+                                            <span class="text-emerald-600 bg-emerald-50 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+                                                <i class="fa-solid fa-circle-check text-[10px]"></i> Đã mua hàng
+                                            </span>
+                                        </div>
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Kích cỡ: S | Chiều cao: 156cm | Cân nặng: 47kg</p>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 font-bold shrink-0 ml-4">18/05/2026</span>
+                                </div>
+                                <div class="flex text-amber-400 text-xs gap-1">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Áo mặc siêu thích luôn ạ. Chất vải sờ mát tay cực kỳ, mỏng nhẹ mặc tập Pickleball cả buổi chiều mà không hề có cảm giác dính hay bí bách gì cả. Thiết kế vai Raglan vung vợt rất thoải mái, phom Slim fit vừa vặn tôn dáng lắm. Màu xanh navy tôn da lắm nha, sẽ mua thêm màu đen và hồng nữa!
+                                </p>
+                                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-2 ml-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[9px] font-black uppercase tracking-widest bg-slate-900 text-white px-2 py-0.5 rounded">Closet Team</span>
+                                        <span class="text-[9px] text-slate-400 font-bold">Phản hồi từ cửa hàng</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 leading-relaxed">Chào bạn Khánh Linh, cảm ơn bạn rất nhiều vì đã tin chọn và phản hồi tích cực về dòng áo Polo Thể Thao Nữ Promax ExDry. Closet rất vui khi thấy áo hỗ trợ tốt cho bạn khi chơi Pickleball. Chúc bạn luôn giữ vững tinh thần rèn luyện sức khỏe và năng lượng tích cực mỗi ngày nha!</p>
+                                </div>
+                            </div>
+
+                            <!-- Review 2 -->
+                            <div class="pt-8 space-y-4">
+                                <div class="flex justify-between items-start">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center gap-3">
+                                            <h5 class="text-xs font-black uppercase tracking-wider text-slate-900">Trần Thu Trang</h5>
+                                            <span class="text-emerald-600 bg-emerald-50 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+                                                <i class="fa-solid fa-circle-check text-[10px]"></i> Đã mua hàng
+                                            </span>
+                                        </div>
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Kích cỡ: M | Chiều cao: 162cm | Cân nặng: 54kg</p>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 font-bold shrink-0 ml-4">12/05/2026</span>
+                                </div>
+                                <div class="flex text-amber-400 text-xs gap-1">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Vải thoáng khí sướng cực, giặt máy mấy lần rồi mà không hề bị nhăn hay xù lông, phom dáng vẫn y như mới. Giao hàng cực nhanh, mình đặt hôm trước hôm sau đã nhận được rồi. Shop tư vấn size chuẩn xác, nhiệt tình. Sẽ ủng hộ shop lâu dài.
+                                </p>
+                                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-2 ml-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[9px] font-black uppercase tracking-widest bg-slate-900 text-white px-2 py-0.5 rounded">Closet Team</span>
+                                        <span class="text-[9px] text-slate-400 font-bold">Phản hồi từ cửa hàng</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 leading-relaxed">Chào bạn Thu Trang, Closet vô cùng trân trọng sự tin cậy của bạn. Dòng sản phẩm dệt từ sợi cao cấp chống nhăn tự nhiên nên bạn hoàn toàn yên tâm khi giặt máy thường xuyên nhé. Mong sớm được phục vụ bạn trong các đơn hàng tiếp theo!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- You May Also Like / Related Products Section -->
+            <section class="mt-20 pt-16 border-t border-slate-100">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <span class="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 mb-3 block">Đề xuất cho bạn</span>
+                        <h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900">Sản phẩm liên quan.</h2>
+                    </div>
+                    <a href="shop.html" class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-900 border-b-2 border-black pb-1.5 hover:opacity-50 transition-all mt-4 md:mt-0 block w-fit">Xem tất cả đồ thể thao</a>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Related Product Card 1 -->
+                    <div class="group relative">
+                        <div class="relative overflow-hidden aspect-[3/4] bg-slate-100 rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1626224583764-f84944d6b239?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="Chân Váy Tennis Xếp Ly">
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500"></div>
+                            <div class="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <a href="product-detail.html" class="block w-full py-2.5 bg-white text-black text-[9px] font-black uppercase tracking-widest text-center shadow-lg hover:bg-slate-950 hover:text-white transition-all rounded-xl">Xem chi tiết</a>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start px-1">
+                            <div>
+                                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-1 leading-tight"><a href="product-detail.html" class="hover:text-indigo-600 transition-colors">Chân Váy Tennis Xếp Ly</a></h3>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Đồ Thể Thao</p>
+                            </div>
+                            <p class="text-[11px] font-black text-indigo-600 shrink-0 ml-2">199k</p>
+                        </div>
+                    </div>
+
+                    <!-- Related Product Card 2 -->
+                    <div class="group relative">
+                        <div class="relative overflow-hidden aspect-[3/4] bg-slate-100 rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="Quần Shorts Thể Thao Nữ">
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500"></div>
+                            <div class="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <a href="product-detail.html" class="block w-full py-2.5 bg-white text-black text-[9px] font-black uppercase tracking-widest text-center shadow-lg hover:bg-slate-950 hover:text-white transition-all rounded-xl">Xem chi tiết</a>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start px-1">
+                            <div>
+                                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-1 leading-tight"><a href="product-detail.html" class="hover:text-indigo-600 transition-colors">Quần Shorts Thể Thao Nữ</a></h3>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Đồ Thể Thao</p>
+                            </div>
+                            <p class="text-[11px] font-black text-indigo-600 shrink-0 ml-2">169k</p>
+                        </div>
+                    </div>
+
+                    <!-- Related Product Card 3 -->
+                    <div class="group relative">
+                        <div class="relative overflow-hidden aspect-[3/4] bg-slate-100 rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1502224562085-639556652f33?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="Áo Thun Chạy Bộ ExDry">
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500"></div>
+                            <div class="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <a href="product-detail.html" class="block w-full py-2.5 bg-white text-black text-[9px] font-black uppercase tracking-widest text-center shadow-lg hover:bg-slate-950 hover:text-white transition-all rounded-xl">Xem chi tiết</a>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start px-1">
+                            <div>
+                                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-1 leading-tight"><a href="product-detail.html" class="hover:text-indigo-600 transition-colors">Áo Thun Chạy Bộ ExDry</a></h3>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Đồ Thể Thao</p>
+                            </div>
+                            <p class="text-[11px] font-black text-indigo-600 shrink-0 ml-2">189k</p>
+                        </div>
+                    </div>
+
+                    <!-- Related Product Card 4 -->
+                    <div class="group relative">
+                        <div class="relative overflow-hidden aspect-[3/4] bg-slate-100 rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1534215754734-18e55d13ce35?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="Mũ Lưỡi Trai Thể Thao">
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500"></div>
+                            <div class="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <a href="product-detail.html" class="block w-full py-2.5 bg-white text-black text-[9px] font-black uppercase tracking-widest text-center shadow-lg hover:bg-slate-950 hover:text-white transition-all rounded-xl">Xem chi tiết</a>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start px-1">
+                            <div>
+                                <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-1 leading-tight"><a href="product-detail.html" class="hover:text-indigo-600 transition-colors">Mũ Lưỡi Trai Thể Thao</a></h3>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Phụ Kiện</p>
+                            </div>
+                            <p class="text-[11px] font-black text-indigo-600 shrink-0 ml-2">99k</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0b0c10] text-[#c5c6c7] pt-28 pb-16 border-t border-[#1f2833]/20 relative overflow-hidden">
+        <!-- Subtle ambient gradient background -->
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-slate-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <!-- Top Section: Logo & Newsletter -->
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-16 pb-20 border-b border-slate-800/40">
+                <div class="max-w-md">
+                    <h3 class="font-serif text-4xl font-black text-white tracking-tighter mb-6 italic">CLOSET.</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                        Đỉnh cao của nghệ thuật tối giản và thời trang thượng hạng. Chúng tôi kiến tạo những giá trị vượt thời gian, định hình phong cách sang trọng thầm lặng.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-pinterest-p text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-tiktok text-sm"></i></a>
+                    </div>
+                </div>
+
+                <div class="w-full lg:max-w-md">
+                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-white mb-4">Đăng ký nhận bản tin sớm</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Nhận thông tin về các bộ sưu tập mới nhất và những ưu đãi độc quyền.</p>
+                    <div class="flex gap-2 w-full">
+                        <input type="email" placeholder="Địa chỉ email của bạn" class="flex-1 bg-slate-900/60 border border-slate-800 px-6 py-4 rounded-xl text-xs text-white outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-bold uppercase tracking-widest">
+                        <button type="submit" class="px-8 py-4 bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-lg shadow-white/5">Đăng ký</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Section: Navigation Columns -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 py-20 text-sm">
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Bộ sưu tập</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="shop.html" class="hover:text-white transition-all">Classic Suit</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Heritage Overcoat</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Merino Knitwear</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Evening Dress</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Khám phá</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="shop.html" class="hover:text-white transition-all">Cửa hàng chính hãng</a></li>
+                        <li><a href="blog.html" class="hover:text-white transition-all">Bản tin Journal</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Lookbook Tĩnh</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Câu chuyện thương hiệu</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Dịch vụ khách hàng</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="#" class="hover:text-white transition-all">Liên hệ hỗ trợ</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Chính sách vận chuyển</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Đổi trả & Bảo hành</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Hướng dẫn chọn size</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Cửa hàng</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                        <strong class="text-white block mb-1">Flagship Store</strong>
+                        123 Đường Đồng Khởi, Bến Nghé, Quận 1, TP. Hồ Chí Minh
+                    </p>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        <strong class="text-white block mb-1">Hotline liên hệ</strong>
+                        1900 123 456 (9:00 - 22:00)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom Section: Copyright & Payments -->
+            <div class="pt-8 border-t border-slate-800/40 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                <p>&copy; 2026 Closet Fashion Store. All Rights Reserved. Designed for Quiet Luxury.</p>
+                <div class="flex items-center gap-6">
+                    <span class="opacity-50">Phương thức thanh toán:</span>
+                    <div class="flex gap-3 text-lg text-slate-500">
+                        <i class="fa-brands fa-cc-visa hover:text-white transition-all"></i>
+                        <i class="fa-brands fa-cc-mastercard hover:text-white transition-all"></i>
+                        <i class="fa-brands fa-cc-apple-pay hover:text-white transition-all"></i>
+                        <i class="fa-solid fa-money-bill-transfer hover:text-white transition-all"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Footer Checkout Bar (Inspired by Coolmate) -->
+    <div id="sticky-checkout-bar" class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-2xl py-4 transition-all duration-500 ease-in-out translate-y-full">
+        <div class="container mx-auto px-8 flex justify-between items-center gap-6">
+            <!-- Left: Product Details Info -->
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-12 rounded-lg bg-slate-100 overflow-hidden border border-slate-100 hidden sm:block">
+                    <img id="sticky-product-image" src="../assets/img/polo_navy_main.png" class="w-full h-full object-cover" alt="Product thumbnail">
+                </div>
+                <div>
+                    <h4 class="text-xs font-black uppercase tracking-wider text-slate-900 leading-tight">Áo Polo Thể Thao Nữ Promax ExDry</h4>
+                    <div class="flex items-center gap-3 mt-1 text-[9px] text-slate-500 font-black uppercase tracking-wider">
+                        <span>Màu: <span id="sticky-color-text" class="text-slate-900 font-black">Xanh Navy</span></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        <span>Size: <span id="sticky-size-text" class="text-slate-900 font-black">M</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Price & Checkout Button -->
+            <div class="flex items-center gap-6">
+                <div class="text-right">
+                    <p class="text-xs font-black text-indigo-600">249.000đ</p>
+                    <p class="text-[9px] text-slate-400 font-bold line-through">329.000đ</p>
+                </div>
+                <button onclick="addToCart()" class="px-6 py-3 bg-slate-950 text-white text-[9px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:shadow-lg transition-all duration-300 rounded-xl">
+                    Thêm vào giỏ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Navigation Animation & Gallery Scripts -->
+    <script>
+        let currentColor = 'Xanh Navy';
+        let currentSize = 'M';
+
+        // Shrink Header & Show/Hide Sticky Checkout Bar on Scroll
+        window.onscroll = function() {
+            // Header shrink animation
+            const nav = document.getElementById('main-nav');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.style.height = '80px';
+                    nav.classList.add('shadow-sm');
+                } else {
+                    nav.style.height = '96px';
+                    nav.classList.remove('shadow-sm');
+                }
+            }
+
+            // Sticky checkout bar visibility
+            const stickyBar = document.getElementById('sticky-checkout-bar');
+            const mainBuyBtn = document.querySelector('main button[onclick="addToCart()"]');
+            if (stickyBar && mainBuyBtn) {
+                const triggerPoint = mainBuyBtn.getBoundingClientRect().bottom;
+                if (triggerPoint < 0) {
+                    stickyBar.classList.remove('translate-y-full');
+                    stickyBar.classList.add('translate-y-0');
+                } else {
+                    stickyBar.classList.remove('translate-y-0');
+                    stickyBar.classList.add('translate-y-full');
+                }
+            }
+        };
+
+        // Swap Main Image in Product Detail Gallery
+        function changeMainImage(src, element) {
+            document.getElementById('main-product-image').src = src;
+            // Reset all thumbnail borders
+            document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+                btn.classList.remove('border-2', 'border-black');
+                btn.classList.add('border', 'border-slate-200');
+            });
+            // Highlight clicked thumbnail
+            element.classList.remove('border', 'border-slate-200');
+            element.classList.add('border-2', 'border-black');
+        }
+
+        // Color Swatch Selection
+        function selectColor(color, btn) {
+            currentColor = color;
+            document.getElementById('selected-color-label').innerText = color;
+            
+            const stickyColor = document.getElementById('sticky-color-text');
+            if (stickyColor) stickyColor.innerText = color;
+
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('active');
+            });
+            btn.classList.add('active');
+        }
+
+        // Size Selection
+        function selectSize(size, btn) {
+            currentSize = size;
+            document.getElementById('selected-size-label').innerText = size;
+
+            const stickySize = document.getElementById('sticky-size-text');
+            if (stickySize) stickySize.innerText = size;
+
+            document.querySelectorAll('.size-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            btn.classList.add('active');
+        }
+
+        // Accordion Toggle for Product Detail Info
+        function toggleAccordion(id, btn) {
+            const content = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            
+            if (content.classList.contains('max-h-0')) {
+                content.classList.remove('max-h-0', 'mt-0');
+                content.classList.add('max-h-[300px]', 'mt-4');
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            } else {
+                content.classList.add('max-h-0', 'mt-0');
+                content.classList.remove('max-h-[300px]', 'mt-4');
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            }
+        }
+
+        // Size Guide Modal Controls
+        function openSizeGuide() {
+            const modal = document.getElementById('size-guide-modal');
+            const content = document.getElementById('size-guide-content');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('translate-y-4');
+            }, 50);
+        }
+
+        function closeSizeGuide() {
+            const modal = document.getElementById('size-guide-modal');
+            const content = document.getElementById('size-guide-content');
+            modal.classList.add('opacity-0');
+            content.classList.add('translate-y-4');
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Add to Cart Action with Custom Toast Alert
+        function addToCart() {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-28 right-8 z-[300] bg-slate-950 text-white px-6 py-4 rounded-2xl shadow-2xl border border-slate-800/80 flex items-center gap-4 transition-all duration-500 translate-y-[-20px] opacity-0';
+            toast.innerHTML = `
+                <span class="text-emerald-500"><i class="fa-solid fa-circle-check text-lg"></i></span>
+                <div class="text-xs">
+                    <p class="font-black uppercase tracking-wider">Đã thêm vào giỏ hàng!</p>
+                    <p class="text-slate-400 mt-0.5 font-medium">Áo Polo Promax ExDry (${currentColor} / Size ${currentSize})</p>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-20px]', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

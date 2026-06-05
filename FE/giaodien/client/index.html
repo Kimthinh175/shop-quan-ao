@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CLOSET | Quiet Luxury Fashion Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body,
+      .font-serif,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      p,
+      span,
+      div,
+      a {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+      * {
+        letter-spacing: normal !important;
+      }
+      body {
+        background-color: #faf9f6;
+      }
+      .font-black {
+        font-weight: 700 !important;
+      }
+      .italic {
+        font-style: normal !important;
+      }
+
+      /* Collection card hover */
+      .collection-card:hover img {
+        transform: scale(1.02);
+        transition: transform 0.3s ease;
+      }
+    </style>
+  </head>
+  <body class="text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
+    <!-- Functional Navigation Header -->
+    <nav
+      id="main-nav"
+      class="sticky top-0 w-full z-[100] bg-white border-b border-slate-100 shadow-sm transition-all duration-300"
+    >
+      <div
+        class="container mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-6"
+      >
+        <!-- Logo -->
+        <a
+          href="index.html"
+          class="font-serif text-3xl font-black tracking-tighter text-indigo-900 shrink-0"
+          >CLOSET.</a
+        >
+
+        <!-- Desktop Menu -->
+        <ul
+          class="hidden lg:flex items-center gap-8 text-[13px] font-bold text-slate-700"
+        >
+          <li>
+            <a
+              href="shop.html"
+              class="hover:text-indigo-600 transition-colors py-2"
+              >Sản phẩm</a
+            >
+          </li>
+          <li>
+            <a
+              href="shop.html"
+              class="hover:text-indigo-600 transition-colors py-2 text-red-500"
+              >Giảm giá</a
+            >
+          </li>
+          <li>
+            <a
+              href="blog.html"
+              class="hover:text-indigo-600 transition-colors py-2"
+              >Blog</a
+            >
+          </li>
+          <li>
+            <a
+              href="lookbook.html"
+              class="hover:text-indigo-600 transition-colors py-2"
+              >Lookbook</a
+            >
+          </li>
+        </ul>
+
+        <!-- Search Bar -->
+        <div class="hidden md:flex flex-1 max-w-md relative">
+          <input
+            type="text"
+            placeholder="Tìm kiếm áo thun, quần jean..."
+            class="w-full bg-slate-100 text-sm border-none rounded-full py-2.5 pl-10 pr-4 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700"
+          />
+          <i
+            class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+          ></i>
+        </div>
+
+        <!-- Icons -->
+        <div class="flex items-center gap-5 text-slate-700 shrink-0">
+          <a
+            href="#"
+            class="hover:text-indigo-600 transition-colors text-lg"
+            title="Tài khoản"
+            ><i class="fa-regular fa-user"></i
+          ></a>
+          <a
+            href="cart.html"
+            class="relative hover:text-indigo-600 transition-colors text-lg flex items-center"
+            title="Giỏ hàng"
+          >
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold"
+              >2</span
+            >
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Full-width Hero Banner -->
+    <section
+      class="relative w-full h-[500px] md:h-[600px] bg-slate-200 overflow-hidden"
+    >
+      <img
+        src="https://images.pexels.com/photos/837140/pexels-photo-837140.jpeg?auto=compress&cs=tinysrgb&w=2000"
+        class="absolute inset-0 w-full h-full object-cover object-top"
+        alt="Banner"
+      />
+      <div
+        class="absolute inset-0 bg-black/30 flex items-center justify-center text-center"
+      >
+        <div class="text-white px-4">
+          <p
+            class="text-sm md:text-base font-bold uppercase tracking-widest mb-4"
+          >
+            Bộ sưu tập Hè 2026
+          </p>
+          <h1 class="text-4xl md:text-6xl font-bold mb-6">
+            Thời trang tĩnh lặng.
+          </h1>
+          <a
+            href="shop.html"
+            class="inline-block px-8 py-4 bg-white text-black font-bold uppercase tracking-wider text-sm hover:bg-indigo-600 hover:text-white transition-colors"
+            >Mua ngay</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Bar -->
+    <div class="bg-white border-b border-slate-200 py-4 overflow-x-auto">
+      <div class="container mx-auto px-4 min-w-max">
+        <div class="flex justify-center items-center gap-8 md:gap-12 text-sm font-bold text-slate-700 uppercase">
+          <a href="#nam" class="hover:text-indigo-600 transition-colors">Thời Trang Nam</a>
+          <a href="#nu" class="hover:text-indigo-600 transition-colors">Thời Trang Nữ</a>
+          <a href="#thethao" class="hover:text-indigo-600 transition-colors">Đồ Thể Thao</a>
+          <a href="#phukien" class="hover:text-indigo-600 transition-colors">Phụ Kiện</a>
+          <a href="#macnha" class="hover:text-indigo-600 transition-colors">Mặc Nhà</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- THỜI TRANG NAM -->
+    <section id="nam" class="py-12 bg-white">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="flex justify-between items-end mb-8 border-b border-slate-200 pb-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 uppercase">Thời Trang Nam</h2>
+            <p class="text-slate-500 text-sm">Trang phục hàng ngày thiết yếu dành cho nam giới.</p>
+          </div>
+          <a href="shop.html" class="text-indigo-600 text-sm font-bold hover:underline">Xem tất cả</a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Áo Polo" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Áo Polo Nam Classic Fit</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">350.000đ</p>
+                  <p class="text-xs text-slate-400 line-through">450.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Quần Short" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Quần Short Nam Vải French Terry</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">220.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/3317434/pexels-photo-3317434.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Áo Khoác" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Áo Khoác Gió Nam Chống Nước</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">490.000đ</p>
+                  <p class="text-xs text-slate-400 line-through">650.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Sơ mi" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Áo Sơ Mi Nam Tay Dài Premium</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">399.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THỜI TRANG NỮ -->
+    <section id="nu" class="py-12 bg-[#f8f9fa]">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="flex justify-between items-end mb-8 border-b border-slate-200 pb-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 uppercase">Thời Trang Nữ</h2>
+            <p class="text-slate-500 text-sm">Tôn vinh vẻ đẹp tối giản và thanh lịch.</p>
+          </div>
+          <a href="shop.html" class="text-indigo-600 text-sm font-bold hover:underline">Xem tất cả</a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/157675/fashion-men-s-individuality-black-and-white-157675.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Đầm" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Đầm Suông Nữ Cổ V Dáng Dài</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">450.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/1375849/pexels-photo-1375849.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Áo Nữ" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Áo Thun Nữ Cổ Tròn Basic</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">150.000đ</p>
+                  <p class="text-xs text-slate-400 line-through">199.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Quần Nữ" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Quần Ống Suông Nữ Lưng Cao</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">320.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/2036646/pexels-photo-2036646.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Áo Len" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Áo Len Nữ Cổ Lọ Mùa Đông</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">290.000đ</p>
+                  <p class="text-xs text-slate-400 line-through">350.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ĐỒ THỂ THAO -->
+    <section id="thethao" class="py-12 bg-white">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="flex justify-between items-end mb-8 border-b border-slate-200 pb-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 uppercase">Đồ Thể Thao</h2>
+            <p class="text-slate-500 text-sm">Chất liệu thấm hút mồ hôi, co giãn đa chiều.</p>
+          </div>
+          <a href="shop.html" class="text-indigo-600 text-sm font-bold hover:underline">Xem tất cả</a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/8436585/pexels-photo-8436585.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Set Thể thao" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Bộ Quần Áo Chạy Bộ Nam</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">450.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/8436573/pexels-photo-8436573.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Áo Thể thao" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Áo Thun Thể Thao Nữ Lỗ Kim</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">180.000đ</p>
+                  <p class="text-xs text-slate-400 line-through">250.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/8480571/pexels-photo-8480571.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Quần Tập" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Quần Legging Tập Gym Nữ Cao Cấp</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">250.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Product -->
+          <div class="group border border-slate-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+            <a href="product-detail.html" class="block relative aspect-[3/4] bg-slate-100">
+              <img src="https://images.pexels.com/photos/2228886/pexels-photo-2228886.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-full object-cover mix-blend-multiply" alt="Túi" />
+            </a>
+            <div class="p-4">
+              <a href="product-detail.html">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 hover:text-indigo-600">Túi Trống Thể Thao Đa Năng</h3>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-red-600">320.000đ</p>
+                  <p class="text-xs text-slate-400 line-through">400.000đ</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Journal Stories (Expanded to 6 Articles in an Editorial Grid!) -->
+    <section class="py-28 bg-white">
+      <div class="container mx-auto px-8">
+        <div class="flex justify-between items-end mb-20">
+          <div>
+            <span
+              class="text-indigo-600 text-[10px] font-black uppercase tracking-[0.3em] mb-4 block"
+              >Bản tin Journal</span
+            >
+            <h2 class="font-serif text-4xl md:text-5xl font-black italic">
+              The Editorial.
+            </h2>
+          </div>
+          <a
+            href="blog.html"
+            class="text-[10px] font-black uppercase tracking-[0.3em] border-b border-black pb-2 hover:opacity-50 transition-all"
+            >Xem tất cả</a
+          >
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
+          <!-- Article 1 -->
+          <article class="group cursor-pointer">
+            <a href="post-detail.html">
+              <div
+                class="aspect-video bg-slate-100 overflow-hidden mb-8 rounded-xl"
+              >
+                <img
+                  src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                  alt="Xu hướng phối đồ tối giản"
+                />
+              </div>
+              <h3
+                class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all"
+              >
+                Nghệ thuật phối đồ tối giản cho mùa Thu 2026
+              </h3>
+              <div
+                class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"
+              >
+                <span>15 Tháng 5, 2026</span
+                ><span class="w-1 h-1 bg-slate-200 rounded-full"></span
+                ><span>5 phút đọc</span>
+              </div>
+            </a>
+          </article>
+          <!-- Article 2 -->
+          <article class="group cursor-pointer">
+            <a href="post-detail.html">
+              <div
+                class="aspect-video bg-slate-100 overflow-hidden mb-8 rounded-xl"
+              >
+                <img
+                  src="https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                  alt="Creative director story"
+                />
+              </div>
+              <h3
+                class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all"
+              >
+                Gặp gỡ Giám đốc sáng tạo của CLOSET
+              </h3>
+              <div
+                class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"
+              >
+                <span>10 Tháng 5, 2026</span
+                ><span class="w-1 h-1 bg-slate-200 rounded-full"></span
+                ><span>12 phút đọc</span>
+              </div>
+            </a>
+          </article>
+          <!-- Article 3 -->
+          <article class="group cursor-pointer">
+            <a href="post-detail.html">
+              <div
+                class="aspect-video bg-slate-100 overflow-hidden mb-8 rounded-xl"
+              >
+                <img
+                  src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                  alt="Lookbook Paris"
+                />
+              </div>
+              <h3
+                class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all"
+              >
+                Lookbook: Ánh sáng ban mai tại Paris
+              </h3>
+              <div
+                class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"
+              >
+                <span>05 Tháng 5, 2026</span
+                ><span class="w-1 h-1 bg-slate-200 rounded-full"></span
+                ><span>3 phút đọc</span>
+              </div>
+            </a>
+          </article>
+          <!-- Article 4 -->
+          <article class="group cursor-pointer">
+            <a href="post-detail.html">
+              <div
+                class="aspect-video bg-slate-100 overflow-hidden mb-8 rounded-xl"
+              >
+                <img
+                  src="https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                  alt="Milan Fashion Week"
+                />
+              </div>
+              <h3
+                class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all"
+              >
+                Nhìn Lại Tuần Lễ Thời Trang Milan 2026
+              </h3>
+              <div
+                class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"
+              >
+                <span>01 Tháng 5, 2026</span
+                ><span class="w-1 h-1 bg-slate-200 rounded-full"></span
+                ><span>8 phút đọc</span>
+              </div>
+            </a>
+          </article>
+          <!-- Article 5 -->
+          <article class="group cursor-pointer">
+            <a href="post-detail.html">
+              <div
+                class="aspect-video bg-slate-100 overflow-hidden mb-8 rounded-xl"
+              >
+                <img
+                  src="https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                  alt="Cashmere Care"
+                />
+              </div>
+              <h3
+                class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all"
+              >
+                Bí Quyết Bảo Quản Áo Khoác Cashmere Cao Cấp
+              </h3>
+              <div
+                class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"
+              >
+                <span>28 Tháng 4, 2026</span
+                ><span class="w-1 h-1 bg-slate-200 rounded-full"></span
+                ><span>4 phút đọc</span>
+              </div>
+            </a>
+          </article>
+          <!-- Article 6 -->
+          <article class="group cursor-pointer">
+            <a href="post-detail.html">
+              <div
+                class="aspect-video bg-slate-100 overflow-hidden mb-8 rounded-xl"
+              >
+                <img
+                  src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                  alt="Monochrome Style"
+                />
+              </div>
+              <h3
+                class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all"
+              >
+                Phong Cách Monochrome: Sức Hút Từ Sự Đơn Sắc
+              </h3>
+              <div
+                class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"
+              >
+                <span>20 Tháng 4, 2026</span
+                ><span class="w-1 h-1 bg-slate-200 rounded-full"></span
+                ><span>6 phút đọc</span>
+              </div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="bg-[#0b0c10] text-[#c5c6c7] pt-28 pb-16 border-t border-[#1f2833]/20 relative overflow-hidden"
+    >
+      <!-- Subtle ambient gradient background -->
+      <div
+        class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"
+      ></div>
+      <div
+        class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-slate-500/5 rounded-full blur-[150px] pointer-events-none"
+      ></div>
+
+      <div class="container mx-auto px-8 relative z-10">
+        <!-- Top Section: Logo & Newsletter -->
+        <div
+          class="flex flex-col lg:flex-row justify-between items-start gap-16 pb-20 border-b border-slate-800/40"
+        >
+          <div class="max-w-md">
+            <h3
+              class="font-serif text-4xl font-black text-white tracking-tighter mb-6 italic"
+            >
+              CLOSET.
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+              Đỉnh cao của nghệ thuật tối giản và thời trang thượng hạng. Chúng
+              tôi kiến tạo những giá trị vượt thời gian, định hình phong cách
+              sang trọng thầm lặng.
+            </p>
+            <div class="flex items-center gap-6">
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"
+                ><i class="fa-brands fa-instagram text-sm"></i
+              ></a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"
+                ><i class="fa-brands fa-facebook-f text-sm"></i
+              ></a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"
+                ><i class="fa-brands fa-pinterest-p text-sm"></i
+              ></a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"
+                ><i class="fa-brands fa-tiktok text-sm"></i
+              ></a>
+            </div>
+          </div>
+
+          <div class="w-full lg:max-w-md">
+            <h4
+              class="text-xs font-black uppercase tracking-[0.2em] text-white mb-4"
+            >
+              Đăng ký nhận bản tin sớm
+            </h4>
+            <p class="text-slate-400 text-xs leading-relaxed mb-6">
+              Nhận thông tin về các bộ sưu tập mới nhất và những ưu đãi độc
+              quyền.
+            </p>
+            <div class="flex gap-2 w-full">
+              <input
+                type="email"
+                placeholder="Địa chỉ email của bạn"
+                class="flex-1 bg-slate-900/60 border border-slate-800 px-6 py-4 rounded-xl text-xs text-white outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-bold uppercase tracking-widest"
+              />
+              <button
+                type="submit"
+                class="px-8 py-4 bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-lg shadow-white/5"
+              >
+                Đăng ký
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle Section: Navigation Columns -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-12 py-20 text-sm">
+          <div>
+            <h4
+              class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8"
+            >
+              Bộ sưu tập
+            </h4>
+            <ul
+              class="space-y-4 text-xs font-bold text-slate-400 tracking-wider"
+            >
+              <li>
+                <a href="shop.html" class="hover:text-white transition-all"
+                  >Classic Suit</a
+                >
+              </li>
+              <li>
+                <a href="shop.html" class="hover:text-white transition-all"
+                  >Heritage Overcoat</a
+                >
+              </li>
+              <li>
+                <a href="shop.html" class="hover:text-white transition-all"
+                  >Merino Knitwear</a
+                >
+              </li>
+              <li>
+                <a href="shop.html" class="hover:text-white transition-all"
+                  >Evening Dress</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8"
+            >
+              Khám phá
+            </h4>
+            <ul
+              class="space-y-4 text-xs font-bold text-slate-400 tracking-wider"
+            >
+              <li>
+                <a href="shop.html" class="hover:text-white transition-all"
+                  >Cửa hàng chính hãng</a
+                >
+              </li>
+              <li>
+                <a href="blog.html" class="hover:text-white transition-all"
+                  >Bản tin Journal</a
+                >
+              </li>
+              <li>
+                <a href="lookbook.html" class="hover:text-white transition-all"
+                  >Lookbook Tĩnh</a
+                >
+              </li>
+              <li>
+                <a href="brand.html" class="hover:text-white transition-all"
+                  >Câu chuyện thương hiệu</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8"
+            >
+              Dịch vụ khách hàng
+            </h4>
+            <ul
+              class="space-y-4 text-xs font-bold text-slate-400 tracking-wider"
+            >
+              <li>
+                <a href="#" class="hover:text-white transition-all"
+                  >Liên hệ hỗ trợ</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all"
+                  >Chính sách vận chuyển</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all"
+                  >Đổi trả & Bảo hành</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all"
+                  >Hướng dẫn chọn size</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8"
+            >
+              Cửa hàng
+            </h4>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+              <strong class="text-white block mb-1">Flagship Store</strong>
+              123 Đường Đồng Khởi, Bến Nghé, Quận 1, TP. Hồ Chí Minh
+            </p>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              <strong class="text-white block mb-1">Hotline liên hệ</strong>
+              1900 123 456 (9:00 - 22:00)
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Section: Copyright & Payments -->
+        <div
+          class="pt-8 border-t border-slate-800/40 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400"
+        >
+          <p>
+            &copy; 2026 Closet Fashion Store. All Rights Reserved. Designed for
+            Quiet Luxury.
+          </p>
+          <div class="flex items-center gap-6">
+            <span class="opacity-50">Phương thức thanh toán:</span>
+            <div class="flex gap-3 text-lg text-slate-500">
+              <i
+                class="fa-brands fa-cc-visa hover:text-white transition-all"
+              ></i>
+              <i
+                class="fa-brands fa-cc-mastercard hover:text-white transition-all"
+              ></i>
+              <i
+                class="fa-brands fa-cc-apple-pay hover:text-white transition-all"
+              ></i>
+              <i
+                class="fa-solid fa-money-bill-transfer hover:text-white transition-all"
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Interactive Navigation Animation & Scroll Reveal Script -->
+    <script>
+      // Navigation bar transition on scroll
+      window.onscroll = function () {
+        const nav = document.getElementById("main-nav");
+        if (nav) {
+          if (window.scrollY > 50) {
+            nav.classList.add("nav-scrolled");
+            nav.style.height = "80px";
+          } else {
+            nav.classList.remove("nav-scrolled");
+            nav.style.height = "96px";
+          }
+        }
+      };
+
+      // Intersection Observer for artistic Scroll Reveal
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.15,
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".reveal-item").forEach((item) => {
+        observer.observe(item);
+      });
+    </script>
+  </body>
+</html>

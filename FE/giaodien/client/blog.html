@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạp chí Journal | CLOSET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, .font-serif, h1, h2, h3, h4, h5, p, span, div, a { font-family: Arial, Helvetica, sans-serif !important; }
+        * { letter-spacing: normal !important; }
+        body { background-color: #faf9f6; }
+        .font-black { font-weight: 700 !important; }
+        .italic { font-style: normal !important; }
+        
+        /* Smooth fade-in animation for content loading */
+        .fade-in { animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism navigation scroll effect */
+        .nav-scrolled { 
+            background: rgba(250, 249, 246, 0.75); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04); 
+        }
+
+        /* Hover image scale */
+        .article-card:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
+
+    <!-- Functional Navigation Header -->
+    <nav id="main-nav" class="sticky top-0 w-full z-[100] bg-white border-b border-slate-100 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-6">
+            <!-- Logo -->
+            <a href="index.html" class="font-serif text-3xl font-black tracking-tighter text-indigo-900 shrink-0">CLOSET.</a>
+            
+            <!-- Desktop Menu -->
+            <ul class="hidden lg:flex items-center gap-8 text-[13px] font-bold text-slate-700">
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-colors py-2">Sản phẩm</a></li>
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-colors py-2 text-red-500">Giảm giá</a></li>
+                <li><a href="blog.html" class="text-indigo-600 transition-colors py-2 border-b-2 border-indigo-600">Blog</a></li>
+                <li><a href="lookbook.html" class="hover:text-indigo-600 transition-colors py-2">Lookbook</a></li>
+            </ul>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md relative">
+                <input type="text" placeholder="Tìm kiếm bài viết..." class="w-full bg-slate-100 text-sm border-none rounded-full py-2.5 pl-10 pr-4 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-5 text-slate-700 shrink-0">
+                <a href="#" class="hover:text-indigo-600 transition-colors text-lg" title="Tài khoản"><i class="fa-regular fa-user"></i></a>
+                <a href="cart.html" class="relative hover:text-indigo-600 transition-colors text-lg flex items-center" title="Giỏ hàng">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="pt-40 pb-20 border-b border-slate-200/60 text-center fade-in">
+        <div class="container mx-auto px-8">
+            <span class="text-indigo-600 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Tạp chí thời trang</span>
+            <h1 class="font-serif text-6xl md:text-8xl font-black italic mb-10">Journal.</h1>
+            
+            <!-- Category Filter -->
+            <div class="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400 mt-12">
+                <a href="#" class="text-slate-900 border-b border-slate-900 pb-2">Tất cả</a>
+                <a href="#" class="hover:text-slate-900 transition-all pb-2">Thời trang</a>
+                <a href="#" class="hover:text-slate-900 transition-all pb-2">Di sản</a>
+                <a href="#" class="hover:text-slate-900 transition-all pb-2">Phong cách sống</a>
+                <a href="#" class="hover:text-slate-900 transition-all pb-2">Nghệ thuật</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-24 fade-in" style="animation-delay: 0.2s;">
+        <div class="container mx-auto px-8">
+            
+            <!-- Hero Featured Article -->
+            <div class="mb-24 cursor-pointer group article-card">
+                <a href="post-detail.html" class="block">
+                    <div class="relative w-full aspect-[21/9] bg-slate-100 rounded-2xl overflow-hidden mb-10">
+                        <img src="https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=2400" class="w-full h-full object-cover object-[center_30%] transition-transform duration-[1500ms] ease-out" alt="Hero Article">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-12 text-white">
+                            <span class="bg-white/20 backdrop-blur text-[9px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full mb-6 inline-block">Mới nhất</span>
+                            <h2 class="font-serif text-4xl md:text-6xl font-black italic mb-4">Sức hút của sự Tĩnh Lặng: Định hình phong cách Thu Đông 2026</h2>
+                            <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-white/70">
+                                <span>18 Tháng 5, 2026</span>
+                                <span class="w-1 h-1 bg-white/50 rounded-full"></span>
+                                <span>Bởi Closet Team</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Articles Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
+                <!-- Article 1 -->
+                <article class="group cursor-pointer article-card">
+                    <a href="post-detail.html">
+                        <div class="aspect-[4/5] bg-slate-100 overflow-hidden mb-8 rounded-2xl"><img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover transition-all duration-[1500ms] ease-out" alt="Xu hướng phối đồ tối giản"></div>
+                        <span class="text-indigo-600 text-[9px] font-black uppercase tracking-[0.3em] mb-4 block">Thời trang</span>
+                        <h3 class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all leading-snug">Nghệ thuật phối đồ tối giản cho nam giới hiện đại</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">Làm thế nào để tạo ra điểm nhấn chỉ với những gam màu trung tính và phom dáng cổ điển...</p>
+                        <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"><span>15 Tháng 5, 2026</span><span class="w-1 h-1 bg-slate-200 rounded-full"></span><span>5 phút đọc</span></div>
+                    </a>
+                </article>
+                <!-- Article 2 -->
+                <article class="group cursor-pointer article-card">
+                    <a href="post-detail.html">
+                        <div class="aspect-[4/5] bg-slate-100 overflow-hidden mb-8 rounded-2xl"><img src="https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover transition-all duration-[1500ms] ease-out" alt="Creative director story"></div>
+                        <span class="text-indigo-600 text-[9px] font-black uppercase tracking-[0.3em] mb-4 block">Di sản</span>
+                        <h3 class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all leading-snug">Gặp gỡ Giám đốc sáng tạo đằng sau CLOSET</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">Cuộc phỏng vấn độc quyền về nguồn cảm hứng và triết lý thiết kế Quiet Luxury của thương hiệu...</p>
+                        <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"><span>10 Tháng 5, 2026</span><span class="w-1 h-1 bg-slate-200 rounded-full"></span><span>12 phút đọc</span></div>
+                    </a>
+                </article>
+                <!-- Article 3 -->
+                <article class="group cursor-pointer article-card">
+                    <a href="post-detail.html">
+                        <div class="aspect-[4/5] bg-slate-100 overflow-hidden mb-8 rounded-2xl"><img src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover transition-all duration-[1500ms] ease-out" alt="Lookbook Paris"></div>
+                        <span class="text-indigo-600 text-[9px] font-black uppercase tracking-[0.3em] mb-4 block">Phong cách sống</span>
+                        <h3 class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all leading-snug">Lookbook: Ánh sáng ban mai rực rỡ tại Paris</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">Theo chân người mẫu lang thang trên những con phố tĩnh lặng nhất của thủ đô ánh sáng...</p>
+                        <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"><span>05 Tháng 5, 2026</span><span class="w-1 h-1 bg-slate-200 rounded-full"></span><span>3 phút đọc</span></div>
+                    </a>
+                </article>
+                <!-- Article 4 -->
+                <article class="group cursor-pointer article-card">
+                    <a href="post-detail.html">
+                        <div class="aspect-[4/5] bg-slate-100 overflow-hidden mb-8 rounded-2xl"><img src="https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover transition-all duration-[1500ms] ease-out" alt="Milan Fashion Week"></div>
+                        <span class="text-indigo-600 text-[9px] font-black uppercase tracking-[0.3em] mb-4 block">Sự kiện</span>
+                        <h3 class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all leading-snug">Nhìn Lại Tuần Lễ Thời Trang Milan 2026</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">Tổng hợp những thiết kế ấn tượng nhất và các xu hướng sắp tới cho mùa mốt tiếp theo...</p>
+                        <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"><span>01 Tháng 5, 2026</span><span class="w-1 h-1 bg-slate-200 rounded-full"></span><span>8 phút đọc</span></div>
+                    </a>
+                </article>
+                <!-- Article 5 -->
+                <article class="group cursor-pointer article-card">
+                    <a href="post-detail.html">
+                        <div class="aspect-[4/5] bg-slate-100 overflow-hidden mb-8 rounded-2xl"><img src="https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover transition-all duration-[1500ms] ease-out" alt="Cashmere Care"></div>
+                        <span class="text-indigo-600 text-[9px] font-black uppercase tracking-[0.3em] mb-4 block">Thời trang</span>
+                        <h3 class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all leading-snug">Bí Quyết Bảo Quản Áo Khoác Cashmere Cao Cấp</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">Những kiến thức căn bản để giữ gìn món đồ xa xỉ của bạn luôn bền đẹp như mới qua năm tháng...</p>
+                        <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"><span>28 Tháng 4, 2026</span><span class="w-1 h-1 bg-slate-200 rounded-full"></span><span>4 phút đọc</span></div>
+                    </a>
+                </article>
+                <!-- Article 6 -->
+                <article class="group cursor-pointer article-card">
+                    <a href="post-detail.html">
+                        <div class="aspect-[4/5] bg-slate-100 overflow-hidden mb-8 rounded-2xl"><img src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover transition-all duration-[1500ms] ease-out" alt="Monochrome Style"></div>
+                        <span class="text-indigo-600 text-[9px] font-black uppercase tracking-[0.3em] mb-4 block">Nghệ thuật</span>
+                        <h3 class="font-serif text-2xl font-black mb-4 italic group-hover:text-indigo-600 transition-all leading-snug">Phong Cách Monochrome: Sức Hút Từ Sự Đơn Sắc</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">Sử dụng một tông màu duy nhất để tạo chiều sâu và đẳng cấp cho trang phục của bạn...</p>
+                        <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-slate-400"><span>20 Tháng 4, 2026</span><span class="w-1 h-1 bg-slate-200 rounded-full"></span><span>6 phút đọc</span></div>
+                    </a>
+                </article>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center items-center gap-4 mt-24">
+                <button class="w-10 h-10 border border-slate-300 rounded-full flex items-center justify-center text-slate-400 hover:border-black hover:text-black transition-all"><i class="fa-solid fa-angle-left"></i></button>
+                <div class="flex items-center gap-6 text-[10px] font-black tracking-widest">
+                    <a href="#" class="text-black border-b border-black pb-1">01</a>
+                    <a href="#" class="text-slate-400 hover:text-black transition-all">02</a>
+                    <a href="#" class="text-slate-400 hover:text-black transition-all">03</a>
+                </div>
+                <button class="w-10 h-10 border border-slate-300 rounded-full flex items-center justify-center text-slate-400 hover:border-black hover:text-black transition-all"><i class="fa-solid fa-angle-right"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0b0c10] text-[#c5c6c7] pt-28 pb-16 border-t border-[#1f2833]/20 relative overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-slate-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-16 pb-20 border-b border-slate-800/40">
+                <div class="max-w-md">
+                    <h3 class="font-serif text-4xl font-black text-white tracking-tighter mb-6 italic">CLOSET.</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                        Đỉnh cao của nghệ thuật tối giản và thời trang thượng hạng. Chúng tôi kiến tạo những giá trị vượt thời gian, định hình phong cách sang trọng thầm lặng.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-pinterest-p text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-tiktok text-sm"></i></a>
+                    </div>
+                </div>
+
+                <div class="w-full lg:max-w-md">
+                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-white mb-4">Đăng ký nhận bản tin sớm</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Nhận thông tin về các bài viết mới nhất trên Journal.</p>
+                    <div class="flex gap-2 w-full">
+                        <input type="email" placeholder="Địa chỉ email của bạn" class="flex-1 bg-slate-900/60 border border-slate-800 px-6 py-4 rounded-xl text-xs text-white outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder:text-slate-500 font-bold uppercase tracking-widest">
+                        <button type="submit" class="px-8 py-4 bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-lg shadow-white/5">Đăng ký</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 py-20 text-sm">
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Bộ sưu tập</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="shop.html" class="hover:text-white transition-all">Classic Suit</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Heritage Overcoat</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Merino Knitwear</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Evening Dress</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Khám phá</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="shop.html" class="hover:text-white transition-all">Cửa hàng chính hãng</a></li>
+                        <li><a href="blog.html" class="hover:text-white transition-all">Bản tin Journal</a></li>
+                        <li><a href="lookbook.html" class="hover:text-white transition-all">Lookbook Tĩnh</a></li>
+                        <li><a href="brand.html" class="hover:text-white transition-all">Câu chuyện thương hiệu</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Dịch vụ khách hàng</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="#" class="hover:text-white transition-all">Liên hệ hỗ trợ</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Chính sách vận chuyển</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Đổi trả & Bảo hành</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Hướng dẫn chọn size</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Cửa hàng</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                        <strong class="text-white block mb-1">Flagship Store</strong>
+                        123 Đường Đồng Khởi, Bến Nghé, Quận 1, TP. Hồ Chí Minh
+                    </p>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        <strong class="text-white block mb-1">Hotline liên hệ</strong>
+                        1900 123 456 (9:00 - 22:00)
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800/40 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                <p>&copy; 2026 Closet Fashion Store. All Rights Reserved. Designed for Quiet Luxury.</p>
+                <div class="flex items-center gap-6">
+                    <span class="opacity-50">Phương thức thanh toán:</span>
+                    <div class="flex gap-3 text-lg text-slate-500">
+                        <i class="fa-brands fa-cc-visa hover:text-white transition-all"></i>
+                        <i class="fa-brands fa-cc-mastercard hover:text-white transition-all"></i>
+                        <i class="fa-brands fa-cc-apple-pay hover:text-white transition-all"></i>
+                        <i class="fa-solid fa-money-bill-transfer hover:text-white transition-all"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Navigation Animation Script -->
+    <script>
+        window.onscroll = function() {
+            const nav = document.getElementById('main-nav');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.classList.add('nav-scrolled');
+                    nav.style.height = '80px';
+                } else {
+                    nav.classList.remove('nav-scrolled');
+                    nav.style.height = '96px';
+                }
+            }
+        };
+    </script>
+</body>
+</html>

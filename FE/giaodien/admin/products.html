@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm | CLOSET Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 99px; }
+
+        /* ── Sidebar ── */
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #a5b4fc; transition: all 0.18s; cursor: pointer; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-link.active { background: rgba(255,255,255,0.12); color: #fff; }
+        .sidebar-link i { width: 20px; text-align: center; font-size: 14px; }
+
+        /* ── Input ── */
+        .inp { width: 100%; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-family: inherit; outline: none; background: #fff; transition: border-color 0.18s; color: #111; }
+        .inp:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.08); }
+        .inp::placeholder { color: #9ca3af; }
+        select.inp { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 14px; padding-right: 36px; }
+
+        /* ── Modal overlay ── */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal-box { background: #fff; border-radius: 20px; width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.2); transform: translateY(24px) scale(0.98); transition: transform 0.25s; }
+        .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+
+        /* ── Table ── */
+        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        thead th { background: #f8f9fb; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: #9ca3af; padding: 14px 20px; }
+        thead th:first-child { border-radius: 12px 0 0 12px; }
+        thead th:last-child { border-radius: 0 12px 12px 0; }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:hover { background: #f8f9fb; }
+        tbody td { padding: 14px 20px; border-bottom: 1px solid #f3f4f6; font-size: 13px; vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+
+        /* ── Badge ── */
+        .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 99px; }
+
+        /* ── Receipt type tabs ── */
+        .rcpt-tab { flex: 1; padding: 14px; border-radius: 12px; border: 2px solid #e5e7eb; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .rcpt-tab.active { border-color: #6366f1; background: #eef2ff; }
+        .rcpt-tab .tab-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .rcpt-tab.active .tab-icon { background: #6366f1; color: white; }
+        .rcpt-tab:not(.active) .tab-icon { background: #f3f4f6; color: #9ca3af; }
+        .rcpt-tab p { font-size: 12px; font-weight: 800; color: #374151; }
+        .rcpt-tab span { font-size: 11px; color: #9ca3af; font-weight: 500; }
+
+        /* ── Size/Color grid in receipt ── */
+        .var-row { display: grid; gap: 8px; align-items: center; padding: 10px 12px; background: #f9fafb; border-radius: 10px; margin-bottom: 6px; }
+        .var-row .var-label { font-size: 12px; font-weight: 800; color: #374151; }
+        .qty-inp { border: 1.5px solid #e5e7eb; border-radius: 8px; padding: 7px 10px; font-size: 13px; font-weight: 700; font-family: inherit; outline: none; background: #fff; width: 80px; text-align: center; transition: border-color 0.15s; }
+        .qty-inp:focus { border-color: #6366f1; }
+
+        /* ── Color swatch ── */
+        .color-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.12); display: inline-block; flex-shrink: 0; }
+
+        /* ── Btn ── */
+        .btn-primary { background: #6366f1; color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 13px; font-weight: 800; font-family: inherit; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-outline { background: transparent; color: #6b7280; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 11px 24px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.2s; }
+        .btn-outline:hover { border-color: #374151; color: #374151; }
+
+        /* ── Import receipt list view ── */
+        .receipt-card { border: 1.5px solid #e5e7eb; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: box-shadow 0.18s; cursor: pointer; }
+        .receipt-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.07); border-color: #a5b4fc; }
+
+        /* ── Stats cards ── */
+        .stat-card { background: #fff; border-radius: 16px; padding: 20px; border: 1.5px solid #f3f4f6; }
+
+        /* ── Search bar ── */
+        .search-bar { position: relative; }
+        .search-bar i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 13px; }
+        .search-bar input { padding-left: 38px; }
+
+        /* ── Tab switcher ── */
+        .main-tab { padding: 8px 20px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; border: none; font-family: inherit; }
+        .main-tab.on { background: #6366f1; color: #fff; }
+        .main-tab:not(.on) { background: transparent; color: #6b7280; }
+        .main-tab:not(.on):hover { background: #f3f4f6; color: #374151; }
+
+        /* Tooltip */
+        [title] { position: relative; }
+
+        /* Animations */
+        @keyframes fadeSlideUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform:none; } }
+        .anim { animation: fadeSlideUp 0.4s ease both; }
+    </style>
+</head>
+<body class="bg-[#f4f5f7] text-slate-900 flex h-screen overflow-hidden">
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════════ -->
+<aside class="w-60 bg-[#1e1b4b] flex flex-col py-6 px-4 shrink-0 overflow-y-auto">
+    <!-- Logo -->
+    <div class="px-2 mb-8">
+        <div class="font-serif text-2xl font-black text-white tracking-tight" style="font-family:'Playfair Display',serif;">CLOSET.</div>
+        <div class="text-[10px] font-bold text-indigo-400 tracking-widest uppercase mt-0.5">Admin Panel</div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 space-y-1">
+        <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mb-2">Chính</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fa-solid fa-chart-pie"></i> Tổng quan</a>
+        <a href="orders.html" class="sidebar-link"><i class="fa-solid fa-receipt"></i> Đơn hàng</a>
+        <a href="pos.html" class="sidebar-link"><i class="fa-solid fa-cash-register"></i> Bán hàng (POS)</a>
+
+        <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mt-5 mb-2">Kho hàng</div>
+        <a href="products.html" class="sidebar-link active"><i class="fa-solid fa-box"></i> Sản phẩm</a>
+        <a href="inventory.html" class="sidebar-link"><i class="fa-solid fa-warehouse"></i> Tồn kho</a>
+        <a href="categories.html" class="sidebar-link"><i class="fa-solid fa-tags"></i> Danh mục</a>
+
+        <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mt-5 mb-2">Khác</div>
+        <a href="customers.html" class="sidebar-link"><i class="fa-solid fa-users"></i> Khách hàng</a>
+        <a href="settings.html" class="sidebar-link"><i class="fa-solid fa-gear"></i> Cài đặt</a>
+    </nav>
+
+    <!-- User -->
+    <div class="border-t border-indigo-900 pt-4 mt-4 flex items-center gap-3 px-2">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-black text-sm flex-shrink-0">A</div>
+        <div>
+            <p class="text-white text-xs font-bold leading-tight">Admin</p>
+            <p class="text-indigo-400 text-[10px]">admin@closet.vn</p>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════════ -->
+<main class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Top Bar -->
+    <header class="h-16 bg-white border-b border-slate-200/60 px-8 flex items-center justify-between shrink-0 gap-4">
+        <div class="flex items-center gap-3">
+            <h1 class="text-base font-black text-slate-900">Quản lý sản phẩm</h1>
+            <span class="badge bg-indigo-50 text-indigo-600"><i class="fa-solid fa-box"></i> 8 sản phẩm</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="btn-primary text-sm flex items-center gap-2" onclick="showProductModal()">
+                <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+            </button>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto p-6">
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-4 gap-4 mb-6 anim">
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tổng SP</span>
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                        <i class="fa-solid fa-box text-indigo-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-slate-900">8</p>
+                <p class="text-xs text-emerald-500 font-bold mt-1"><i class="fa-solid fa-arrow-up"></i> +2 tháng này</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tổng tồn kho</span>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                        <i class="fa-solid fa-warehouse text-emerald-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-slate-900">347</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">đơn vị trong kho</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sắp hết hàng</span>
+                    <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-amber-500">3</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">tồn &lt; 10 đơn vị</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Phiếu nhập</span>
+                    <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                        <i class="fa-solid fa-file-import text-purple-500 text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-black text-slate-900">12</p>
+                <p class="text-xs text-slate-400 font-bold mt-1">trong tháng 5/2026</p>
+            </div>
+        </div>
+
+        <!-- Tab switcher + Search -->
+        <div class="flex items-center justify-between mb-4 gap-4">
+            <!-- Filters -->
+            <div class="flex items-center gap-3 w-full">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="inp" placeholder="Tìm sản phẩm..." style="width:220px;" oninput="filterTable(this.value)">
+                </div>
+                <select class="inp" style="width:160px;">
+                    <option value="">Tất cả danh mục</option>
+                    <option>Đồ Âu Cao Cấp</option>
+                    <option>Áo Khoác</option>
+                    <option>Knitwear</option>
+                    <option>Phụ kiện</option>
+                </select>
+                <select class="inp" style="width:140px;">
+                    <option value="">Tất cả trạng thái</option>
+                    <option>Còn hàng</option>
+                    <option>Sắp hết</option>
+                    <option>Hết hàng</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ═══ PRODUCTS TABLE ════════════════════════════════ -->
+        <div id="view-products" class="anim">
+            <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:40px;"><input type="checkbox" class="rounded"></th>
+                            <th>Sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá bán</th>
+                            <th>Tồn kho</th>
+                            <th>Biến thể</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-table-body">
+                        <!-- Row 1 -->
+                        <tr class="product-row">
+                            <td><input type="checkbox" class="rounded"></td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=100" class="w-11 h-11 object-cover rounded-xl flex-shrink-0" alt="Classic Midnight Suit">
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-sm">Classic Midnight Suit</p>
+                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">SKU: CL-MS-01</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-xs font-bold text-slate-500">Đồ Âu Cao Cấp</span></td>
+                            <td><span class="font-black text-indigo-600 text-sm">7.500.000đ</span></td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-emerald-400 rounded-full" style="width:70%"></div>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-600">42</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-1 flex-wrap">
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">S</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">M</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">L</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">XL</span>
+                                    <div class="color-dot" style="background:#1a237e;" title="Navy Blue"></div>
+                                    <div class="color-dot" style="background:#212121;" title="Black"></div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-emerald-50 text-emerald-600"><i class="fa-solid fa-circle" style="font-size:6px"></i> Còn hàng</span></td>
+                            <td>
+                                <div class="flex items-center gap-1.5">
+                                    <button class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center hover:bg-indigo-100 transition-all" title="Sửa" onclick="showProductModal('Classic Midnight Suit')"><i class="fa-solid fa-pen text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center hover:bg-purple-100 transition-all" title="Tạo phiếu nhập" onclick="showReceiptModal(null,'Classic Midnight Suit')"><i class="fa-solid fa-file-import text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all" title="Xoá"><i class="fa-solid fa-trash text-[11px]"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="product-row">
+                            <td><input type="checkbox" class="rounded"></td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.pexels.com/photos/3317434/pexels-photo-3317434.jpeg?auto=compress&cs=tinysrgb&w=100" class="w-11 h-11 object-cover rounded-xl flex-shrink-0" alt="Heritage Overcoat">
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-sm">Heritage Overcoat</p>
+                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">SKU: CL-OC-01</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-xs font-bold text-slate-500">Áo Khoác</span></td>
+                            <td><span class="font-black text-indigo-600 text-sm">12.200.000đ</span></td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-amber-400 rounded-full" style="width:20%"></div>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-600">8</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-1 flex-wrap">
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">M</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">L</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">XL</span>
+                                    <div class="color-dot" style="background:#795548;" title="Camel Brown"></div>
+                                    <div class="color-dot" style="background:#37474f;" title="Charcoal"></div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-amber-50 text-amber-600"><i class="fa-solid fa-circle" style="font-size:6px"></i> Sắp hết</span></td>
+                            <td>
+                                <div class="flex items-center gap-1.5">
+                                    <button class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center hover:bg-indigo-100 transition-all" title="Sửa" onclick="showProductModal('Heritage Overcoat')"><i class="fa-solid fa-pen text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center hover:bg-purple-100 transition-all" title="Tạo phiếu nhập" onclick="showReceiptModal(null,'Heritage Overcoat')"><i class="fa-solid fa-file-import text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all" title="Xoá"><i class="fa-solid fa-trash text-[11px]"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="product-row">
+                            <td><input type="checkbox" class="rounded"></td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.pexels.com/photos/3621117/pexels-photo-3621117.jpeg?auto=compress&cs=tinysrgb&w=100" class="w-11 h-11 object-cover rounded-xl flex-shrink-0" alt="Merino Knitwear">
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-sm">Merino Knitwear</p>
+                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">SKU: CL-KW-01</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-xs font-bold text-slate-500">Knitwear</span></td>
+                            <td><span class="font-black text-indigo-600 text-sm">4.200.000đ</span></td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-emerald-400 rounded-full" style="width:85%"></div>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-600">65</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-1 flex-wrap">
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">S</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">M</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">L</span>
+                                    <div class="color-dot" style="background:#f5f5f5;border-color:#ccc;" title="White"></div>
+                                    <div class="color-dot" style="background:#616161;" title="Grey"></div>
+                                    <div class="color-dot" style="background:#bf360c;" title="Burgundy"></div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-emerald-50 text-emerald-600"><i class="fa-solid fa-circle" style="font-size:6px"></i> Còn hàng</span></td>
+                            <td>
+                                <div class="flex items-center gap-1.5">
+                                    <button class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center hover:bg-indigo-100 transition-all" title="Sửa" onclick="showProductModal('Merino Knitwear')"><i class="fa-solid fa-pen text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center hover:bg-purple-100 transition-all" title="Tạo phiếu nhập" onclick="showReceiptModal(null,'Merino Knitwear')"><i class="fa-solid fa-file-import text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all" title="Xoá"><i class="fa-solid fa-trash text-[11px]"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Row 4 -->
+                        <tr class="product-row">
+                            <td><input type="checkbox" class="rounded"></td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=100" class="w-11 h-11 object-cover rounded-xl flex-shrink-0" alt="Chelsea Heritage Boots">
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-sm">Chelsea Heritage Boots</p>
+                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">SKU: CL-BT-01</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-xs font-bold text-slate-500">Phụ kiện</span></td>
+                            <td><span class="font-black text-indigo-600 text-sm">4.800.000đ</span></td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-red-400 rounded-full" style="width:5%"></div>
+                                    </div>
+                                    <span class="text-xs font-bold text-red-500">3</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-1 flex-wrap">
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">39</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">40</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">41</span>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">42</span>
+                                    <div class="color-dot" style="background:#3e2723;" title="Dark Brown"></div>
+                                    <div class="color-dot" style="background:#212121;" title="Black"></div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-red-50 text-red-500"><i class="fa-solid fa-circle" style="font-size:6px"></i> Gần hết</span></td>
+                            <td>
+                                <div class="flex items-center gap-1.5">
+                                    <button class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center hover:bg-indigo-100 transition-all" title="Sửa"><i class="fa-solid fa-pen text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center hover:bg-purple-100 transition-all" title="Tạo phiếu nhập" onclick="showReceiptModal(null,'Chelsea Heritage Boots')"><i class="fa-solid fa-file-import text-[11px]"></i></button>
+                                    <button class="w-7 h-7 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all" title="Xoá"><i class="fa-solid fa-trash text-[11px]"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between px-6 py-4 border-t border-slate-100">
+                    <p class="text-xs text-slate-400 font-bold">Hiển thị 1–4 / 8 sản phẩm</p>
+                    <div class="flex items-center gap-1">
+                        <button class="w-7 h-7 rounded-lg border border-slate-200 text-slate-400 text-xs hover:border-indigo-400 hover:text-indigo-600 transition-all">‹</button>
+                        <button class="w-7 h-7 rounded-lg bg-indigo-600 text-white text-xs font-black">1</button>
+                        <button class="w-7 h-7 rounded-lg border border-slate-200 text-slate-500 text-xs hover:border-indigo-400 hover:text-indigo-600 transition-all">2</button>
+                        <button class="w-7 h-7 rounded-lg border border-slate-200 text-slate-400 text-xs hover:border-indigo-400 hover:text-indigo-600 transition-all">›</button>
+                    </div>
+                </div>
+        </div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: THÊM / SỬA SẢN PHẨM
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-product" onclick="closeModalOnBg(event,'modal-product')">
+  <div class="modal-box" style="max-width:640px;">
+    <div class="flex items-center justify-between px-7 py-5 border-b border-slate-100">
+        <h2 class="text-base font-black text-slate-900" id="product-modal-title">Thêm sản phẩm mới</h2>
+        <button onclick="closeModal('modal-product')" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark text-sm"></i></button>
+    </div>
+    <div class="p-7 space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-2">
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Tên sản phẩm</label>
+                <input type="text" class="inp" id="prod-name" placeholder="VD: Classic Midnight Suit">
+            </div>
+            <div>
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">SKU</label>
+                <input type="text" class="inp" id="prod-sku" placeholder="VD: CL-MS-01">
+            </div>
+            <div>
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Danh mục</label>
+                <select class="inp" id="prod-cat">
+                    <option>Đồ Âu Cao Cấp</option>
+                    <option>Áo Khoác</option>
+                    <option>Knitwear</option>
+                    <option>Phụ kiện</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Giá bán (đ)</label>
+                <input type="number" class="inp" id="prod-price" placeholder="VD: 7500000">
+            </div>
+            <div>
+                <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Giá vốn (đ)</label>
+                <input type="number" class="inp" id="prod-cost" placeholder="VD: 4000000">
+            </div>
+        </div>
+
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Các Size có sẵn</label>
+            <div class="flex flex-wrap gap-2" id="size-toggle">
+                <span class="size-tag">S</span><span class="size-tag active">M</span><span class="size-tag active">L</span><span class="size-tag active">XL</span><span class="size-tag">XXL</span><span class="size-tag">39</span><span class="size-tag">40</span><span class="size-tag">41</span><span class="size-tag">42</span><span class="size-tag">43</span>
+            </div>
+        </div>
+
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Các Màu có sẵn</label>
+            <div class="flex flex-wrap gap-2" id="color-toggle">
+                <span class="color-tag active" data-color="#1a237e" title="Navy Blue"><span class="color-dot" style="background:#1a237e;"></span>Navy Blue</span>
+                <span class="color-tag" data-color="#212121" title="Black"><span class="color-dot" style="background:#212121;"></span>Black</span>
+                <span class="color-tag" data-color="#795548" title="Camel Brown"><span class="color-dot" style="background:#795548;"></span>Camel Brown</span>
+                <span class="color-tag" data-color="#37474f" title="Charcoal"><span class="color-dot" style="background:#37474f;"></span>Charcoal</span>
+                <span class="color-tag" data-color="#f5f5f5" title="White"><span class="color-dot" style="background:#eee;border:1px solid #ccc;"></span>White</span>
+                <span class="color-tag" data-color="#bf360c" title="Burgundy"><span class="color-dot" style="background:#bf360c;"></span>Burgundy</span>
+            </div>
+        </div>
+
+        <div>
+            <label class="text-xs font-black uppercase tracking-wider text-slate-500 mb-2 block">Mô tả ngắn</label>
+            <textarea class="inp" rows="3" style="resize:none;border-radius:10px;" placeholder="Mô tả ngắn về sản phẩm..."></textarea>
+        </div>
+    </div>
+    <div class="flex items-center justify-end gap-3 px-7 py-5 border-t border-slate-100">
+        <button class="btn-outline" onclick="closeModal('modal-product')">Huỷ</button>
+        <button class="btn-primary flex items-center gap-2" onclick="submitProduct()">
+            <i class="fa-solid fa-check text-xs"></i> Lưu sản phẩm
+        </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast Notification ── -->
+<div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white text-sm font-bold px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 opacity-0 pointer-events-none transition-all duration-300 z-[2000]">
+    <i class="fa-solid fa-check-circle text-emerald-400"></i>
+    <span id="toast-msg">Thao tác thành công!</span>
+</div>
+
+<style>
+    .size-tag { padding: 5px 12px; border-radius: 8px; border: 1.5px solid #e5e7eb; font-size: 12px; font-weight: 700; color: #6b7280; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .size-tag.active { border-color: #6366f1; background: #eef2ff; color: #4f46e5; }
+    .color-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 8px; border: 1.5px solid #e5e7eb; font-size: 12px; font-weight: 700; color: #6b7280; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .color-tag.active { border-color: #6366f1; background: #eef2ff; color: #4f46e5; }
+</style>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────
+const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+const COLORS = [
+    { name: 'Navy Blue',   hex: '#1a237e' },
+    { name: 'Black',       hex: '#212121' },
+    { name: 'Charcoal',    hex: '#37474f' },
+    { name: 'Camel Brown', hex: '#795548' },
+    { name: 'White',       hex: '#f5f5f5', border: '#ccc' },
+    { name: 'Burgundy',    hex: '#bf360c' },
+];
+
+// ─── INIT ─────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+    initToggleTags();
+});
+
+// ─── MODAL HELPERS ───────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+        SIZES.forEach(s => {
+            tags += `<span class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700">
+                <i class="fa-solid fa-ruler text-indigo-400 text-[10px]"></i> ${s}
+            </span>`;
+        });
+        count = SIZES.length;
+    } else {
+        // 1 ri = 1 của mỗi màu
+        COLORS.forEach(c => {
+            tags += `<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700">
+                <span style="width:10px;height:10px;border-radius:50%;background:${c.hex};border:1px solid rgba(0,0,0,0.15);display:inline-block;flex-shrink:0;"></span>
+                ${c.name}
+            </span>`;
+        });
+        count = COLORS.length;
+    }
+
+    preview.innerHTML = tags;
+    document.getElementById('ri-variant-count').textContent = count;
+    updateSummary();
+}
+
+// ─── UPDATE SUMMARY ──────────────────────────────────────
+function updateSummary() {
+    const ri = parseInt(document.getElementById('ri-count').value) || 0;
+    const varCount = currentReceiptType === 'full-size' ? SIZES.length : COLORS.length;
+    const total = ri * varCount;
+    document.getElementById('total-qty-display').textContent = total + ' đơn vị';
+    document.getElementById('summary-detail').textContent = ri + ' ri × ' + varCount + ' biến thể';
+}
+
+
+// ─── SHOW PRODUCT MODAL ──────────────────────────────────
+function showProductModal(name) {
+    document.getElementById('product-modal-title').textContent = name ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới';
+    document.getElementById('prod-name').value = name || '';
+    openModal('modal-product');
+}
+
+// ─── SUBMIT PRODUCT ──────────────────────────────────────
+function submitProduct() {
+    const name = document.getElementById('prod-name').value.trim();
+    if (!name) { alert('Vui lòng nhập tên sản phẩm.'); return; }
+    closeModal('modal-product');
+    showToast('Sản phẩm "' + name + '" đã được lưu!');
+}
+
+
+// ─── FILTER TABLE ────────────────────────────────────────
+function filterTable(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.product-row').forEach(row => {
+        const name = row.querySelector('p.font-bold')?.textContent.toLowerCase() || '';
+        row.style.display = name.includes(q) ? '' : 'none';
+    });
+}
+
+// ─── TOGGLE TAGS ─────────────────────────────────────────
+function initToggleTags() {
+    document.querySelectorAll('.size-tag, .color-tag').forEach(tag => {
+        tag.addEventListener('click', () => tag.classList.toggle('active'));
+    });
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(8px)'; }, 3000);
+}
+</script>
+
+</body>
+</html>

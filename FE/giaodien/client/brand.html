@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câu chuyện Thương hiệu | CLOSET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, .font-serif, h1, h2, h3, h4, h5, p, span, div, a { font-family: Arial, Helvetica, sans-serif !important; }
+        * { letter-spacing: normal !important; }
+        body { background-color: #faf9f6; overflow-x: hidden; }
+        .font-black { font-weight: 700 !important; }
+        .italic { font-style: normal !important; }
+        
+        /* Smooth fade-in animation for content loading */
+        .fade-in { animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism navigation scroll effect */
+        .nav-scrolled { 
+            background: rgba(250, 249, 246, 0.75); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04); 
+        }
+
+        /* Artistic Scroll Reveal Styles */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-item.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="text-slate-900 selection:bg-indigo-100">
+
+    <!-- Functional Navigation Header -->
+    <nav id="main-nav" class="sticky top-0 w-full z-[100] bg-white border-b border-slate-100 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-6">
+            <!-- Logo -->
+            <a href="index.html" class="font-serif text-3xl font-black tracking-tighter text-indigo-900 shrink-0">CLOSET.</a>
+            
+            <!-- Desktop Menu -->
+            <ul class="hidden lg:flex items-center gap-8 text-[13px] font-bold text-slate-700">
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-colors py-2">Sản phẩm</a></li>
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-colors py-2 text-red-500">Giảm giá</a></li>
+                <li><a href="blog.html" class="hover:text-indigo-600 transition-colors py-2">Blog</a></li>
+                <li><a href="brand.html" class="text-indigo-600 transition-colors py-2 border-b-2 border-indigo-600">Thương hiệu</a></li>
+            </ul>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md relative">
+                <input type="text" placeholder="Tìm kiếm câu chuyện..." class="w-full bg-slate-100 text-sm border-none rounded-full py-2.5 pl-10 pr-4 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-5 text-slate-700 shrink-0">
+                <a href="#" class="hover:text-indigo-600 transition-colors text-lg" title="Tài khoản"><i class="fa-regular fa-user"></i></a>
+                <a href="cart.html" class="relative hover:text-indigo-600 transition-colors text-lg flex items-center" title="Giỏ hàng">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="pt-48 pb-20 border-b border-slate-200/60 text-center fade-in">
+        <div class="container mx-auto px-8 max-w-4xl">
+            <span class="text-indigo-600 text-[10px] font-black uppercase tracking-[0.4em] mb-6 block">Triết lý của chúng tôi</span>
+            <h1 class="font-serif text-5xl md:text-7xl font-black italic mb-10 leading-tight">Tinh hoa của sự tĩnh lặng.</h1>
+            <p class="text-slate-500 text-base md:text-lg leading-relaxed font-medium px-4">Tại CLOSET, chúng tôi tin rằng sự sang trọng thực sự không nằm ở những logo hào nhoáng hay những thiết kế rườm rà. Sang trọng là khi bạn cảm nhận được giá trị tuyệt đối trong từng đường kim, sợi chỉ, trên những chất liệu thượng hạng được chế tác hoàn toàn thủ công.</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section: The Craft (Zig-Zag 1) -->
+        <section class="py-24 md:py-36 border-b border-slate-200/50">
+            <div class="container mx-auto px-8">
+                <div class="flex flex-col md:flex-row items-center gap-16 md:gap-24 reveal-item">
+                    <div class="md:w-1/2">
+                        <div class="aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 shadow-xl">
+                            <img src="https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=1200" class="w-full h-full object-cover" alt="The Craftsmanship">
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 max-w-lg">
+                        <span class="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Nghệ nhân & Kỹ thuật</span>
+                        <h2 class="font-serif text-4xl md:text-5xl font-black mb-8 leading-tight"><i class="font-normal italic text-slate-400">The</i> Craft.</h2>
+                        <p class="text-slate-600 leading-relaxed mb-6 text-sm">Quá trình tạo ra một chiếc áo khoác của CLOSET đòi hỏi hơn 40 giờ lao động thủ công từ những nghệ nhân có ít nhất 15 năm kinh nghiệm. Mỗi chi tiết nhỏ, từ những khuy cài sừng thật đến các mũi khâu ẩn, đều được thực hiện với độ chính xác tuyệt đối.</p>
+                        <p class="text-slate-600 leading-relaxed text-sm">Chúng tôi từ chối sản xuất công nghiệp hàng loạt để giữ gìn cái hồn của nghệ thuật may đo truyền thống, nơi máy móc không thể thay thế bàn tay con người.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Materials (Zig-Zag 2) -->
+        <section class="py-24 md:py-36 bg-white">
+            <div class="container mx-auto px-8">
+                <div class="flex flex-col md:flex-row-reverse items-center gap-16 md:gap-24 reveal-item">
+                    <div class="md:w-1/2">
+                        <div class="aspect-square md:aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 shadow-xl">
+                            <img src="https://images.pexels.com/photos/2220329/pexels-photo-2220329.jpeg?auto=compress&cs=tinysrgb&w=1200" class="w-full h-full object-cover" alt="Premium Materials">
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 max-w-lg">
+                        <span class="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Nguồn gốc nguyên liệu</span>
+                        <h2 class="font-serif text-4xl md:text-5xl font-black mb-8 leading-tight"><i class="font-normal italic text-slate-400">Pure</i> Materials.</h2>
+                        <p class="text-slate-600 leading-relaxed mb-6 text-sm">Chúng tôi tìm kiếm những nhà cung cấp sợi tốt nhất trên thế giới. Lụa tơ tằm nguyên bản, len Merino siêu mịn từ Australia và Cashmere tinh khiết từ cao nguyên Nội Mông.</p>
+                        <p class="text-slate-600 leading-relaxed text-sm">Sự bền vững là ưu tiên hàng đầu. Chúng tôi chỉ hợp tác với các trang trại chăn nuôi nhân đạo và các xưởng nhuộm tuân thủ tiêu chuẩn sinh thái nghiêm ngặt nhất.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Philosophy Banner -->
+        <section class="relative py-40 bg-[#0b0c10] text-white overflow-hidden">
+            <div class="absolute inset-0 z-0 opacity-40">
+                <img src="https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=2400" class="w-full h-full object-cover" alt="Creative Director">
+                <div class="absolute inset-0 bg-black/70"></div>
+            </div>
+            
+            <div class="container mx-auto px-8 text-center relative z-10 max-w-4xl reveal-item">
+                <i class="fa-solid fa-quote-left text-4xl text-indigo-500/50 mb-8"></i>
+                <p class="font-serif text-3xl md:text-5xl font-black italic leading-snug mb-10">
+                    "Trang phục không nên làm lu mờ người mặc. Nó sinh ra để là phông nền tĩnh lặng, làm nổi bật khí chất bên trong của bạn."
+                </p>
+                <div class="w-16 h-[1px] bg-white/30 mx-auto mb-6"></div>
+                <h4 class="text-sm font-bold uppercase tracking-[0.2em] mb-1">Alexandre Nguyen</h4>
+                <cite class="text-[10px] font-black uppercase tracking-widest text-white/50 block">Giám đốc Sáng tạo</cite>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0b0c10] text-[#c5c6c7] pt-28 pb-16 relative overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-slate-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-16 pb-20 border-b border-slate-800/40">
+                <div class="max-w-md">
+                    <h3 class="font-serif text-4xl font-black text-white tracking-tighter mb-6 italic">CLOSET.</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                        Đỉnh cao của nghệ thuật tối giản và thời trang thượng hạng. Chúng tôi kiến tạo những giá trị vượt thời gian, định hình phong cách sang trọng thầm lặng.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    </div>
+                </div>
+
+                <div class="w-full lg:max-w-md">
+                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-white mb-4">Đăng ký nhận bản tin</h4>
+                    <div class="flex gap-2 w-full">
+                        <input type="email" placeholder="Địa chỉ email" class="flex-1 bg-slate-900/60 border border-slate-800 px-6 py-4 rounded-xl text-xs text-white outline-none focus:border-white focus:ring-1 focus:ring-white transition-all font-bold uppercase tracking-widest">
+                        <button type="submit" class="px-8 py-4 bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300">Đăng ký</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 py-20 text-sm">
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Bộ sưu tập</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="shop.html" class="hover:text-white transition-all">Classic Suit</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Evening Dress</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Khám phá</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="blog.html" class="hover:text-white transition-all">Bản tin Journal</a></li>
+                        <li><a href="lookbook.html" class="hover:text-white transition-all">Lookbook Tĩnh</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Cửa hàng</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                        <strong class="text-white block mb-1">Flagship Store</strong>
+                        123 Đường Đồng Khởi, Quận 1, TP. HCM
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800/40 flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                <p>&copy; 2026 Closet Fashion Store. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Navigation Animation Script & Scroll Reveal -->
+    <script>
+        window.onscroll = function() {
+            const nav = document.getElementById('main-nav');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.style.height = '80px';
+                } else {
+                    nav.style.height = '96px';
+                }
+            }
+        };
+
+        // Intersection Observer for artistic Scroll Reveal
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

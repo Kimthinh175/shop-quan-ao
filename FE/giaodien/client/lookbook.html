@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookbook | CLOSET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, .font-serif, h1, h2, h3, h4, h5, p, span, div, a { font-family: Arial, Helvetica, sans-serif !important; }
+        * { letter-spacing: normal !important; }
+        body { background-color: #faf9f6; overflow-x: hidden; }
+        .font-black { font-weight: 700 !important; }
+        .italic { font-style: normal !important; }
+        
+        /* Smooth fade-in animation for content loading */
+        .fade-in { animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism navigation scroll effect */
+        .nav-scrolled { 
+            background: rgba(250, 249, 246, 0.75); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04); 
+        }
+
+        /* Artistic Scroll Reveal Styles */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-item.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image hover reveal effect */
+        .look-img { transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .look-card:hover .look-img { transform: scale(1.05); }
+    </style>
+</head>
+<body class="text-slate-900 selection:bg-indigo-100">
+
+    <!-- Functional Navigation Header -->
+    <nav id="main-nav" class="sticky top-0 w-full z-[100] bg-white border-b border-slate-100 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-6">
+            <!-- Logo -->
+            <a href="index.html" class="font-serif text-3xl font-black tracking-tighter text-indigo-900 shrink-0">CLOSET.</a>
+            
+            <!-- Desktop Menu -->
+            <ul class="hidden lg:flex items-center gap-8 text-[13px] font-bold text-slate-700">
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-colors py-2">Sản phẩm</a></li>
+                <li><a href="shop.html" class="hover:text-indigo-600 transition-colors py-2 text-red-500">Giảm giá</a></li>
+                <li><a href="blog.html" class="hover:text-indigo-600 transition-colors py-2">Blog</a></li>
+                <li><a href="lookbook.html" class="text-indigo-600 transition-colors py-2 border-b-2 border-indigo-600">Lookbook</a></li>
+            </ul>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md relative">
+                <input type="text" placeholder="Tìm kiếm lookbook..." class="w-full bg-slate-100 text-sm border-none rounded-full py-2.5 pl-10 pr-4 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-5 text-slate-700 shrink-0">
+                <a href="#" class="hover:text-indigo-600 transition-colors text-lg" title="Tài khoản"><i class="fa-regular fa-user"></i></a>
+                <a href="cart.html" class="relative hover:text-indigo-600 transition-colors text-lg flex items-center" title="Giỏ hàng">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Fullscreen Intro -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=2400" class="w-full h-full object-cover opacity-80" alt="Lookbook Cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/20"></div>
+        </div>
+        <div class="container mx-auto px-8 z-10 text-center text-white fade-in">
+            <span class="inline-block text-[10px] font-black uppercase tracking-[0.6em] mb-6 opacity-90 drop-shadow-sm">Bộ sưu tập mùa Đông</span>
+            <h1 class="font-serif text-6xl md:text-9xl font-black mb-6 leading-none drop-shadow-sm">Winter<br><i class="font-normal italic text-white/80">Symphony.</i></h1>
+            <p class="text-white/70 text-sm max-w-lg mx-auto uppercase tracking-widest font-bold">Khám phá nghệ thuật sắp đặt hình khối và ánh sáng.</p>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-70">
+            <span class="text-[9px] font-black uppercase tracking-[0.3em] text-white">Khám phá</span>
+            <div class="w-[1px] h-12 bg-white/50"></div>
+        </div>
+    </section>
+
+    <main class="py-32 bg-[#faf9f6]">
+        <div class="container mx-auto px-4 md:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-24 reveal-item">
+                <h2 class="font-serif text-4xl font-black italic mb-6">The Visual Experience</h2>
+                <p class="text-slate-500 text-sm leading-relaxed">Bộ sưu tập là một bản giao hưởng của những đường cắt hoàn hảo và chất liệu vượt thời gian. Không có rào cản, chỉ có cái đẹp thuần túy hiện hữu qua từng bức ảnh.</p>
+            </div>
+
+            <!-- Asymmetric Masonry Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+                
+                <!-- Row 1 -->
+                <div class="md:col-span-7 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group" style="height: 80vh;">
+                    <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=1200" class="w-full h-full object-cover object-center look-img" alt="Look 01">
+                    <div class="absolute bottom-8 left-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-[9px] font-black uppercase tracking-widest block mb-2">Look 01</span>
+                        <h3 class="font-serif text-2xl font-black italic">Classic Midnight Suit</h3>
+                    </div>
+                </div>
+
+                <div class="md:col-span-5 flex flex-col gap-8 md:gap-12">
+                    <div class="flex-1 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group">
+                        <img src="https://images.pexels.com/photos/3317434/pexels-photo-3317434.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover object-center look-img" alt="Look 02">
+                        <div class="absolute bottom-8 left-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <span class="text-[9px] font-black uppercase tracking-widest block mb-2">Look 02</span>
+                            <h3 class="font-serif text-2xl font-black italic">Heritage Overcoat</h3>
+                        </div>
+                    </div>
+                    <div class="flex-1 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group">
+                        <img src="https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover object-center look-img" alt="Look 03">
+                        <div class="absolute bottom-8 left-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <span class="text-[9px] font-black uppercase tracking-widest block mb-2">Look 03</span>
+                            <h3 class="font-serif text-2xl font-black italic">Artistic Tailoring</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2 (Full Width Quote + Image) -->
+                <div class="md:col-span-12 my-20 reveal-item text-center px-4">
+                    <p class="font-serif text-3xl md:text-5xl font-black text-slate-800 italic leading-snug max-w-4xl mx-auto">
+                        "Sang trọng không phải là điều để phô trương. Nó là trải nghiệm cá nhân sâu sắc giữa cơ thể và những chất liệu thượng hạng nhất."
+                    </p>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="md:col-span-4 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group" style="height: 60vh;">
+                    <img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=800" class="w-full h-full object-cover object-center look-img" alt="Look 04">
+                    <div class="absolute bottom-8 left-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-[9px] font-black uppercase tracking-widest block mb-2">Look 04</span>
+                        <h3 class="font-serif text-xl font-black italic">Chelsea Boots</h3>
+                    </div>
+                </div>
+
+                <div class="md:col-span-8 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group" style="height: 60vh;">
+                    <img src="https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=1600" class="w-full h-full object-cover object-[center_30%] look-img" alt="Look 05">
+                    <div class="absolute bottom-8 left-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-[9px] font-black uppercase tracking-widest block mb-2">Look 05</span>
+                        <h3 class="font-serif text-2xl font-black italic">Silk Evening Gown</h3>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="md:col-span-6 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group" style="height: 70vh;">
+                    <img src="https://images.pexels.com/photos/837140/pexels-photo-837140.jpeg?auto=compress&cs=tinysrgb&w=1200" class="w-full h-full object-cover object-center look-img" alt="Look 06">
+                </div>
+
+                <div class="md:col-span-6 reveal-item look-card relative overflow-hidden rounded-xl bg-slate-100 group" style="height: 70vh;">
+                    <img src="https://images.pexels.com/photos/291762/pexels-photo-291762.jpeg?auto=compress&cs=tinysrgb&w=1200" class="w-full h-full object-cover object-center look-img" alt="Look 07">
+                </div>
+            </div>
+            
+            <div class="text-center mt-32 reveal-item">
+                <a href="shop.html" class="inline-flex items-center gap-4 border-b border-black pb-2 text-[10px] font-black uppercase tracking-widest hover:opacity-50 transition-all">
+                    Chuyển đến cửa hàng <i class="fa-solid fa-arrow-right-long"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0b0c10] text-[#c5c6c7] pt-28 pb-16 border-t border-[#1f2833]/20 relative overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-slate-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-16 pb-20 border-b border-slate-800/40">
+                <div class="max-w-md">
+                    <h3 class="font-serif text-4xl font-black text-white tracking-tighter mb-6 italic">CLOSET.</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                        Đỉnh cao của nghệ thuật tối giản và thời trang thượng hạng. Chúng tôi kiến tạo những giá trị vượt thời gian, định hình phong cách sang trọng thầm lặng.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-white transition-all duration-300"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    </div>
+                </div>
+
+                <div class="w-full lg:max-w-md">
+                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-white mb-4">Đăng ký nhận bản tin</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Nhận thông tin về các Lookbook mới nhất.</p>
+                    <div class="flex gap-2 w-full">
+                        <input type="email" placeholder="Địa chỉ email" class="flex-1 bg-slate-900/60 border border-slate-800 px-6 py-4 rounded-xl text-xs text-white outline-none focus:border-white focus:ring-1 focus:ring-white transition-all font-bold uppercase tracking-widest">
+                        <button type="submit" class="px-8 py-4 bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300">Đăng ký</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 py-20 text-sm">
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Bộ sưu tập</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="shop.html" class="hover:text-white transition-all">Classic Suit</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition-all">Evening Dress</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Khám phá</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="blog.html" class="hover:text-white transition-all">Bản tin Journal</a></li>
+                        <li><a href="brand.html" class="hover:text-white transition-all">Câu chuyện thương hiệu</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Dịch vụ</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 tracking-wider">
+                        <li><a href="#" class="hover:text-white transition-all">Liên hệ hỗ trợ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8">Cửa hàng</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                        <strong class="text-white block mb-1">Flagship Store</strong>
+                        123 Đường Đồng Khởi, Quận 1, TP. HCM
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800/40 flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                <p>&copy; 2026 Closet Fashion Store. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Navigation Animation & Scroll Reveal Script -->
+    <script>
+        // Intersection Observer for artistic Scroll Reveal
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

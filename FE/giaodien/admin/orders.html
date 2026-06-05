@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn hàng | Closet Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #a5b4fc; transition: all 0.18s; cursor: pointer; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-link.active { background: rgba(255,255,255,0.12); color: #fff; }
+        .sidebar-link i { width: 20px; text-align: center; font-size: 14px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-60 bg-[#1e1b4b] flex flex-col py-6 px-4 shrink-0 overflow-y-auto">
+        <div class="px-2 mb-8">
+            <div class="font-serif text-2xl font-black text-white tracking-tight" style="font-family:'Playfair Display',serif;">CLOSET.</div>
+            <div class="text-[10px] font-bold text-indigo-400 tracking-widest uppercase mt-0.5">Admin Panel</div>
+        </div>
+        <nav class="flex-1 space-y-1">
+            <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mb-2">Chính</div>
+            <a href="dashboard.html" class="sidebar-link"><i class="fa-solid fa-chart-pie"></i> Tổng quan</a>
+            <a href="orders.html" class="sidebar-link active"><i class="fa-solid fa-receipt"></i> Đơn hàng</a>
+            <a href="pos.html" class="sidebar-link"><i class="fa-solid fa-cash-register"></i> Bán hàng (POS)</a>
+            <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mt-5 mb-2">Kho hàng</div>
+            <a href="products.html" class="sidebar-link"><i class="fa-solid fa-box"></i> Sản phẩm</a>
+            <a href="inventory.html" class="sidebar-link"><i class="fa-solid fa-warehouse"></i> Tồn kho</a>
+            <a href="categories.html" class="sidebar-link"><i class="fa-solid fa-tags"></i> Danh mục</a>
+            <div class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 px-3 mt-5 mb-2">Khác</div>
+            <a href="customers.html" class="sidebar-link"><i class="fa-solid fa-users"></i> Khách hàng</a>
+            <a href="settings.html" class="sidebar-link"><i class="fa-solid fa-gear"></i> Cài đặt</a>
+        </nav>
+        <div class="border-t border-indigo-900 pt-4 mt-4 flex items-center gap-3 px-2">
+            <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-black text-sm flex-shrink-0">A</div>
+            <div>
+                <p class="text-white text-xs font-bold leading-tight">Admin</p>
+                <p class="text-indigo-400 text-[10px]">admin@closet.vn</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Topbar -->
+        <header class="h-20 bg-white border-b border-slate-200 px-10 flex items-center justify-between shrink-0">
+            <h1 class="text-xl font-black text-slate-800">Quản lý đơn hàng</h1>
+            <div class="flex items-center gap-6">
+                <button class="px-6 py-2 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-file-export"></i> Xuất báo cáo
+                </button>
+                <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">T</div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-y-auto p-10 custom-scrollbar">
+            <!-- Stats -->
+            <div class="grid grid-cols-4 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div><p class="text-2xl font-black">24</p><p class="text-xs text-slate-400 font-bold uppercase">Đang chờ</p></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-truck"></i></div>
+                    <div><p class="text-2xl font-black">15</p><p class="text-xs text-slate-400 font-bold uppercase">Đang giao</p></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-circle-check"></i></div>
+                    <div><p class="text-2xl font-black">118</p><p class="text-xs text-slate-400 font-bold uppercase">Hoàn tất</p></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-circle-xmark"></i></div>
+                    <div><p class="text-2xl font-black">4</p><p class="text-xs text-slate-400 font-bold uppercase">Đã hủy</p></div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] border-b border-slate-100">
+                            <th class="px-8 py-6">Mã đơn hàng</th>
+                            <th class="px-8 py-6">Khách hàng</th>
+                            <th class="px-8 py-6">Ngày đặt</th>
+                            <th class="px-8 py-6">Tổng tiền</th>
+                            <th class="px-8 py-6">Kênh bán</th>
+                            <th class="px-8 py-6">Trạng thái</th>
+                            <th class="px-8 py-6">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        <!-- Order Online -->
+                        <tr class="hover:bg-slate-50 transition-all group">
+                            <td class="px-8 py-6 font-bold text-indigo-600">#ORD-9942</td>
+                            <td class="px-8 py-6">
+                                <p class="font-bold text-slate-800">Nguyễn Văn A</p>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">nv.a@example.com</p>
+                            </td>
+                            <td class="px-8 py-6 text-sm font-bold text-slate-500">12/05/2026</td>
+                            <td class="px-8 py-6 font-black text-slate-800">$420.00</td>
+                            <td class="px-8 py-6"><span class="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Online</span></td>
+                            <td class="px-8 py-6">
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Đã giao</span>
+                            </td>
+                            <td class="px-8 py-6">
+                                <a href="invoice.html" class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all"><i class="fa-solid fa-eye"></i></a>
+                            </td>
+                        </tr>
+                        <!-- Order Offline (POS) -->
+                        <tr class="hover:bg-slate-50 transition-all group">
+                            <td class="px-8 py-6 font-bold text-indigo-600">#POS-7712</td>
+                            <td class="px-8 py-6">
+                                <p class="font-bold text-slate-800">Khách lẻ tại quầy</p>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Store: HCM District 1</p>
+                            </td>
+                            <td class="px-8 py-6 text-sm font-bold text-slate-500">12/05/2026</td>
+                            <td class="px-8 py-6 font-black text-slate-800">$180.00</td>
+                            <td class="px-8 py-6"><span class="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Offline</span></td>
+                            <td class="px-8 py-6">
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Hoàn tất</span>
+                            </td>
+                            <td class="px-8 py-6">
+                                <a href="invoice.html" class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all"><i class="fa-solid fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
