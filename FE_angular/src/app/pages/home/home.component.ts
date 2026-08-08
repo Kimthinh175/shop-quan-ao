@@ -3,6 +3,7 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
+import { PromotionService } from '../../services/promotion.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 
 interface Banner {
@@ -398,6 +399,7 @@ interface Banner {
 export class HomeComponent implements OnInit, OnDestroy {
   private api = inject(ApiService);
   private cartService = inject(CartService);
+  private promoService = inject(PromotionService);
 
   // Banner State
   activeBannerIndex = 0;
@@ -530,9 +532,28 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.api.getHomeData().subscribe({
       next: (res: any) => {
         const d = res.data || res;
-        this.products = d.products || [];
-        this.popularProducts = d.popularProducts || [];
-        this.mensCollection = d.mensCollection || [];
+        
+        // Helper to apply promo to a list of products
+        const applyPromo = (list: any[]) => {
+          return list.map(p => {
+            const base = p.default_price > 0 ? p.default_price : (p.variants?.[0]?.price || 0);
+            const promo = this.promoService.applyPromotion(p._id, base);
+            return {
+              ...p,
+              sale_price: promo.salePrice,
+              original_price: promo.originalPrice,
+              discount_percent: promo.discountPercent,
+              is_flash_sale: !!promo.promotion
+            };
+          });
+        };
+
+        this.promoService.loadActivePromotions().subscribe(() => {
+          this.products = applyPromo(d.products || []);
+          this.popularProducts = applyPromo(d.popularProducts || []);
+          this.mensCollection = applyPromo(d.mensCollection || []);
+        });
+
         this.categories = d.categories || [];
         this.articles = d.articles || [];
         this.flashSale = d.flashSale || null;

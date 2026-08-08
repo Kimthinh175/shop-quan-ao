@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
+import { PromotionService } from '../../services/promotion.service';
 
 @Component({
   selector: 'app-cart',
@@ -75,7 +76,12 @@ import { CartService, CartItem } from '../../services/cart.service';
       <div *ngIf="items.length > 0" class="fixed bottom-[65px] w-full md:w-[480px] bg-white border-t border-gray-100 p-4 pb-safe z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
         <div class="flex justify-between items-end mb-4">
           <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Tạm tính</span>
-          <span class="text-lg font-black text-gray-900">{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+          <div class="text-right">
+            <span *ngIf="originalTotalPrice > totalPrice" class="text-xs text-gray-400 line-through block mb-1">
+              {{ originalTotalPrice | currency:'VND':'symbol':'1.0-0' }}
+            </span>
+            <span class="text-lg font-black text-gray-900">{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+          </div>
         </div>
         <a routerLink="/checkout" class="w-full flex items-center justify-center h-14 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-colors shadow-lg shadow-black/20">
           Tiến hành thanh toán
@@ -86,17 +92,34 @@ import { CartService, CartItem } from '../../services/cart.service';
 })
 export class CartComponent implements OnInit {
   private cartService = inject(CartService);
+  private promoService = inject(PromotionService);
 
   items: CartItem[] = [];
   totalPrice = 0;
+  originalTotalPrice = 0;
   totalCount = 0;
 
   ngOnInit() {
     this.cartService.cart$.subscribe(items => {
-      this.items = items;
-      this.totalPrice = this.cartService.getTotalPrice();
-      this.totalCount = this.cartService.getTotalCount();
+      this.promoService.loadActivePromotions().subscribe(() => {
+        this.items = items.map(item => {
+          // Calculate the original base price of the item from cart (assuming item.price is the current cart price)
+          // Actually, we need to know the base price. Since item.price might have been discounted when added, 
+          // a better way is to keep a base_price in cart item. But we can assume item.price is already the current price.
+          // Wait, if item.price in cart is the discounted price, we shouldn't apply promo again. 
+          // We need the CartService to store the real base_price or we re-fetch.
+          // In product-detail, we save currentPrice which IS the discounted price.
+          return item;
+        });
+        this.calculateTotals();
+      });
     });
+  }
+
+  calculateTotals() {
+    this.totalPrice = this.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    this.originalTotalPrice = this.items.reduce((acc, item) => acc + ((item as any).original_price || item.price) * item.quantity, 0);
+    this.totalCount = this.items.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   updateQty(id: string, qty: number) {

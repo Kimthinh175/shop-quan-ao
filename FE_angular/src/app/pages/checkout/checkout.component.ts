@@ -2,9 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CartService, CartItem } from '../../services/cart.service';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { CartService, CartItem } from '../../services/cart.service';
+import { PromotionService } from '../../services/promotion.service';
 
 @Component({
   selector: 'app-checkout',
@@ -101,16 +102,33 @@ import { AuthService } from '../../services/auth.service';
       </div>
 
       <!-- Submit Fixed Bottom -->
-      <div class="fixed bottom-[65px] w-full md:w-[480px] bg-white border-t border-gray-100 p-4 pb-safe z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <div class="flex justify-between items-end mb-4">
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Tổng cộng</span>
-          <span class="text-xl font-black text-gray-900">{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+      <div class="fixed bottom-[65px] w-full md:w-[480px] bg-white border-t border-gray-100 pt-4 z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <!-- Summary -->
+        <div class="px-4 py-4 bg-gray-50 border-t border-gray-100">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs text-gray-500">Tạm tính ({{ totalCount }} SP)</span>
+            <span *ngIf="originalTotalPrice > totalPrice" class="text-xs text-gray-400 line-through mr-2">
+              {{ originalTotalPrice | currency:'VND':'symbol':'1.0-0' }}
+            </span>
+            <span class="text-sm font-bold">{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs text-gray-500">Phí vận chuyển</span>
+            <span class="text-sm font-bold text-green-600">Miễn phí</span>
+          </div>
+          <div class="h-px w-full bg-gray-200 mb-4"></div>
+          <div class="flex justify-between items-end">
+            <span class="text-sm font-bold uppercase tracking-widest text-gray-800">Tổng cộng</span>
+            <span class="text-2xl font-black text-gray-900">{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+          </div>
         </div>
-        <button (click)="placeOrder()" [disabled]="submitting || !isValid()" 
-                class="w-full flex items-center justify-center h-14 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-colors shadow-lg shadow-black/20 disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed">
-          <span *ngIf="!submitting">Hoàn tất đặt hàng</span>
-          <i *ngIf="submitting" class="fa-solid fa-spinner fa-spin text-xl"></i>
-        </button>
+        <div class="p-4 pb-safe">
+          <button (click)="placeOrder()" [disabled]="submitting || !isValid()" 
+                  class="w-full flex items-center justify-center h-14 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-colors shadow-lg shadow-black/20 disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed">
+            <span *ngIf="!submitting">Hoàn tất đặt hàng</span>
+            <i *ngIf="submitting" class="fa-solid fa-spinner fa-spin text-xl"></i>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -118,12 +136,14 @@ import { AuthService } from '../../services/auth.service';
 })
 export class CheckoutComponent implements OnInit {
   private cartService = inject(CartService);
+  private promoService = inject(PromotionService);
   private api = inject(ApiService);
   private auth = inject(AuthService);
   private router = inject(Router);
 
   items: CartItem[] = [];
   totalPrice = 0;
+  originalTotalPrice = 0;
   totalCount = 0;
   
   isSummaryOpen = false;
@@ -142,22 +162,27 @@ export class CheckoutComponent implements OnInit {
     const buyNow = this.cartService.getBuyNowItem();
     if (buyNow) {
       this.isBuyNow = true;
-      this.items = [buyNow];
-      this.totalPrice = buyNow.price * buyNow.quantity;
-      this.totalCount = buyNow.quantity;
+      this.processItems([buyNow]);
     } else {
       this.cartService.cart$.subscribe(items => {
         if (!this.isBuyNow) {
-          this.items = items;
-          this.totalPrice = this.cartService.getTotalPrice();
-          this.totalCount = this.cartService.getTotalCount();
-          
-          if (this.items.length === 0 && !this.submitting) {
+          if (items.length === 0 && !this.submitting) {
             this.router.navigate(['/cart']); // redirect if empty
+            return;
           }
+          this.processItems(items);
         }
       });
     }
+  }
+
+  processItems(rawItems: CartItem[]) {
+    this.promoService.loadActivePromotions().subscribe(() => {
+      this.items = rawItems.map(item => item); // Currently cart assumes price is already updated, but we could reapply here
+      this.totalPrice = this.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      this.originalTotalPrice = this.items.reduce((acc, item) => acc + ((item as any).original_price || item.price) * item.quantity, 0);
+      this.totalCount = this.items.reduce((acc, item) => acc + item.quantity, 0);
+    });
   }
 
   isValid(): boolean {

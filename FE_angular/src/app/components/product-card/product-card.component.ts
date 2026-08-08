@@ -42,8 +42,14 @@ import { DragDropCartService } from '../../services/drag-drop-cart.service';
           <span class="px-2 py-0.5 bg-black/80 backdrop-blur-md text-amber-400 text-[8px] font-serif-brand font-black uppercase tracking-[0.2em] rounded-md shadow-sm border border-amber-400/30">
             CLOSET
           </span>
+          <!-- Flash Sale badge -->
+          <span *ngIf="product?.is_flash_sale"
+                class="px-2 py-0.5 text-white text-[8px] font-black uppercase tracking-wider rounded-md shadow-md flex items-center gap-0.5"
+                style="background: linear-gradient(135deg, #dc2626, #ea580c)">
+            <i class="fa-solid fa-fire text-[7px]"></i> Sale
+          </span>
           <span *ngIf="product?.discount_percent > 0" 
-                class="px-2 py-0.5 bg-red-600 text-white text-[9px] font-black uppercase tracking-wider rounded-md shadow-md animate-pulse">
+                class="px-2 py-0.5 bg-red-600 text-white text-[9px] font-black uppercase tracking-wider rounded-md shadow-md">
             -{{ product.discount_percent }}%
           </span>
         </div>
@@ -161,6 +167,7 @@ export class ProductCardComponent {
       variant_id: this.product.variants?.[0]?._id || this.product._id || this.product.id,
       name: this.product.name,
       price: this.product.sale_price || this.product.price || this.product.default_price || (this.product.variants?.[0]?.price) || 350000,
+      original_price: this.product.original_price || this.product.default_price || (this.product.variants?.[0]?.price) || 350000,
       quantity: 1,
       image: this.product.main_img || 'https://via.placeholder.com/150'
     };

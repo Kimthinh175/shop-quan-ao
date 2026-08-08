@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { CartService, CartItem } from '../../services/cart.service';
+import { PromotionService } from '../../services/promotion.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 
 @Component({
@@ -16,6 +17,7 @@ export class ProductDetailComponent implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
   private cartService = inject(CartService);
+  private promoService = inject(PromotionService);
   private router = inject(Router);
 
   product: any = null;
@@ -34,13 +36,30 @@ export class ProductDetailComponent implements OnInit {
   showSizeGuide = false;
   isFavorite = false;
 
+  promoInfo: any = null;
+
+  get basePrice(): number {
+    if (!this.product) return 0;
+    return this.product.default_price > 0 ? this.product.default_price : (this.product.variants?.[0]?.price || 0);
+  }
+
   get currentPrice(): number {
     if (!this.product) return 0;
+    const base = this.basePrice;
+    // Apply promotion discount
+    if (this.promoInfo && this.promoInfo.promotion) {
+      return this.promoInfo.salePrice;
+    }
     if (this.selectedColor && this.selectedSize && this.product.variants) {
       const v = this.product.variants.find((v: any) => v.color === this.selectedColor && v.size === this.selectedSize);
       if (v) return v.price;
     }
-    return this.product.default_price > 0 ? this.product.default_price : (this.product.variants?.[0]?.price || 0);
+    return base;
+  }
+
+  get originalPrice(): number {
+    if (!this.product) return 0;
+    return this.basePrice;
   }
 
   getColorHex(color: string): string {
@@ -123,6 +142,11 @@ export class ProductDetailComponent implements OnInit {
         this.extractVariants(this.product.variants || []);
         this.fetchRelatedProducts();
         this.fetchProductReviews(id);
+        // Apply promotion
+        this.promoService.loadActivePromotions().subscribe(() => {
+          const base = this.product.default_price > 0 ? this.product.default_price : (this.product.variants?.[0]?.price || 0);
+          this.promoInfo = this.promoService.applyPromotion(this.product._id, base);
+        });
         this.loading = false;
       },
       error: (err) => {
@@ -202,6 +226,7 @@ export class ProductDetailComponent implements OnInit {
       variant_id: variantId,
       name: this.product.name,
       price: this.currentPrice,
+      original_price: this.originalPrice,
       quantity: this.quantity,
       image: this.product.main_img,
       color: this.selectedColor,
@@ -230,6 +255,7 @@ export class ProductDetailComponent implements OnInit {
       variant_id: variantId,
       name: this.product.name,
       price: this.currentPrice,
+      original_price: this.originalPrice,
       quantity: this.quantity,
       image: this.product.main_img,
       color: this.selectedColor,

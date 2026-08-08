@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { PromotionService } from '../../services/promotion.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 
 @Component({
@@ -148,6 +149,7 @@ import { ProductCardComponent } from '../../components/product-card/product-card
 export class CatalogComponent implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private promoService = inject(PromotionService);
 
   products: any[] = [];
   loading = true;
@@ -204,10 +206,24 @@ export class CatalogComponent implements OnInit {
     
     this.api.getProducts(params).subscribe({
       next: (res: any) => {
-        this.products = res.results || res.data || [];
+        const rawProducts = res.results || res.data || [];
+        // Apply promotion prices
+        this.promoService.loadActivePromotions().subscribe(() => {
+          this.products = rawProducts.map((p: any) => {
+            const base = p.default_price > 0 ? p.default_price : (p.variants?.[0]?.price || 0);
+            const promo = this.promoService.applyPromotion(p._id, base);
+            return {
+              ...p,
+              sale_price: promo.salePrice,
+              original_price: promo.originalPrice,
+              discount_percent: promo.discountPercent,
+              is_flash_sale: !!promo.promotion
+            };
+          });
+        });
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Lỗi tải sản phẩm:', err);
         this.loading = false;
       }
