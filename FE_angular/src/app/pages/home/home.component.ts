@@ -259,7 +259,7 @@ interface Banner {
         </div>
 
         <div *ngIf="!loadingProducts" class="grid grid-cols-2 gap-3.5">
-          <app-product-card *ngFor="let p of displayedProducts" [product]="p"></app-product-card>
+          <app-product-card *ngFor="let p of displayedProducts" [product]="p" [mode]="activeTab === 'new' ? 'new' : 'popular'"></app-product-card>
         </div>
       </section>
 

@@ -68,11 +68,11 @@ class HomeController {
                 // 1. Categories
                 Category.find({}).sort({ name: 1 }).limit(10).lean(),
                 
-                // 2. New Arrivals (Products)
+                // 2. New Arrivals (Products) - sort by newest
                 Product.find({ status: { $ne: 'INACTIVE' } }).sort({ createdAt: -1 }).limit(8).lean(),
 
-                // 3. Popular Products
-                Product.find({ status: { $ne: 'INACTIVE' } }).sort({ review_count: -1, rate: -1, createdAt: -1 }).limit(8).lean(),
+                // 3. Popular Products - sort by most sold
+                Product.find({ status: { $ne: 'INACTIVE' } }).sort({ sold_count: -1, review_count: -1, rate: -1 }).limit(8).lean(),
 
                 // 4. Men's Collection Products
                 Product.find({ status: { $ne: 'INACTIVE' } }).sort({ createdAt: 1 }).limit(6).lean(),
@@ -85,7 +85,15 @@ class HomeController {
             ]);
 
             // Enrich sản phẩm tính toán giá chuẩn và đính kèm biến thể
-            const products = await enrichProducts(rawProducts);
+            const now = Date.now();
+            const enrichedRaw = await enrichProducts(rawProducts);
+            // Thêm days_ago cho mỗi sản phẩm mới nhất
+            const products = enrichedRaw.map(p => {
+                const created = p.createdAt ? new Date(p.createdAt).getTime() : now;
+                const diffDays = Math.floor((now - created) / (1000 * 60 * 60 * 24));
+                return { ...p, days_ago: diffDays };
+            });
+            // Popular products: thêm sold_count vào response
             const popularProducts = await enrichProducts(rawPopularProducts);
             const mensCollection = await enrichProducts(rawMensCollection);
 

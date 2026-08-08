@@ -92,12 +92,30 @@ import { DragDropCartService } from '../../services/drag-drop-cart.service';
             {{ product.original_price | currency:'VND':'symbol':'1.0-0' }}
           </span>
         </div>
+
+        <!-- NEW mode: N ngày trước badge -->
+        <div *ngIf="mode === 'new'" class="mt-1.5 flex justify-center">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-black"
+                [ngClass]="product?.days_ago === 0 ? 'bg-green-50 text-green-600 border border-green-200' : 'bg-gray-50 text-gray-500 border border-gray-200'">
+            <i class="fa-regular fa-clock text-[7px]"></i>
+            {{ product?.days_ago === 0 ? 'Hôm nay' : (product?.days_ago === 1 ? '1 ngày trước' : (product?.days_ago + ' ngày trước')) }}
+          </span>
+        </div>
+
+        <!-- POPULAR mode: Đã bán X badge -->
+        <div *ngIf="mode === 'popular'" class="mt-1.5 flex justify-center">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-black bg-red-50 text-red-600 border border-red-200">
+            <i class="fa-solid fa-fire text-[7px]"></i>
+            Đã bán {{ product?.sold_count || 0 }}
+          </span>
+        </div>
       </div>
     </div>
   `
 })
 export class ProductCardComponent {
   @Input() product: any;
+  @Input() mode: 'default' | 'new' | 'popular' = 'default';
 
   private cartService = inject(CartService);
   private dragDropService = inject(DragDropCartService);

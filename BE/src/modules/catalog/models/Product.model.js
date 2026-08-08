@@ -18,6 +18,7 @@ const ProductSchema = new mongoose.Schema({
     description: { type: String },
     rate: { type: Number, default: 0 },
     review_count: { type: Number, default: 0 },
+    sold_count: { type: Number, default: 0 },
     status: { type: String, enum: ['ACTIVE', 'INACTIVE', 'DRAFT'], default: 'DRAFT' }
 }, { timestamps: true });
 
