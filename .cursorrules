@@ -1,0 +1,14 @@
+# AI Assistant Instructions
+Always follow these rules when working on this project:
+
+1. **Project Map First**: Before making any significant code changes or answering architectural questions, always read the `PROJECT_MAP.md` file at the root of the repository to understand the current structure, classes, and exported functions. This saves tokens and ensures you don't hallucinate missing functions.
+2. **Updating the Map**: If you create a new module, file, or make major structural changes, you MUST use your terminal tool (`run_command`) to run `npm run map` to automatically update the `PROJECT_MAP.md` file before finishing your turn. Do not ask the user to run it.
+
+## Kỹ Năng Gu Thẩm Mỹ (Taste Skill / UI Design Rules)
+Khi phát triển Frontend, AI bắt buộc phải tuân thủ các quy tắc thiết kế "Functional E-commerce" (Thực dụng, giống Coolmate) sau đây:
+1. **Typography Thực Dụng**: Sử dụng 100% font không chân (Sans-serif) như `Inter` hoặc `Plus Jakarta Sans`. Không dùng font có chân (Serif). Chữ cần rõ ràng, dễ đọc, kích thước chuẩn (14px - 16px cho body).
+2. **Mật Độ Nội Dung (Information Density)**: Tối ưu hóa không gian. Bố cục dạng Grid nhiều cột (vd: 4 cột cho sản phẩm trên Desktop). Ít khoảng trắng vô ích, khách hàng cần xem được nhiều sản phẩm nhất có thể.
+3. **Màu Sắc Tin Cậy**: Sử dụng nền trắng `#ffffff` hoặc xám nhạt `#f8fafc`. Màu chủ đạo là Đen hoặc Xanh Dương đậm (tạo sự tin cậy, mạnh mẽ của nam giới).
+4. **Nút Bấm Kêu Gọi Hành Động (Call-to-Action)**: Nút "Thêm vào giỏ", "Mua ngay" phải bự, vuông vức hoặc bo góc nhẹ, màu tương phản mạnh (Đen, Xanh biển, Đỏ) để kích thích tỷ lệ chuyển đổi (CR).
+5. **UI Component Đặc Trưng**: Phải có Topbar thông báo khuyến mãi (Freeship, Đổi trả), Thanh tìm kiếm to đùng giữa Header, và các Nhãn giảm giá (Badges) gắn thẳng lên ảnh sản phẩm (vd: "-20%", "Combo").
+6. **Không Dùng Hiệu Ứng Chậm**: Các thao tác hover phải nhanh (150ms - 300ms) để mang lại cảm giác phản hồi tức thì, không rườm rà.

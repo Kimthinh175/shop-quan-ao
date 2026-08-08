@@ -1,0 +1,376 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-page: #faf9f6;
+    --bg-card: #ffffff;
+    --bg-subtle: #f1f5f9;
+    --text-main: #0b0b0b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --accent-gold: #d4af37;
+    --accent-champagne: #ebc563;
+    --accent-indigo: #4f46e5;
+  }
+
+  html.dark, [data-theme="dark"] {
+    --bg-page: #0b0b0b;
+    --bg-card: #171717;
+    --bg-subtle: #232223;
+    --text-main: #faf8f5;
+    --text-muted: #a3a3a3;
+    --border-color: #2b2b2b;
+    --accent-gold: #d4af37;
+    --accent-champagne: #ebc563;
+    --accent-indigo: #818cf8;
+  }
+
+  html,
+  body,
+  button,
+  input,
+  select,
+  textarea,
+  h1, h2, h3, h4, h5, h6,
+  p, div, a {
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  }
+
+  /* Preserve Font Awesome Icons */
+  .fa, .fas, .far, .fal, .fab, .fa-solid, .fa-regular, .fa-light, .fa-brands, i[class*="fa-"], span[class*="fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Firefox Scrollbar Support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+  }
+
+  html.dark *, [data-theme="dark"] * {
+    scrollbar-color: rgba(212, 175, 55, 0.4) transparent;
+  }
+}
+
+/* ==========================================================================
+   QUIET LUXURY CUSTOM SCROLLBARS (WEBKIT)
+   ========================================================================== */
+
+/* Webkit Global & Custom Scrollbar Width & Height */
+::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+/* Scrollbar Thumb - Light Theme (Indigo/Slate) */
+::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 70, 229, 0.8);
+}
+
+/* Scrollbar Thumb - Dark Theme (Metallic Gold Glow) */
+.dark ::-webkit-scrollbar-thumb,
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+.dark .custom-scrollbar::-webkit-scrollbar-thumb,
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.4);
+  border-radius: 9999px;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(235, 197, 99, 0.9);
+  box-shadow: 0 0 12px rgba(235, 197, 99, 0.5);
+}
+
+/* Utility to completely hide scrollbar when needed */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Collection card hover */
+.collection-card:hover img {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+/* Skeleton Pulse Animations for Slow Network */
+@keyframes closetSkeletonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.skeleton-pulse {
+  animation: closetSkeletonPulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Global App Preloader Overlay */
+#app-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-page);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#app-preloader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   CHECKOUT PAGE STYLES
+   ========================================================================== */
+
+/* Card container */
+.card {
+  background: var(--bg-card);
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.06);
+}
+
+/* Section heading label */
+.section-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Input field */
+.input-field {
+  width: 100%;
+  min-width: 0;
+  padding: 0.65rem 1rem;
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--border-color);
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  flex-shrink: 1;
+}
+
+.input-field:focus {
+  border-color: var(--accent-indigo);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  background: var(--bg-card);
+}
+
+.dark .input-field:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.input-field option {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* Payment/Shipping option row */
+.pay-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  background: var(--bg-card);
+}
+
+.pay-opt:hover {
+  border-color: #a5b4fc;
+  background: #eef2ff;
+}
+
+.dark .pay-opt:hover {
+  border-color: var(--accent-gold);
+  background: rgba(212,175,55,0.08);
+}
+
+.pay-opt.active {
+  border-color: var(--accent-indigo);
+  background: #eef2ff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.dark .pay-opt.active {
+  border-color: var(--accent-gold);
+  background: rgba(212,175,55,0.1);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+/* Radio ring & dot inside pay-opt */
+.radio-ring {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
+}
+
+.pay-opt.active .radio-ring {
+  border-color: var(--accent-indigo);
+}
+
+.dark .pay-opt.active .radio-ring {
+  border-color: var(--accent-gold);
+}
+
+.radio-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.pay-opt.active .radio-dot {
+  background: var(--accent-indigo);
+}
+
+.dark .pay-opt.active .radio-dot {
+  background: var(--accent-gold);
+}
+
+/* Order item row */
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Voucher bar */
+.voucher-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.voucher-bar input {
+  flex: 1;
+  padding: 0.6rem 0.875rem;
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--border-color);
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.voucher-bar input:focus {
+  border-color: var(--accent-indigo);
+}
+
+.dark .voucher-bar input:focus {
+  border-color: var(--accent-gold);
+}
+
+.voucher-bar button {
+  padding: 0.6rem 1.125rem;
+  background: var(--text-main);
+  color: var(--bg-card);
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.voucher-bar button:hover {
+  background: var(--accent-indigo);
+  color: #fff;
+}
+
+/* Sticky right column */
+.sticky-right {
+  position: sticky;
+  top: 6.5rem;
+}
+
+/* Checkbox */
+.check-box {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 0.375rem;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.check-box.on {
+  background: var(--accent-indigo);
+  border-color: var(--accent-indigo);
+}
+
+.dark .check-box.on {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+}

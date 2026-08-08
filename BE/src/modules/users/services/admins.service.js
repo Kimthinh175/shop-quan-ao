@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../../../core/middlewares/auth');
 
 class AdminService {
-    async login(username, password) {
+    async login(username, password, { ip, fingerprint } = {}) {
         const admin = await Admin.findOne({ username });
         if (!admin) {
             throw new Error('Sai tài khoản hoặc mật khẩu');
@@ -17,7 +17,7 @@ class AdminService {
 
         // Tạo token
         const token = jwt.sign(
-            { id: admin._id, username: admin.username, role: admin.role, type: 'staff' },
+            { id: admin._id, username: admin.username, role: admin.role, type: 'staff', ip, fingerprint },
             JWT_SECRET,
             { expiresIn: '24h' }
         );

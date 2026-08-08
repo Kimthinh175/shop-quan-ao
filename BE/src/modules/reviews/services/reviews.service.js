@@ -55,16 +55,15 @@ class ReviewsService {
         const limit = parseInt(query.limit) || 10;
         const rating = query.rating;
 
-        const filter = { product_id: productId };
-        if (rating) filter.rating = rating;
+        const targetProductId = !isNaN(Number(productId)) ? Number(productId) : productId;
+        const filter = { product_id: targetProductId };
+        if (rating) filter.rating = parseInt(rating);
 
-        return await paginate(ProductReview, filter, {
+        return await ProductReview.paginate(filter, {
             page,
             limit,
             sort: '-createdAt',
-            populate: [
-                { path: 'user_id', select: 'name avatar_url username' }
-            ]
+            populate: 'user_id'
         });
     }
 
@@ -72,13 +71,11 @@ class ReviewsService {
         const page = parseInt(query.page) || 1;
         const limit = parseInt(query.limit) || 10;
 
-        return await paginate(ProductReview, { user_id: userId }, {
+        return await ProductReview.paginate({ user_id: userId }, {
             page,
             limit,
             sort: '-createdAt',
-            populate: [
-                { path: 'product_id', select: 'name main_img' }
-            ]
+            populate: 'product_id'
         });
     }
 

@@ -1,0 +1,21 @@
+{
+  "name": "shop-quan-ao",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "BE",
+    "FE"
+  ],
+  "scripts": {
+    "dev": "npx concurrently \"npm run dev --workspace BE\" \"npm run dev --workspace FE\"",
+    "install:all": "npm install",
+    "map": "node scripts/generate-map.js",
+    "mcp:understand": "node mcp/understand-anything-server.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "quill": "^2.0.3",
+    "sharp": "^0.35.1"
+  }
+}

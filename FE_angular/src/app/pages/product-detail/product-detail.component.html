@@ -1,0 +1,326 @@
+<div class="bg-gray-50 min-h-screen pb-[150px] animate-[fadeIn_0.3s_ease-out]" *ngIf="!loading && product">
+
+  <!-- ── 1. FLOATING HEADER (Back & Wishlist) ── -->
+  <header class="sticky top-0 w-full p-4 flex justify-between items-center z-30 bg-white/80 backdrop-blur-md border-b border-gray-100/60 shadow-sm">
+    <button (click)="goBack()" class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-gray-800 shadow-md hover:bg-black hover:text-white transition-colors border border-gray-100">
+      <i class="fa-solid fa-arrow-left text-sm"></i>
+    </button>
+
+    <span class="font-serif font-black text-base tracking-tighter text-gray-900 line-clamp-1 max-w-[200px]">
+      {{ product.name }}
+    </span>
+
+    <button (click)="isFavorite = !isFavorite" 
+            [ngClass]="isFavorite ? 'text-red-500 bg-red-50' : 'text-gray-600 bg-white'"
+            class="w-9 h-9 rounded-full flex items-center justify-center shadow-md border border-gray-100 transition-colors">
+      <i class="fa-solid fa-heart text-sm" [class.fa-regular]="!isFavorite"></i>
+    </button>
+  </header>
+
+
+  <!-- ── 2. MOBILE PHOTO GALLERY ── -->
+  <section class="relative bg-white border-b border-gray-100 select-none">
+    <div class="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 group"
+         [draggable]="false"
+         (dragstart)="$event.preventDefault()"
+         (touchstart)="onTouchStart($event)"
+         (touchend)="onTouchEnd($event)">
+      
+      <img [src]="allImages[currentImageIndex] || ''" 
+           [alt]="product.name" 
+           [draggable]="false"
+           (dragstart)="$event.preventDefault()"
+           class="w-full h-full object-cover transition-all duration-300">
+      
+      <!-- Prev & Next Arrows -->
+      <button *ngIf="allImages.length > 1" 
+              (click)="prevImage()" 
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-800 shadow-md hover:bg-black hover:text-white transition-all z-20 active:scale-90">
+        <i class="fa-solid fa-chevron-left text-xs"></i>
+      </button>
+
+      <button *ngIf="allImages.length > 1" 
+              (click)="nextImage()" 
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-800 shadow-md hover:bg-black hover:text-white transition-all z-20 active:scale-90">
+        <i class="fa-solid fa-chevron-right text-xs"></i>
+      </button>
+
+      <!-- Counter Badge (e.g. 1/4) -->
+      <span class="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest z-10 shadow-md pointer-events-none">
+        {{ currentImageIndex + 1 }} / {{ allImages.length }}
+      </span>
+
+      <!-- New / Sale Badge -->
+      <div class="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
+        <span class="px-2.5 py-1 bg-black text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md">
+          Hot Item
+        </span>
+        <span class="px-2.5 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md">
+          -23%
+        </span>
+      </div>
+    </div>
+
+    <!-- Thumbnail Strip -->
+    <div class="flex gap-2.5 p-3 overflow-x-auto scrollbar-none bg-gray-50 border-t border-gray-100">
+      <div *ngFor="let img of allImages; let i = index" 
+           (click)="currentImageIndex = i"
+           class="w-14 h-14 rounded-xl overflow-hidden bg-white shrink-0 cursor-pointer border-2 transition-all duration-200"
+           [ngClass]="i === currentImageIndex ? 'border-black scale-105 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'">
+        <img [src]="img" [alt]="'Thumb ' + i" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── 3. PRODUCT INFO & PRICING ── -->
+  <section class="p-5 bg-white rounded-b-3xl shadow-sm border-b border-gray-100">
+    <!-- Brand & Rating -->
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+        {{ product.brand_id?.name || 'CLOSET' }}
+      </span>
+
+      <div class="flex items-center gap-1 bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-full text-amber-500 text-[10px] font-bold">
+        <i class="fa-solid fa-star"></i>
+        <span class="text-amber-900 font-black">4.9</span>
+        <span class="text-gray-400 font-normal">(128)</span>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-xl font-black text-gray-900 leading-snug tracking-tight mb-3">
+      {{ product.name }}
+    </h1>
+
+    <!-- Price Section -->
+    <div class="flex items-baseline gap-3 mb-5">
+      <span class="text-2xl font-black text-gray-900 tracking-tight">
+        {{ currentPrice | currency:'VND':'symbol':'1.0-0' }}
+      </span>
+      <span class="text-xs text-gray-400 line-through">
+        {{ (currentPrice * 1.3) | currency:'VND':'symbol':'1.0-0' }}
+      </span>
+    </div>
+
+    <div class="w-full h-px bg-gray-100 mb-5"></div>
+
+
+    <!-- ── 4. COLOR SELECTOR ── -->
+    <div class="mb-5" *ngIf="colors.length > 0">
+      <div class="flex justify-between items-center mb-2.5">
+        <span class="text-xs font-black uppercase tracking-wider text-gray-800">
+          Màu sắc: <span class="text-gray-500 font-normal capitalize">{{ selectedColor }}</span>
+        </span>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button *ngFor="let color of colors" 
+                (click)="selectColor(color)"
+                class="w-8 h-8 rounded-full shadow-sm border-2 transition-all relative flex items-center justify-center"
+                [ngClass]="selectedColor === color ? 'border-black scale-110 ring-2 ring-black/20' : 'border-gray-200 hover:scale-105'"
+                [style.backgroundColor]="getColorHex(color)"
+                [title]="color">
+          <i *ngIf="selectedColor === color" class="fa-solid fa-check text-[10px]" [ngClass]="color.toLowerCase() === 'trắng' || color.toLowerCase() === 'white' ? 'text-black' : 'text-white'"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- ── 5. SIZE SELECTOR ── -->
+    <div class="mb-5" *ngIf="sizes.length > 0">
+      <div class="flex justify-between items-center mb-2.5">
+        <span class="text-xs font-black uppercase tracking-wider text-gray-800">
+          Kích cỡ: <span class="text-gray-500 font-normal uppercase">{{ selectedSize }}</span>
+        </span>
+        <button (click)="showSizeGuide = true" class="text-[10px] font-bold text-indigo-600 hover:underline flex items-center gap-1">
+          <i class="fa-solid fa-ruler-horizontal text-xs"></i> Bảng quy đổi Size
+        </button>
+      </div>
+      <div class="flex flex-wrap gap-2.5">
+        <button *ngFor="let size of sizes" 
+                (click)="selectSize(size)"
+                [ngClass]="selectedSize === size ? 'bg-black text-white border-black shadow-md scale-105' : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-black'"
+                class="min-w-[44px] h-10 px-3.5 border rounded-xl text-xs font-black uppercase tracking-wider transition-all">
+          {{ size }}
+        </button>
+      </div>
+    </div>
+
+
+    <!-- ── 6. QUANTITY PICKER ── -->
+    <div class="flex items-center justify-between pt-2">
+      <span class="text-xs font-black uppercase tracking-wider text-gray-800">Số lượng:</span>
+      <div class="flex items-center border border-gray-200 rounded-xl bg-gray-50 h-10 px-1">
+        <button (click)="quantity = quantity > 1 ? quantity - 1 : 1" class="w-8 h-full flex items-center justify-center text-gray-600 hover:text-black active:scale-90">
+          <i class="fa-solid fa-minus text-xs"></i>
+        </button>
+        <span class="w-8 text-center text-xs font-black text-gray-900">{{ quantity }}</span>
+        <button (click)="quantity = quantity + 1" class="w-8 h-full flex items-center justify-center text-gray-600 hover:text-black active:scale-90">
+          <i class="fa-solid fa-plus text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── 7. NỘI DUNG CHI TIẾT SẢN PHẨM (BUNG HẾT) ── -->
+  <section class="mt-4 px-4">
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 space-y-5">
+      
+      <!-- Description -->
+      <div class="border-b border-gray-100 pb-4">
+        <div class="flex items-center gap-2 mb-2.5">
+          <i class="fa-solid fa-file-lines text-indigo-600 text-sm"></i>
+          <span class="text-xs font-black text-gray-900 uppercase tracking-wider">Mô tả sản phẩm</span>
+        </div>
+        <div class="text-xs text-gray-600 leading-relaxed space-y-2" [innerHTML]="product.description || 'Sản phẩm cao cấp được thiết kế tinh tế với phom dáng chuẩn hiện đại, chất liệu bền bỉ và vô cùng thoáng mát.'">
+        </div>
+      </div>
+
+      <!-- Care Instructions -->
+      <div class="border-b border-gray-100 pb-4">
+        <div class="flex items-center gap-2 mb-2.5">
+          <i class="fa-solid fa-soap text-indigo-600 text-sm"></i>
+          <span class="text-xs font-black text-gray-900 uppercase tracking-wider">Hướng dẫn bảo quản</span>
+        </div>
+        <div class="text-xs text-gray-600 leading-relaxed space-y-1.5">
+          <p>• Giặt máy ở nhiệt độ thường với sản phẩm cùng màu.</p>
+          <p>• Không xịt trực tiếp nước tẩy đậm đặc lên vải.</p>
+          <p>• Phơi trong bóng râm, tránh ánh nắng mặt trời gắt.</p>
+          <p>• Là/ủi ở nhiệt độ trung bình (dưới 150°C).</p>
+        </div>
+      </div>
+
+      <!-- Shipping Policy -->
+      <div>
+        <div class="flex items-center gap-2 mb-2.5">
+          <i class="fa-solid fa-truck-fast text-indigo-600 text-sm"></i>
+          <span class="text-xs font-black text-gray-900 uppercase tracking-wider">Vận chuyển & Đổi trả</span>
+        </div>
+        <div class="text-xs text-gray-600 leading-relaxed space-y-1.5">
+          <p>• Giao hàng hỏa tốc trong 24h tại TP.HCM và Hà Nội.</p>
+          <p>• Đổi trả miễn phí trong vòng 7 ngày nếu lỗi từ nhà sản xuất.</p>
+          <p>• Được kiểm tra hàng trước khi thanh toán (COD).</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 7.5. ĐÁNH GIÁ SẢN PHẨM ── -->
+  <section class="mt-4 px-4" id="reviews-section">
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+      
+      <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+        <h3 class="text-xs font-black uppercase tracking-widest text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-star text-amber-500 text-sm"></i> Đánh giá ({{ reviews.length }})
+        </h3>
+        <div *ngIf="product.rate" class="flex items-center gap-1.5">
+          <span class="text-xl font-black text-gray-900">{{ product.rate }}/5</span>
+        </div>
+      </div>
+
+      <div *ngIf="reviews.length === 0" class="text-center py-6 text-gray-400">
+        <i class="fa-regular fa-comment-dots text-3xl mb-2 opacity-50"></i>
+        <p class="text-[10px] font-bold uppercase tracking-widest">Chưa có đánh giá nào</p>
+      </div>
+
+      <div class="space-y-4">
+        <div *ngFor="let rv of reviews" class="border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-user text-indigo-300 text-xs"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-center">
+                <span class="text-[11px] font-black text-gray-900">{{ rv.user_id?.full_name || 'Khách hàng' | slice:0:3 }}***</span>
+                <span class="text-[9px] text-gray-400">{{ rv.createdAt || rv.create_at | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="flex text-amber-400 text-[8px] mt-0.5 gap-0.5">
+                <i *ngFor="let s of [1,2,3,4,5]" class="fa-solid fa-star" [ngClass]="s <= rv.rating ? 'text-amber-400' : 'text-gray-200'"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed mb-2">{{ rv.content }}</p>
+          
+          <!-- Hình ảnh đánh giá -->
+          <div *ngIf="rv.images && rv.images.length > 0" class="flex gap-2 overflow-x-auto scrollbar-none mt-2">
+            <div *ngFor="let img of rv.images" class="w-16 h-16 rounded-xl overflow-hidden bg-gray-50 shrink-0 border border-gray-100">
+              <img [src]="img" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── 8. RELATED PRODUCTS ── -->
+  <section class="mt-6 px-4" *ngIf="relatedProducts.length > 0">
+    <h3 class="text-xs font-black uppercase tracking-widest text-gray-900 mb-4 flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-black"></span> Sản phẩm tương tự
+    </h3>
+    <div class="grid grid-cols-2 gap-3.5">
+      <app-product-card *ngFor="let p of relatedProducts" [product]="p"></app-product-card>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- ── 9. STICKY BOTTOM ACTION BAR (Cố định phía trên Bottom Nav) ── -->
+<div *ngIf="product" class="fixed bottom-[65px] left-1/2 -translate-x-1/2 w-full max-w-[480px] p-3 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 shadow-[0_-8px_20px_rgba(0,0,0,0.08)]">
+  <div class="flex gap-2.5">
+    <button (click)="addToCart()" 
+            class="flex-1 h-12 bg-gray-900 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-black active:scale-95 transition-all shadow-md flex items-center justify-center gap-2">
+      <i class="fa-solid fa-bag-shopping"></i> Thêm vào giỏ
+    </button>
+    <button (click)="buyNow()" 
+            class="flex-1 h-12 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] hover:from-amber-600 hover:to-amber-700 active:scale-95 transition-all shadow-md flex items-center justify-center gap-2">
+      <i class="fa-solid fa-bolt"></i> Mua ngay
+    </button>
+  </div>
+</div>
+
+
+<!-- ── 10. SIZE GUIDE MODAL ── -->
+<div *ngIf="showSizeGuide" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative">
+    <button (click)="showSizeGuide = false" class="absolute top-4 right-4 text-gray-400 hover:text-black w-8 h-8 rounded-full flex items-center justify-center bg-gray-100">
+      <i class="fa-solid fa-xmark text-sm"></i>
+    </button>
+
+    <h3 class="text-sm font-black uppercase tracking-widest text-gray-900 mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-ruler-vertical text-indigo-600"></i> Bảng Quy Đổi Size
+    </h3>
+
+    <div class="overflow-x-auto mb-4">
+      <table class="w-full text-xs text-center border-collapse">
+        <thead>
+          <tr class="bg-gray-100 text-gray-900 font-bold border-b border-gray-200">
+            <th class="p-2">Size</th>
+            <th class="p-2">Chiều cao (cm)</th>
+            <th class="p-2">Cân nặng (kg)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-600">
+          <tr><td class="p-2 font-bold text-gray-900">S</td><td class="p-2">155 - 165</td><td class="p-2">48 - 55</td></tr>
+          <tr><td class="p-2 font-bold text-gray-900">M</td><td class="p-2">164 - 172</td><td class="p-2">56 - 65</td></tr>
+          <tr><td class="p-2 font-bold text-gray-900">L</td><td class="p-2">171 - 178</td><td class="p-2">66 - 75</td></tr>
+          <tr><td class="p-2 font-bold text-gray-900">XL</td><td class="p-2">177 - 185</td><td class="p-2">76 - 85</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button (click)="showSizeGuide = false" class="w-full py-3 bg-black text-white text-xs font-black uppercase tracking-widest rounded-xl">
+      Đã hiểu
+    </button>
+  </div>
+</div>
+
+
+<!-- Loading State -->
+<div *ngIf="loading" class="min-h-screen flex items-center justify-center">
+  <i class="fa-solid fa-spinner fa-spin text-3xl text-gray-300"></i>
+</div>

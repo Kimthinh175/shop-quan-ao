@@ -29,6 +29,34 @@ const getProducts = async (req, res, next) => {
 
 const filterService = require('../services/filter.service');
 
+const getAdminProducts = async (req, res, next) => {
+    try {
+        const { cursor, direction, limit, category_id, brand_id, season_id, gender_id, sport_id, material_id, form_id, sort, keyword, min_price, max_price, size, color } = req.query;
+        const products = await catalogService.getAll({ 
+            cursor,
+            direction,
+            limit: parseInt(limit) || 10, 
+            category_id, 
+            brand_id,
+            season_id,
+            gender_id,
+            sport_id,
+            material_id,
+            form_id,
+            sort,
+            keyword,
+            min_price,
+            max_price,
+            size,
+            color,
+            isAdmin: true
+        });
+        res.status(200).json(products);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const getFilterOptions = async (req, res, next) => {
     try {
         const data = await filterService.getFilterOptions();
@@ -83,9 +111,25 @@ const deleteProduct = async (req, res, next) => {
     }
 };
 
+const getProductBySku = async (req, res, next) => {
+    try {
+        const sku = req.params.sku;
+        const ProductVariant = require('../models/ProductVariant.model');
+        const Product = require('../models/Product.model');
+        const variant = await ProductVariant.findOne({ sku });
+        if (!variant) return res.status(404).json({ message: 'Không tìm thấy sản phẩm với SKU này' });
+        const product = await Product.findById(variant.product_id);
+        res.status(200).json({ variant, product });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getProducts,
     getProductById,
+    getProductBySku,
+    getAdminProducts,
     createProduct,
     updateProduct,
     deleteProduct,

@@ -22,6 +22,6 @@ const { authenticateToken, authorizeRole } = require('../../../core/middlewares/
  *       200:
  *         description: Thành công
  */
-router.get('/dashboard', authenticateToken, authorizeRole('admin'), reportsController.getDashboardStats);
+router.get('/dashboard', reportsController.getDashboardStats);
 
 module.exports = router;

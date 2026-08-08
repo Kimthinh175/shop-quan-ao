@@ -3,11 +3,11 @@ const orderService = require('../services/orders.service');
 class OrderController {
     async create(req, res) {
         try {
-            if (!req.user || !req.user.id) {
-                return res.status(401).json({ message: 'Vui lòng đăng nhập để đặt hàng' });
+            if (!req.user) {
+                return res.status(401).json({ message: 'Vui lòng đăng nhập' });
             }
-            // Truyền req.user.id vào service
-            const order = await orderService.createOrder(req.user.id, req.body);
+            const customerId = req.body.is_pos ? null : (req.user.customer_id || req.user.id);
+            const order = await orderService.createOrder(customerId, req.body);
             res.status(201).json(order);
         } catch (error) {
             res.status(400).json({ message: error.message });
@@ -37,9 +37,30 @@ class OrderController {
         }
     }
 
+    async getMyOrders(req, res) {
+        try {
+            if (!req.user || !req.user.customer_id) {
+                return res.status(401).json({ message: 'Vui lòng đăng nhập để xem đơn hàng' });
+            }
+            const result = await orderService.getByCustomer(req.user.customer_id, req.query);
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     async getById(req, res) {
         try {
             const result = await orderService.getById(req.params.id);
+            
+            // Fix IDOR: Nếu là khách hàng, chỉ được xem đơn của chính mình
+            if (req.user && req.user.type === 'user' && req.user.customer_id) {
+                const orderCustomerId = result.order ? result.order.customer_id : result.customer_id;
+                if (orderCustomerId && orderCustomerId.toString() !== req.user.customer_id.toString()) {
+                    return res.status(403).json({ message: 'Bạn không có quyền xem đơn hàng này (IDOR Protected)' });
+                }
+            }
+
             res.json(result);
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -68,14 +89,13 @@ class OrderController {
                 return res.status(400).json({ success: false, message: 'Invalid webhook data' });
             }
 
-            // PayOS gửi orderCode về, ta gán nó bằng orderId
             const orderId = webhookData.orderCode;
-            if (webhookData.code === '00' && webhookData.success === true) {
-                // Thanh toán thành công -> Đổi status đơn hàng
-                const Order = require('../models/Order.model');
-                const order = await Order.findById(orderId);
-                
-                if (order) {
+            const Order = require('../models/Order.model');
+            const order = await Order.findById(orderId);
+            
+            if (order) {
+                if (webhookData.code === '00' && webhookData.success === true) {
+                    // Thanh toán thành công -> Đổi status đơn hàng
                     if (order.status === 'CANCELLED') {
                         // Nếu đơn đã bị hủy (do quá hạn) nhưng tiền vẫn vào -> Ghi chú CẦN HOÀN TIỀN
                         order.admin_note = (order.admin_note ? order.admin_note + ' | ' : '') + 'KHÁCH THANH TOÁN TRỄ - CẦN HOÀN TIỀN';
@@ -84,7 +104,13 @@ class OrderController {
                         console.error(`[PAYOS] Đơn hàng #${orderId} đã HỦY nhưng vừa nhận được tiền. Yêu cầu hoàn tiền thủ công.`);
                     } else {
                         order.payment_status = 'PAID';
-                        order.status = 'CONFIRMED';
+                        order.status = order.is_pos ? 'COMPLETED' : 'CONFIRMED';
+                        await order.save();
+                    }
+                } else {
+                    // Thanh toán thất bại hoặc khách hủy
+                    if (order.status !== 'COMPLETED' && order.status !== 'SHIPPING') {
+                        order.status = 'CANCELLED';
                         await order.save();
                     }
                 }

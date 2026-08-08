@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orders.controller');
-const { authenticateToken, authorizeRole } = require('../../../core/middlewares/auth');
+const { authenticateToken, optionalAuthenticateToken, authorizeRole } = require('../../../core/middlewares/auth');
 
 /**
  * @swagger
@@ -109,7 +109,8 @@ router.post('/payos/webhook', orderController.payosWebhook);
  *       200:
  *         description: Thành công
  */
-router.get('/:id', authenticateToken, orderController.getById);
+router.get('/my-orders', authenticateToken, orderController.getMyOrders);
+router.get('/:id', optionalAuthenticateToken, orderController.getById);
 
 /**
  * @swagger

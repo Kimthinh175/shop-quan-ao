@@ -1,0 +1,122 @@
+/* Main Stylesheet for Closet Quiet Luxury */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    background-color: #faf9f6;
+    color: #0f172a;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-serif, h1.font-serif, h2.font-serif, h3.font-serif, h4.font-serif, h5.font-serif {
+    font-family: 'Playfair Display', serif !important;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+/* Global Transitions */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Smooth fade-in animation for content loading */
+.fade-in { animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Glassmorphism navigation scroll effect */
+.nav-scrolled { 
+    background: rgba(250, 249, 246, 0.75); 
+    backdrop-filter: blur(24px); 
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04); 
+}
+
+/* Ultra premium hover effect for collection cards */
+.collection-card:hover img {
+    transform: scale(1.04);
+}
+.collection-card:hover .overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Silk-smooth text marquee animation */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+}
+.marquee-content {
+    display: inline-block;
+    animation: marquee 30s linear infinite;
+}
+@keyframes marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Artistic Scroll Reveal Styles */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-item.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Editorial Product Card: Slow-burn Ken Burns zoom */
+@keyframes kenBurns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
+}
+
+/* Hover underline slide-in animation for product cards */
+.product-card-line {
+    width: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.5);
+    transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .product-card-line {
+    width: 100%;
+}
+
+/* Number reveal animation */
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cinematic hero fade-in */
+.hero-content-enter {
+    animation: heroFadeIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-sidebar-link { color: #64748b; background: transparent; }
+.admin-sidebar-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.06); }
+.admin-sidebar-link.sidebar-active { color: #60a5fa !important; background: rgba(42,131,233,0.15) !important; }
+.admin-sidebar-link.sidebar-active:hover { color: #93c5fd !important; background: rgba(42,131,233,0.2) !important; }
+.admin-sidebar-link .active-dot { display: none; }
+.admin-sidebar-link.sidebar-active .active-dot { display: block !important; }

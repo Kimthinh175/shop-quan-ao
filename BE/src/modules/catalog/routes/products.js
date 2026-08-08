@@ -7,7 +7,13 @@ const {
   updateProduct,
   deleteProduct,
   getFilterOptions,
+  getProductBySku,
+  getAdminProducts,
 } = require("../controllers/product.controller");
+const {
+  authenticateToken,
+  authorizeRole,
+} = require("../../../core/middlewares/auth");
 
 /**
  * @swagger
@@ -28,8 +34,7 @@ const {
  *       200:
  *         description: Trả về các lựa chọn lọc
  */
-router.route("/filter-options")
-  .get(getFilterOptions);
+router.route("/filter-options").get(getFilterOptions);
 
 /**
  * @swagger
@@ -143,9 +148,12 @@ router.route("/filter-options")
  *       201:
  *         description: Tạo thành công
  */
-router.route("/")
+router.route("/admin").get(authenticateToken, authorizeRole("admin"), getAdminProducts);
+
+router
+  .route("/")
   .get(getProducts)
-  .post(createProduct);
+  .post(authenticateToken, authorizeRole("admin"), createProduct);
 
 /**
  * @swagger
@@ -205,9 +213,12 @@ router.route("/")
  *       200:
  *         description: Xóa thành công
  */
-router.route("/:id")
+router.route("/sku/:sku").get(getProductBySku);
+
+router
+  .route("/:id")
   .get(getProductById)
-  .put(updateProduct)
-  .delete(deleteProduct);
+  .put(authenticateToken, authorizeRole("admin"), updateProduct)
+  .delete(authenticateToken, authorizeRole("admin"), deleteProduct);
 
 module.exports = router;

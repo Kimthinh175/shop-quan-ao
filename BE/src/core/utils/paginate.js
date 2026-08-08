@@ -58,11 +58,17 @@ module.exports = function cursorPaginate(schema) {
         }
 
         if (options.populate) {
-            options.populate.split(',').forEach((populateOption) => {
-                docsPromise = docsPromise.populate(
-                    populateOption.split('.').reverse().reduce((a, b) => ({ path: b, populate: a }))
-                );
-            });
+            if (typeof options.populate === 'string') {
+                options.populate.split(',').forEach((populateOption) => {
+                    docsPromise = docsPromise.populate(
+                        populateOption.split('.').reverse().reduce((a, b) => ({ path: b, populate: a }))
+                    );
+                });
+            } else if (Array.isArray(options.populate)) {
+                options.populate.forEach((pop) => {
+                    docsPromise = docsPromise.populate(pop);
+                });
+            }
         }
 
         // Chạy song song cả query lấy data và đếm tổng (tuỳ chọn)

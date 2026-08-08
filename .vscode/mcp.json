@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "shop-quan-ao-understand": {
+      "command": "node",
+      "args": ["mcp/understand-anything-server.mjs"],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}

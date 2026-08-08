@@ -12,6 +12,7 @@ const ProductVariantSchema = new mongoose.Schema({
     sold: { type: Number, default: 0, min: 0 },
     size: { type: String, required: true },
     color: { type: String, required: true },
+    color_hex: { type: String, default: '#d1d5db' },
     price: { type: Number, required: true, min: 0 },
     cost_price: { type: Number, default: 0, min: 0 }
 }, { timestamps: true });

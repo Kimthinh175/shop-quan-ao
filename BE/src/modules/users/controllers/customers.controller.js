@@ -18,7 +18,7 @@ class CustomerController {
     // Profile & Quản lý
     async getMe(req, res) {
         try {
-            const customer = await customerService.getById(req.user.id);
+            const customer = await customerService.getById(req.user.customer_id);
             res.json(customer);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -27,7 +27,7 @@ class CustomerController {
 
     async updateMe(req, res) {
         try {
-            const customer = await customerService.update(req.user.id, req.body);
+            const customer = await customerService.update(req.user.customer_id, req.body);
             res.json(customer);
         } catch (error) {
             res.status(400).json({ message: error.message });
@@ -66,7 +66,7 @@ class CustomerController {
     // Address
     async getAddresses(req, res) {
         try {
-            const customer = await customerService.getById(req.user.id);
+            const customer = await customerService.getById(req.user.customer_id);
             res.json(customer.addresses);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -75,7 +75,7 @@ class CustomerController {
 
     async addAddress(req, res) {
         try {
-            const addresses = await customerService.addAddress(req.user.id, req.body);
+            const addresses = await customerService.addAddress(req.user.customer_id, req.body);
             res.status(201).json(addresses);
         } catch (error) {
             res.status(400).json({ message: error.message });
@@ -84,7 +84,7 @@ class CustomerController {
 
     async updateAddress(req, res) {
         try {
-            const addresses = await customerService.updateAddress(req.user.id, req.params.addressId, req.body);
+            const addresses = await customerService.updateAddress(req.user.customer_id, req.params.addressId, req.body);
             res.json(addresses);
         } catch (error) {
             res.status(400).json({ message: error.message });
@@ -93,7 +93,7 @@ class CustomerController {
 
     async deleteAddress(req, res) {
         try {
-            const addresses = await customerService.deleteAddress(req.user.id, req.params.addressId);
+            const addresses = await customerService.deleteAddress(req.user.customer_id, req.params.addressId);
             res.json(addresses);
         } catch (error) {
             res.status(400).json({ message: error.message });

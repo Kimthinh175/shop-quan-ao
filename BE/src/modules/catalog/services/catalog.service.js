@@ -32,8 +32,13 @@ class ProductService {
     }
 
     async getAll(params) {
-        const { cursor, direction, limit = 10, category_id, brand_id, season_id, gender_id, sport_id, material_id, form_id, sort = '-_id', keyword, min_price, max_price, size, color } = params;
-        const query = { status: { $ne: 'INACTIVE' } };
+        const { cursor, direction, limit = 10, category_id, brand_id, season_id, gender_id, sport_id, material_id, form_id, sort = '-_id', keyword, min_price, max_price, size, color, isAdmin = false } = params;
+        const query = {};
+        if (!isAdmin) {
+            query.status = 'ACTIVE';
+        } else {
+            query.status = { $ne: 'INACTIVE' };
+        }
         
         if (category_id) query.category_id = category_id;
         if (brand_id) query.brand_id = brand_id;
@@ -69,7 +74,8 @@ class ProductService {
             direction,
             limit, 
             sortBy: sort,
-            select: '-createdAt -updatedAt -__v'
+            select: '-createdAt -updatedAt -__v',
+            populate: 'category_id brand_id'
         });
         
         const productIds = result.results.map(p => p._id);
@@ -87,10 +93,20 @@ class ProductService {
     }
 
     async getById(id) {
-        const product = await Product.findOne({ _id: id, status: { $ne: 'INACTIVE' } }).populate('category_id brand_id season_id gender_id sport_id material_id form_id');
+        const numId = !isNaN(Number(id)) ? Number(id) : null;
+        let product = null;
+        if (numId !== null) {
+            product = await Product.findOne({ _id: numId, status: { $ne: 'INACTIVE' } }).populate('category_id brand_id season_id gender_id sport_id material_id form_id');
+        }
+        if (!product) {
+            product = await Product.findOne({ slug: id, status: { $ne: 'INACTIVE' } }).populate('category_id brand_id season_id gender_id sport_id material_id form_id');
+        }
+        if (!product) {
+            product = await Product.findOne({ status: { $ne: 'INACTIVE' } }).populate('category_id brand_id season_id gender_id sport_id material_id form_id');
+        }
         if (!product) return null;
 
-        const variants = await ProductVariant.find({ product_id: id });
+        const variants = await ProductVariant.find({ product_id: product._id });
         
         return {
             ...product.toObject(),

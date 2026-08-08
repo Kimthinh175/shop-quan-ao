@@ -47,7 +47,7 @@ const initSocket = (server) => {
                 }
             }
             console.log(`[Socket] User ${userId} disconnected (Socket ID: ${socket.id})`);
-        });
+        }); 
     });
 };
 

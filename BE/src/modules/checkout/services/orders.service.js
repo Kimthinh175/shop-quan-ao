@@ -8,8 +8,8 @@ const notificationsService = require('../../notifications/services/notifications
 class OrderService {
         async createOrder(customerId, orderData) {
         const mongoose = require('mongoose');
-        const session = await mongoose.startSession();
-        session.startTransaction();
+        
+        
         try {
             // Validation cơ bản
             if (!orderData.items || orderData.items.length === 0) {
@@ -27,13 +27,55 @@ class OrderService {
 
             // BƯỚC 1: KIỂM TRA TỒN KHO VÀ CHẠY FIFO
             for (const item of orderData.items) {
-                const variant = await ProductVariant.findById(item.product_variant_id).session(session);
-                if (!variant) throw new Error(`Không tìm thấy ProductVariant ${item.product_variant_id}`);
+                let variant = null;
+                const rawVarId = item.product_variant_id || item.variant_id;
+                if (rawVarId !== undefined && rawVarId !== null) {
+                    const numVarId = !isNaN(Number(rawVarId)) ? Number(rawVarId) : null;
+                    if (numVarId !== null) {
+                        variant = await ProductVariant.findById(numVarId);
+                    }
+                    if (!variant && typeof rawVarId === 'string') {
+                        try {
+                            variant = await ProductVariant.findById(rawVarId);
+                        } catch (err) {}
+                    }
+                }
+
+                if (!variant) {
+                    // Fallback cho sản phẩm mua trực tiếp / demo
+                    const rawPid = item.product_id || item.id;
+                    const numPid = (rawPid && !isNaN(Number(rawPid))) ? Number(rawPid) : null;
+                    let foundProduct = null;
+                    if (numPid !== null) {
+                        foundProduct = await Product.findById(numPid);
+                    }
+                    const realPid = foundProduct ? foundProduct._id : (numPid || 1);
+
+                    const itemPrice = item.price || (foundProduct ? (foundProduct.default_price || 350000) : 500000);
+                    calculatedTotalPrice += item.quantity * itemPrice;
+
+                    orderItemsToSave.push({
+                        product_variant_id: item.variant_id || item.product_variant_id || null,
+                        variant_snapshot: {
+                            product_id: realPid,
+                            product_variant_id: item.variant_id || item.product_variant_id || null,
+                            name: item.name || item.product_name || (foundProduct ? foundProduct.name : 'Sản phẩm CLOSET'),
+                            sku: item.sku || 'SKU-CLOSET',
+                            color: item.color || 'Mặc định',
+                            size: item.size || 'Mặc định',
+                            main_img: item.image || item.main_img || (foundProduct ? foundProduct.main_img : '')
+                        },
+                        total_quantity: item.quantity,
+                        unit_price: itemPrice,
+                        lots_deducted: []
+                    });
+                    continue;
+                }
                 if (variant.quantity < item.quantity) {
                     throw new Error(`Sản phẩm ${variant.sku} không đủ tồn kho (Còn ${variant.quantity})`);
                 }
 
-                const product = await Product.findById(variant.product_id).session(session);
+                const product = await Product.findById(variant.product_id);
                 
                 let remainingToDeduct = item.quantity;
                 const lotsDeducted = [];
@@ -77,7 +119,7 @@ class OrderService {
                     }
                 }
 
-                await variant.save({ session });
+                await variant.save({});
 
                 calculatedTotalPrice += item.quantity * variant.price;
 
@@ -103,7 +145,7 @@ class OrderService {
             let giftSnapshot = null;
             if (orderData.promotion_id) {
                 const Promotion = require('../../promotions/models/Promotion.model');
-                const promotion = await Promotion.findById(orderData.promotion_id).session(session);
+                const promotion = await Promotion.findById(orderData.promotion_id);
                 if (!promotion) throw new Error('Không tìm thấy chương trình khuyến mãi');
                 
                 const now = new Date();
@@ -152,7 +194,7 @@ class OrderService {
                         promotionDiscount += discount;
                     } else if (reward.reward_type === 'GIFT') {
                         const Gift = require('../../promotions/models/Gift.model');
-                        const gift = await Gift.findById(reward.gift_id).session(session);
+                        const gift = await Gift.findById(reward.gift_id);
                         if (!gift) {
                             throw new Error('Quà tặng không tồn tại trong hệ thống');
                         }
@@ -161,7 +203,7 @@ class OrderService {
                         }
                         
                         gift.quantity -= reward.gift_quantity;
-                        await gift.save({ session });
+                        await gift.save({});
 
                         giftSnapshot = {
                             gift_id: gift._id,
@@ -173,7 +215,7 @@ class OrderService {
                 }
                 
                 promotion.used_count += 1;
-                await promotion.save({ session });
+                await promotion.save({});
             }
 
             // BƯỚC 1.6: XỬ LÝ VOUCHER
@@ -186,9 +228,9 @@ class OrderService {
                 
                 // Fetch within session
                 const Voucher = require('../../promotions/models/Voucher.model');
-                const voucher = await Voucher.findById(voucherResult.voucher._id).session(session);
+                const voucher = await Voucher.findById(voucherResult.voucher._id);
                 voucher.used_count += 1;
-                await voucher.save({ session });
+                await voucher.save({});
             }
 
             // BƯỚC 1.7: TÍCH ĐIỂM & TRỪ ĐIỂM (Loyalty Points)
@@ -196,11 +238,11 @@ class OrderService {
             let pointsEarned = 0;
             
             const User = require('../../users/models/User.model');
-            const userRec = await User.findById(customerId).session(session);
+            const userRec = await User.findById(customerId);
             const actualCustomerId = userRec ? userRec.customer_id : customerId;
             
             const Customer = require('../../users/models/Customer.model');
-            const customerInfo = await Customer.findById(actualCustomerId).session(session);
+            const customerInfo = await Customer.findById(actualCustomerId);
 
             if (orderData.use_points) {
                 let usePoints = Number(orderData.use_points) || 0;
@@ -211,7 +253,7 @@ class OrderService {
                     orderData.points_used = usePoints;
                     
                     customerInfo.points -= usePoints;
-                    await customerInfo.save({ session });
+                    await customerInfo.save({});
                 }
             }
             
@@ -228,7 +270,11 @@ class OrderService {
             orderData.customer_id = actualCustomerId;
             if (giftSnapshot) orderData.gift_snapshot = giftSnapshot;
             
-            if (orderData.payment_method === 'POS') {
+            if (orderData.payment_method === 'CASH' && orderData.is_pos) {
+                orderData.status = 'COMPLETED';
+                orderData.payment_status = 'PAID';
+            } else if (orderData.payment_method === 'POS') {
+                orderData.payment_method = 'CASH'; // Fallback mapping
                 orderData.status = 'COMPLETED';
                 orderData.payment_status = 'PAID';
             } else {
@@ -236,17 +282,17 @@ class OrderService {
                 orderData.payment_status = 'UNPAID';
             }
 
-            const orders = await Order.create([orderData], { session });
+            const orders = await Order.create([orderData], {});
             const order = orders[0];
 
             // BƯỚC 3: TẠO ORDER ITEMS
             for (const oi of orderItemsToSave) {
                 oi.order_id = order._id;
             }
-            await OrderItem.create(orderItemsToSave, { session });
+            await OrderItem.create(orderItemsToSave, {});
 
-            await session.commitTransaction();
-            session.endSession();
+            
+            
 
             // BƯỚC 4: TÍCH HỢP PAYOS NẾU LÀ TRANSFER (ngoài transaction)
             let payosLinkInfo = null;
@@ -271,23 +317,41 @@ class OrderService {
 
             return result;
         } catch (error) {
-            await session.abortTransaction();
-            session.endSession();
+            
+            
             throw error;
         }
     }
 
     async getAll(query = {}) {
         const page = parseInt(query.page) || 1;
-        const limit = parseInt(query.limit) || 10;
+        const limit = parseInt(query.limit) || 100;
         const skip = (page - 1) * limit;
 
+        const filter = {};
+        if (query.status && query.status !== 'ALL') {
+            filter.status = query.status;
+        }
+        if (query.is_pos === 'true' || query.is_pos === true) {
+            filter.is_pos = true;
+        } else if (query.is_pos === 'false' || query.is_pos === false) {
+            filter.is_pos = false;
+        }
+        if (query.search) {
+            const regex = new RegExp(query.search, 'i');
+            filter.$or = [
+                { receiver_name: regex },
+                { receiver_phone: regex },
+                { order_code: regex }
+            ];
+        }
+
         const [data, total] = await Promise.all([
-            Order.find()
+            Order.find(filter)
                 .sort('-_id')
                 .skip(skip)
                 .limit(limit),
-            Order.countDocuments()
+            Order.countDocuments(filter)
         ]);
 
         return {
@@ -301,9 +365,74 @@ class OrderService {
         };
     }
 
+    async getByCustomer(customerId, query = {}) {
+        const page = parseInt(query.page) || 1;
+        const limit = parseInt(query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const filter = { customer_id: customerId };
+        if (query.status) {
+            filter.status = query.status;
+        }
+
+        const total = await Order.countDocuments(filter);
+        const data = await Order.find(filter)
+            .sort({ create_at: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        // FETCH ITEMS FOR EACH ORDER AND SYNC PAYOS
+        const resultData = [];
+        for (const order of data) {
+            // Must convert mongoose doc to plain object to attach items
+            const orderObj = order.toObject();
+
+            if (orderObj.payment_method === 'TRANSFER' && orderObj.payment_status === 'UNPAID') {
+                try {
+                    const payosService = require('./payos.service');
+                    const info = await payosService.getPaymentLink(orderObj._id);
+                    if (info && info.status === 'PAID') {
+                        orderObj.payment_status = 'PAID';
+                        if (orderObj.status === 'PENDING') orderObj.status = order.is_pos ? 'COMPLETED' : 'CONFIRMED';
+                        order.payment_status = 'PAID';
+                        if (order.status === 'PENDING') order.status = order.is_pos ? 'COMPLETED' : 'CONFIRMED';
+                        await order.save();
+                    }
+                } catch (e) {}
+            }
+
+            const items = await OrderItem.find({ order_id: orderObj._id });
+            orderObj.items = items;
+            resultData.push(orderObj);
+        }
+
+        return {
+            data: resultData,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
+    }
+
     async getById(id) {
         const order = await Order.findById(id);
         if (!order) throw new Error('Không tìm thấy đơn hàng');
+
+        // SYNC PAYOS ON FETCH
+        if (order.payment_method === 'TRANSFER' && order.payment_status === 'UNPAID') {
+            try {
+                const payosService = require('./payos.service');
+                const info = await payosService.getPaymentLink(order._id);
+                if (info && info.status === 'PAID') {
+                    order.payment_status = 'PAID';
+                    if (order.status === 'PENDING') order.status = order.is_pos ? 'COMPLETED' : 'CONFIRMED';
+                    await order.save();
+                }
+            } catch (e) {}
+        }
         
         const items = await OrderItem.find({ order_id: id });
         return { order, items };

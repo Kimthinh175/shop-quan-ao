@@ -37,6 +37,9 @@ const OrderSchema = new mongoose.Schema({
     // Quà tặng
     gift_snapshot: { type: mongoose.Schema.Types.Mixed },
     
+    // Đơn hàng bán tại quầy (POS)
+    is_pos: { type: Boolean, default: false },
+
     // Trạng thái
     status: { 
         type: String, 
@@ -54,6 +57,11 @@ const OrderSchema = new mongoose.Schema({
         default: 'UNPAID' 
     }
 }, { timestamps: { createdAt: 'create_at', updatedAt: 'updated_at' }, _id: false });
+
+// Optimizing Queries with Indices
+OrderSchema.index({ customer_id: 1 });
+OrderSchema.index({ status: 1 });
+OrderSchema.index({ create_at: -1 });
 
 OrderSchema.plugin(autoIncrement, { modelName: 'order_id' });
 

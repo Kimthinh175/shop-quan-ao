@@ -2,18 +2,26 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const routes = require("./core/routes");
 
 const { notFound, errorHandler } = require('./core/middlewares/errorHandler');
 
 const app = express();
 
-// Security Middlewares
-app.use(helmet());
-app.use(cors());
+// Set trust proxy to get real IP behind load balancers like Render
+app.set('trust proxy', 1);
 
-// Logger
+// Security & Logging Middlewares
+app.use(helmet({
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
+}));
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 // Body Parsers
 app.use(express.json());

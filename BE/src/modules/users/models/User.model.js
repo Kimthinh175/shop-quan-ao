@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     name: { type: String },
     avatar_url: { type: String },
+    email: { type: String, unique: true, sparse: true },
     google_id: { type: String }
 }, { timestamps: { createdAt: 'create_at', updatedAt: 'updated_at' }, _id: false });
 

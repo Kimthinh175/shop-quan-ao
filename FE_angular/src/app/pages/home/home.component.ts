@@ -1,0 +1,515 @@
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ApiService } from '../../services/api.service';
+import { CartService } from '../../services/cart.service';
+import { ProductCardComponent } from '../../components/product-card/product-card.component';
+
+interface Banner {
+  title: string;
+  subtitle: string;
+  image: string;
+  badge: string;
+  link: string;
+}
+
+@Component({
+  selector: 'app-home',
+  standalone: true,
+  imports: [CommonModule, RouterModule, ProductCardComponent, CurrencyPipe],
+  template: `
+    <div class="bg-gray-50 min-h-screen pb-0 animate-[fadeIn_0.3s_ease-out]">
+
+      <!-- ── 1. HERO CAROUSEL SLIDER ── -->
+      <section class="relative w-full h-[58vh] min-h-[380px] max-h-[500px] overflow-hidden bg-gray-900 group">
+        <!-- Slides -->
+        <div *ngFor="let banner of banners; let i = index" 
+             class="absolute inset-0 transition-opacity duration-700 ease-in-out"
+             [ngClass]="activeBannerIndex === i ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'">
+          <img [src]="banner.image" [alt]="banner.title" class="w-full h-full object-cover scale-105 transition-transform duration-[4000ms]" [class.scale-100]="activeBannerIndex === i">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20"></div>
+
+          <!-- Banner Content -->
+          <div class="absolute inset-0 flex flex-col items-center justify-end text-white text-center p-6 pb-12">
+            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-extrabold uppercase tracking-[0.25em] mb-3 text-brand-gold border border-white/30 animate-[fadeIn_0.5s]">
+              {{ banner.badge }}
+            </span>
+            <h1 class="text-3xl font-serif font-black italic mb-3 leading-tight tracking-tight drop-shadow-md" [innerHTML]="banner.title">
+            </h1>
+            <p class="text-xs text-gray-200 font-medium mb-6 max-w-[280px] line-clamp-2">
+              {{ banner.subtitle }}
+            </p>
+            <a [routerLink]="banner.link" class="px-8 py-3.5 bg-white text-black text-[11px] font-black uppercase tracking-widest rounded-full hover:bg-black hover:text-white transition-all shadow-xl active:scale-95">
+              Khám phá ngay <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="absolute bottom-3 left-0 right-0 z-20 flex justify-center items-center gap-2">
+          <button *ngFor="let banner of banners; let i = index" 
+                  (click)="setBanner(i)"
+                  [ngClass]="activeBannerIndex === i ? 'w-6 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'"
+                  class="h-2 rounded-full transition-all duration-300"></button>
+        </div>
+      </section>
+
+
+      <!-- ── 2. MARQUEE BADGE BAR ── -->
+      <div class="bg-black text-white overflow-hidden py-3 border-y border-gray-800">
+        <div class="whitespace-nowrap animate-[marquee_18s_linear_infinite] flex gap-8 items-center text-[10px] font-black uppercase tracking-[0.2em]">
+          <span><i class="fa-solid fa-crown text-amber-400 mr-2"></i> THƯƠNG HIỆU CAO CẤP</span>
+          <span><i class="fa-solid fa-gem text-amber-400 mr-2"></i> CHẤT LIỆU THƯỢNG HẠNG</span>
+          <span><i class="fa-solid fa-bolt text-amber-400 mr-2"></i> GIAO HÀNG HỎA TỐC</span>
+          <span><i class="fa-solid fa-rotate-left text-amber-400 mr-2"></i> 7 NGÀY ĐỔI TRẢ</span>
+          <span><i class="fa-solid fa-crown text-amber-400 mr-2"></i> THƯƠNG HIỆU CAO CẤP</span>
+        </div>
+      </div>
+
+
+      <!-- ── 3. CLOSET BRAND CATEGORY CARDS ── -->
+      <section class="py-6 px-4 bg-white border-b border-gray-100">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xs font-serif-brand font-black uppercase tracking-[0.2em] text-gray-900 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            Danh mục nổi bật
+          </h2>
+          <a routerLink="/catalog" class="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 hover:text-black">
+            Xem tất cả <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </a>
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-brand">
+          <a *ngFor="let cat of categories" 
+             [routerLink]="['/catalog']" 
+             [queryParams]="{ category: cat.slug || cat._id }"
+             class="group relative w-28 aspect-[4/5] rounded-2xl overflow-hidden bg-gray-900 border border-gray-100 hover:border-amber-400/80 transition-all duration-300 shrink-0 shadow-sm">
+            
+            <img *ngIf="cat.image" [src]="cat.image" [alt]="cat.name" class="w-full h-full object-cover group-hover:scale-110 opacity-85 group-hover:opacity-100 transition-all duration-700">
+            
+            <div *ngIf="!cat.image" class="w-full h-full bg-gray-900 flex items-center justify-center text-gray-600">
+              <i class="fa-solid fa-layer-group text-2xl"></i>
+            </div>
+
+            <!-- Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+
+            <!-- Category Title -->
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-white group-hover:text-amber-400 transition-colors line-clamp-1">
+                {{ cat.name }}
+              </span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+
+      <!-- ── 4. FLASH SALE WITH COUNTDOWN TIMER ── -->
+      <section class="w-full bg-gradient-to-br from-gray-900 via-black to-slate-900 py-6 px-4 text-white shadow-xl relative overflow-hidden border-b border-gray-800">
+        <!-- Background accent glow -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-red-500/20 rounded-full blur-3xl"></div>
+        
+        <div class="flex items-center justify-between mb-4 relative z-10">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-red-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest mb-1 animate-pulse">
+              <i class="fa-solid fa-fire"></i> Flash Sale
+            </div>
+            <h3 class="text-base font-serif-brand font-black uppercase tracking-[0.15em] text-white">Ưu Đãi Giờ Vàng</h3>
+          </div>
+
+          <!-- Countdown Box -->
+          <div class="flex items-center gap-1 text-center font-mono">
+            <div *ngIf="days !== '00'" class="flex items-center gap-1">
+              <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
+                <span class="block text-xs font-black text-amber-400">{{ days }}</span>
+                <span class="block text-[8px] text-gray-400 uppercase">Ngày</span>
+              </div>
+              <span class="text-xs font-bold text-amber-400">:</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
+              <span class="block text-xs font-black text-amber-400">{{ hours }}</span>
+              <span class="block text-[8px] text-gray-400 uppercase">Giờ</span>
+            </div>
+            <span class="text-xs font-bold text-amber-400">:</span>
+            <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
+              <span class="block text-xs font-black text-amber-400">{{ minutes }}</span>
+              <span class="block text-[8px] text-gray-400 uppercase">Phút</span>
+            </div>
+            <span class="text-xs font-bold text-amber-400">:</span>
+            <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
+              <span class="block text-xs font-black text-amber-400">{{ seconds }}</span>
+              <span class="block text-[8px] text-gray-400 uppercase">Giây</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Horizontal Scroll Slider Wrapper with Floating Side Buttons -->
+        <div class="relative group/slider">
+          <!-- Prev Button (Left) -->
+          <button (click)="scrollSlider(flashSaleSlider, -200)" 
+                  class="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-amber-400 border border-amber-400/50 backdrop-blur-md flex items-center justify-center text-xs transition-all shadow-2xl active:scale-95 opacity-90 hover:opacity-100"
+                  title="Lướt sang trái">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <!-- Horizontal Scroll Slider for Product Cards -->
+          <div #flashSaleSlider class="flex gap-3.5 overflow-x-auto pb-3.5 scrollbar-brand relative z-10 scroll-smooth px-1">
+            <div *ngFor="let p of flashSaleProducts" class="w-[165px] shrink-0">
+              <app-product-card [product]="p"></app-product-card>
+            </div>
+          </div>
+
+          <!-- Next Button (Right) -->
+          <button (click)="scrollSlider(flashSaleSlider, 200)" 
+                  class="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-amber-400 border border-amber-400/50 backdrop-blur-md flex items-center justify-center text-xs transition-all shadow-2xl active:scale-95 opacity-90 hover:opacity-100"
+                  title="Lướt sang phải">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+
+
+      <!-- ── 5. TABBED PRODUCT GRID (SẢN PHẨM NỔI BẬT) ── -->
+      <section class="py-6 px-4 bg-white border-b border-gray-100">
+        <!-- Tabs Header -->
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex gap-2 bg-gray-100 p-1 rounded-full">
+            <button (click)="activeTab = 'new'"
+                    [ngClass]="activeTab === 'new' ? 'bg-black text-white shadow-sm' : 'text-gray-500 hover:text-black'"
+                    class="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition-all">
+              Mới nhất
+            </button>
+            <button (click)="activeTab = 'popular'"
+                    [ngClass]="activeTab === 'popular' ? 'bg-black text-white shadow-sm' : 'text-gray-500 hover:text-black'"
+                    class="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition-all">
+              Bán chạy
+            </button>
+          </div>
+
+          <a routerLink="/catalog" class="text-xs font-bold text-gray-400 hover:text-black">
+            Tất cả <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+        </div>
+
+        <!-- Product Grid -->
+        <div *ngIf="loadingProducts" class="flex justify-center py-12">
+          <i class="fa-solid fa-spinner fa-spin text-2xl text-gray-300"></i>
+        </div>
+
+        <div *ngIf="!loadingProducts" class="grid grid-cols-2 gap-3.5">
+          <app-product-card *ngFor="let p of displayedProducts" [product]="p"></app-product-card>
+        </div>
+      </section>
+
+
+      <!-- ── 6. MOBILE "MÓC ÁO" FEATURED SLIDER ── -->
+      <section class="py-8 px-4 bg-slate-900 text-white w-full shadow-xl overflow-hidden relative border-b border-slate-800">
+        <div class="flex justify-between items-end mb-6 relative z-10">
+          <div>
+            <span class="text-[9px] font-extrabold uppercase tracking-[0.25em] text-amber-400 block mb-1">Thiết Kế Độc Bản</span>
+            <h3 class="text-base font-serif-brand font-black uppercase tracking-[0.15em] text-white">BST Thời Trang Nam</h3>
+          </div>
+          
+          <a routerLink="/catalog" class="text-[10px] font-bold uppercase tracking-wider text-gray-400 hover:text-white">
+            Khám phá <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </a>
+        </div>
+
+        <!-- Horizontal Scroll Slider Wrapper with Floating Side Buttons -->
+        <div class="relative group/slider">
+          <!-- Prev Button (Left) -->
+          <button (click)="scrollSlider(mensSlider, -200)" 
+                  class="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-amber-400 border border-amber-400/50 backdrop-blur-md flex items-center justify-center text-xs transition-all shadow-2xl active:scale-95 opacity-90 hover:opacity-100"
+                  title="Lướt sang trái">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <!-- Horizontal Scroll Slider for Product Cards -->
+          <div #mensSlider class="flex gap-3.5 overflow-x-auto pb-3.5 scrollbar-brand relative z-10 scroll-smooth px-1">
+            <div *ngFor="let p of mensCollection" class="w-[165px] shrink-0">
+              <app-product-card [product]="p"></app-product-card>
+            </div>
+          </div>
+
+          <!-- Next Button (Right) -->
+          <button (click)="scrollSlider(mensSlider, 200)" 
+                  class="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-amber-400 border border-amber-400/50 backdrop-blur-md flex items-center justify-center text-xs transition-all shadow-2xl active:scale-95 opacity-90 hover:opacity-100"
+                  title="Lướt sang phải">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+
+
+      <!-- ── 7. BRAND VALUES & POLICY HIGHLIGHTS (CLOSET IDENTITY) ── -->
+      <section class="py-6 px-4 bg-gradient-to-br from-[#0B0B0B] via-[#141414] to-[#1c1c1c] w-full border-b border-amber-400/25 shadow-2xl relative overflow-hidden">
+        <!-- Subtle Gold Glow -->
+        <div class="absolute -bottom-10 -left-10 w-36 h-36 bg-amber-400/10 rounded-full blur-3xl"></div>
+        
+        <div class="grid grid-cols-2 gap-3 relative z-10">
+          <div class="bg-white/5 border border-amber-400/20 p-3.5 rounded-2xl flex items-center gap-3 backdrop-blur-md hover:border-amber-400/60 transition-all duration-300 group">
+            <div class="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/30 flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition-all">
+              <i class="fa-solid fa-truck-fast text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-[11px] font-serif-brand font-bold uppercase tracking-wider text-white">Miễn phí giao hàng</h4>
+              <p class="text-[9px] text-amber-200/60 tracking-tight">Đơn từ 500k</p>
+            </div>
+          </div>
+
+          <div class="bg-white/5 border border-amber-400/20 p-3.5 rounded-2xl flex items-center gap-3 backdrop-blur-md hover:border-amber-400/60 transition-all duration-300 group">
+            <div class="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/30 flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition-all">
+              <i class="fa-solid fa-rotate-left text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-[11px] font-serif-brand font-bold uppercase tracking-wider text-white">Đổi trả 7 ngày</h4>
+              <p class="text-[9px] text-amber-200/60 tracking-tight">Đổi mới tận nhà</p>
+            </div>
+          </div>
+
+          <div class="bg-white/5 border border-amber-400/20 p-3.5 rounded-2xl flex items-center gap-3 backdrop-blur-md hover:border-amber-400/60 transition-all duration-300 group">
+            <div class="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/30 flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition-all">
+              <i class="fa-solid fa-shield-halved text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-[11px] font-serif-brand font-bold uppercase tracking-wider text-white">100% Chính hãng</h4>
+              <p class="text-[9px] text-amber-200/60 tracking-tight">Cam kết thượng hạng</p>
+            </div>
+          </div>
+
+          <div class="bg-white/5 border border-amber-400/20 p-3.5 rounded-2xl flex items-center gap-3 backdrop-blur-md hover:border-amber-400/60 transition-all duration-300 group">
+            <div class="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/30 flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition-all">
+              <i class="fa-solid fa-headset text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-[11px] font-serif-brand font-bold uppercase tracking-wider text-white">Hỗ trợ 24/7</h4>
+              <p class="text-[9px] text-amber-200/60 tracking-tight">Tư vấn phong cách</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ── 8. FASHION JOURNAL / BLOG EDITORIAL (CLOSET IDENTITY) ── -->
+      <section class="py-6 px-4 bg-white border-b border-gray-100">
+        <div class="flex justify-between items-end mb-5">
+          <div>
+            <span class="text-[9px] font-serif-brand font-extrabold uppercase tracking-[0.2em] text-amber-600 block mb-1">Tạp Chí Thời Trang</span>
+            <h3 class="text-base font-serif-brand font-black uppercase tracking-[0.15em] text-gray-900">Xu Hướng & Phong Cách</h3>
+          </div>
+          <a routerLink="/blog" class="text-xs font-bold text-gray-400 hover:text-black">
+            Xem tất cả <i class="fa-solid fa-arrow-right ml-0.5"></i>
+          </a>
+        </div>
+
+        <div class="space-y-4">
+          <a *ngFor="let art of articles; let isLast = last" 
+             [routerLink]="['/blog']" 
+             class="flex gap-3 group cursor-pointer"
+             [class.border-b]="!isLast"
+             [class.border-gray-100]="!isLast"
+             [class.pb-3]="!isLast">
+            <div class="w-24 h-20 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+              <img [src]="art.thumbnail || art.image || 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400'" 
+                   [alt]="art.title"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="flex-1 flex flex-col justify-center">
+              <span class="text-[9px] font-serif-brand font-extrabold text-amber-600 uppercase tracking-[0.2em] mb-1">
+                {{ art.category || 'Quiet Luxury' }}
+              </span>
+              <h4 class="text-xs font-bold text-gray-900 group-hover:text-amber-600 transition-colors line-clamp-2 leading-snug">
+                {{ art.title }}
+              </h4>
+            </div>
+          </a>
+
+          <div *ngIf="!articles || articles.length === 0" class="text-xs text-gray-400 text-center py-4">
+            Chưa có bài viết mới.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  `
+})
+export class HomeComponent implements OnInit, OnDestroy {
+  private api = inject(ApiService);
+  private cartService = inject(CartService);
+
+  // Banner State
+  activeBannerIndex = 0;
+  private bannerTimer: any;
+
+  banners: Banner[] = [
+    {
+      badge: 'Bộ sưu tập Xuân Hè 2026',
+      title: 'Quiet Luxury<br>& Timeless',
+      subtitle: 'Sự kết hợp hoàn hảo giữa đường nét tối giản và chất liệu thượng hạng.',
+      image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      link: '/catalog'
+    },
+    {
+      badge: 'Ưu đãi đặc biệt',
+      title: 'Mid-Season Sale<br>Up to 50%',
+      subtitle: 'Cơ hội sở hữu những thiết kế cao cấp với mức giá ưu đãi nhất mùa.',
+      image: 'https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      link: '/catalog'
+    },
+    {
+      badge: 'Bộ sưu tập mới',
+      title: 'Modern Minimalist<br>Collection',
+      subtitle: 'Định hình phong cách hiện đại với tính ứng dụng cao.',
+      image: 'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      link: '/catalog'
+    }
+  ];
+
+  // Data States
+  products: any[] = [];
+  categories: any[] = [];
+  loadingProducts = true;
+  activeTab: 'new' | 'popular' = 'new';
+
+  // Flash Sale Timer State
+  days = '00';
+  hours = '00';
+  minutes = '00';
+  seconds = '00';
+  private countdownTimer: any;
+
+  popularProducts: any[] = [];
+  mensCollection: any[] = [];
+  articles: any[] = [];
+  flashSale: any = null;
+
+  scrollSlider(element: HTMLElement, offset: number) {
+    if (element) {
+      element.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  }
+
+  get flashSaleProducts() {
+    if (this.flashSale?.products && this.flashSale.products.length > 0) {
+      return this.flashSale.products;
+    }
+    return this.products.slice(0, 4);
+  }
+
+  get displayedProducts() {
+    if (this.activeTab === 'popular') {
+      return this.popularProducts.length > 0 ? this.popularProducts : [...this.products].reverse();
+    }
+    return this.products;
+  }
+
+  ngOnInit() {
+    this.startBannerTimer();
+    this.startCountdown();
+    this.fetchData();
+  }
+
+  ngOnDestroy() {
+    if (this.bannerTimer) clearInterval(this.bannerTimer);
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
+  }
+
+  setBanner(index: number) {
+    this.activeBannerIndex = index;
+    this.startBannerTimer(); // Reset timer on manual click
+  }
+
+  startBannerTimer() {
+    if (this.bannerTimer) clearInterval(this.bannerTimer);
+    this.bannerTimer = setInterval(() => {
+      this.activeBannerIndex = (this.activeBannerIndex + 1) % this.banners.length;
+    }, 4500);
+  }
+
+  startCountdown(targetEndTime?: string | Date) {
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
+
+    const updateTimer = () => {
+      let targetDate: Date;
+      if (targetEndTime) {
+        targetDate = new Date(targetEndTime);
+      } else {
+        // Mặc định tính tới cuối ngày hôm nay nếu không có promotion cụ thể
+        targetDate = new Date();
+        targetDate.setHours(23, 59, 59, 999);
+      }
+
+      const diffMs = targetDate.getTime() - Date.now();
+      if (diffMs > 0) {
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const d = Math.floor(totalSeconds / (3600 * 24));
+        const h = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+
+        this.days = String(d).padStart(2, '0');
+        this.hours = String(h).padStart(2, '0');
+        this.minutes = String(m).padStart(2, '0');
+        this.seconds = String(s).padStart(2, '0');
+      } else {
+        this.days = '00';
+        this.hours = '00';
+        this.minutes = '00';
+        this.seconds = '00';
+      }
+    };
+
+    updateTimer();
+    this.countdownTimer = setInterval(updateTimer, 1000);
+  }
+
+  fetchData() {
+    this.loadingProducts = true;
+    this.api.getHomeData().subscribe({
+      next: (res: any) => {
+        const d = res.data || res;
+        this.products = d.products || [];
+        this.popularProducts = d.popularProducts || [];
+        this.mensCollection = d.mensCollection || [];
+        this.categories = d.categories || [];
+        this.articles = d.articles || [];
+        this.flashSale = d.flashSale || null;
+        if (this.flashSale?.promotion?.end_time) {
+          this.startCountdown(this.flashSale.promotion.end_time);
+        }
+        if (d.banners && d.banners.length > 0) {
+          this.banners = d.banners;
+        }
+        this.loadingProducts = false;
+      },
+      error: (err) => {
+        console.error('Lỗi tải dữ liệu trang chủ:', err);
+        this.api.getProducts({ page: 1, limit: 8 }).subscribe({
+          next: (res: any) => {
+            this.products = res.results || res.data || [];
+            this.loadingProducts = false;
+          },
+          error: () => { this.loadingProducts = false; }
+        });
+        this.api.getCategories().subscribe({
+          next: (res: any) => {
+            this.categories = Array.isArray(res) ? res : (res.data || []);
+          }
+        });
+      }
+    });
+  }
+
+  quickAddToCart(product: any) {
+    this.cartService.addToCart({
+      id: product._id || product.id,
+      product_id: product._id || product.id,
+      name: product.name,
+      price: product.price || product.default_price || 350000,
+      quantity: 1,
+      image: product.main_img || 'https://via.placeholder.com/150'
+    });
+    alert(`Đã thêm "${product.name}" vào giỏ hàng!`);
+  }
+}

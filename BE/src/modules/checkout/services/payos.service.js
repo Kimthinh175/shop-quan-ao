@@ -12,14 +12,17 @@ class PayosService {
      * Tạo Payment Link
      */
     async createPaymentLink(orderId, amount, description) {
-        const domain = 'http://localhost:8080';
+        const domain = process.env.FE_DOMAIN || 'http://localhost:5173';
+        
+        // Chuyển orderId sang dạng number vì PayOS yêu cầu orderCode phải là kiểu số nguyên
+        const numericOrderId = Number(orderId);
         
         const requestData = {
-            orderCode: orderId,
+            orderCode: numericOrderId,
             amount: amount,
             description: description.substring(0, 25),
-            returnUrl: `${domain}/checkout-success.html`,
-            cancelUrl: `${domain}/checkout-cancel.html`
+            cancelUrl: `${domain}/checkout/success?orderCode=${orderId}&cancel=true`,
+            returnUrl: `${domain}/checkout/success?orderCode=${orderId}`
         };
 
         try {
@@ -36,7 +39,8 @@ class PayosService {
      */
     async getPaymentLink(orderId) {
         try {
-            const info = await payos.paymentRequests.get(orderId);
+            const numericOrderId = Number(orderId);
+            const info = await payos.paymentRequests.get(numericOrderId);
             return info; // object chứa status, amountPaid, amountRemaining...
         } catch (error) {
             console.error('Lỗi lấy thông tin PayOS:', error);
