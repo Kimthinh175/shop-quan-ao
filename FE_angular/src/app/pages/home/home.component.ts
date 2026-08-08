@@ -214,7 +214,7 @@ interface Banner {
                 <!-- Labels -->
                 <div class="absolute inset-0 flex justify-between items-center px-1.5 z-10">
                   <span class="text-[8px] font-black text-white/90 drop-shadow">🔥 {{ p.flash_sold || 0 }}</span>
-                  <span class="text-[8px] font-black" style="color: #f59e0b">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
+                  <span class="text-[8px] font-black text-white" style="text-shadow: 0 0 6px rgba(0,0,0,0.9), 1px 1px 0 rgba(0,0,0,0.8)">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
                 </div>
               </div>
             </div>
