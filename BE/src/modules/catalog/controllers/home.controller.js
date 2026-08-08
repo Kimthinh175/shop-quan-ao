@@ -97,15 +97,23 @@ class HomeController {
                 if (r.discount_percent) promoDiscount = r.discount_percent;
             }
 
-            // Chọn 4 sản phẩm đa dạng từ các vị trí khác nhau để đảm bảo hình ảnh đa dạng nhất
-            const rawFlashProducts = [
-                rawProducts[0],
-                rawProducts[2] || rawProducts[0],
-                rawProducts[4] || rawProducts[1],
-                rawProducts[6] || rawProducts[2]
-            ].filter(Boolean);
+            // Chọn sản phẩm cho Flash Sale, làm giàu data và thêm số lượt mua/giới hạn
+            let flashSalePool = await enrichProducts(rawProducts, promoDiscount);
+            
+            flashSalePool.forEach(p => {
+                // Tính số tiền giảm
+                p.discount_amount = p.original_price - p.sale_price;
+                // Tạo số liệu mock bán chạy cho Flash sale (ví dụ limit 1000, đã bán 800-950)
+                const seed = p._id.toString().charCodeAt(p._id.toString().length - 1) || 0;
+                p.flash_limit = 1000;
+                p.flash_sold = 800 + (seed % 150); // Trông có vẻ gần hết hàng
+            });
 
-            const flashProducts = await enrichProducts(rawFlashProducts, promoDiscount);
+            // Sắp xếp các sản phẩm trong flash sale dựa trên số tiền được giảm nhiều nhất
+            flashSalePool.sort((a, b) => b.discount_amount - a.discount_amount);
+
+            // Lấy top 4 sản phẩm
+            const flashProducts = flashSalePool.slice(0, 4);
 
             // Banners mặc định cho Slider
             const banners = [

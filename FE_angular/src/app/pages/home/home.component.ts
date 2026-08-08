@@ -155,8 +155,17 @@ interface Banner {
 
           <!-- Horizontal Scroll Slider for Product Cards -->
           <div #flashSaleSlider class="flex gap-3.5 overflow-x-auto pb-3.5 scrollbar-brand relative z-10 scroll-smooth px-1">
-            <div *ngFor="let p of flashSaleProducts" class="w-[165px] shrink-0">
+            <div *ngFor="let p of flashSaleProducts" class="w-[165px] shrink-0 flex flex-col">
               <app-product-card [product]="p"></app-product-card>
+              <!-- Thanh tiến độ Flash Sale -->
+              <div class="mt-2.5 w-full bg-red-100 rounded-full h-3.5 relative overflow-hidden flex items-center shadow-inner">
+                <div class="bg-gradient-to-r from-red-600 to-red-500 h-full absolute left-0 top-0 transition-all duration-1000 ease-out" 
+                     [style.width.%]="((p.flash_sold || 0) / (p.flash_limit || 1)) * 100"></div>
+                <div class="absolute inset-0 flex justify-between items-center px-2 text-[8px] font-black z-10 uppercase tracking-wider">
+                  <span class="text-white drop-shadow-md">Đã bán {{ p.flash_sold || 0 }}</span>
+                  <span class="text-red-800 drop-shadow-sm">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
+                </div>
+              </div>
             </div>
           </div>
 
