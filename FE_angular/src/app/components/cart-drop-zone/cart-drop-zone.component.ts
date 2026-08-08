@@ -10,8 +10,12 @@ import { DragDropCartService } from '../../services/drag-drop-cart.service';
   imports: [CommonModule],
   template: `
     <!-- Vùng thả vô hình (mở rộng chiếm 40% nửa dưới màn hình để cực kỳ dễ thả) -->
-    <div *ngIf="isVisible || isDragOver" 
-         class="fixed bottom-0 left-0 w-full h-[40vh] z-[9999]"
+    <div class="fixed bottom-0 left-0 w-full h-[40vh] z-[9999]"
+         [ngClass]="{
+           'pointer-events-auto': isVisible || isDragOver,
+           'pointer-events-none': !isVisible && !isDragOver
+         }"
+         (dragenter)="onDragOver($event)"
          (dragover)="onDragOver($event)"
          (dragleave)="onDragLeave($event)"
          (drop)="onDrop($event)">
@@ -144,7 +148,11 @@ export class CartDropZoneComponent implements OnInit, OnDestroy {
     if (!event.dataTransfer) return;
 
     try {
-      const dataStr = event.dataTransfer.getData('application/json');
+      let dataStr = event.dataTransfer.getData('text/plain');
+      // Fallback in case of old cache using application/json
+      if (!dataStr) {
+        dataStr = event.dataTransfer.getData('application/json');
+      }
       if (!dataStr) return;
 
       const product = JSON.parse(dataStr);

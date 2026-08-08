@@ -138,7 +138,7 @@ export class ProductCardComponent {
   onDragStart(event: DragEvent) {
     this.dragDropService.showDropZone();
     if (event.dataTransfer && this.product) {
-      event.dataTransfer.setData('application/json', JSON.stringify(this.product));
+      event.dataTransfer.setData('text/plain', JSON.stringify(this.product));
       event.dataTransfer.effectAllowed = 'copy';
     }
   }
