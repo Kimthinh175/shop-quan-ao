@@ -159,6 +159,25 @@ export class CheckoutComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.auth.currentUser$.subscribe(user => {
+      if (user) {
+        this.orderData.customerName = user.full_name || user.name || '';
+        this.orderData.phone = user.phone || '';
+        
+        if (user.addresses && user.addresses.length > 0) {
+          const defaultAddress = user.addresses.find((a: any) => a.is_default) || user.addresses[0];
+          this.orderData.customerName = defaultAddress.recipient_name || this.orderData.customerName;
+          this.orderData.phone = defaultAddress.phone || this.orderData.phone;
+          
+          let addr = defaultAddress.street_address || '';
+          if (defaultAddress.ward) addr += `, ${defaultAddress.ward}`;
+          if (defaultAddress.district) addr += `, ${defaultAddress.district}`;
+          if (defaultAddress.province) addr += `, ${defaultAddress.province}`;
+          this.orderData.address = addr;
+        }
+      }
+    });
+
     const buyNow = this.cartService.getBuyNowItem();
     if (buyNow) {
       this.isBuyNow = true;
