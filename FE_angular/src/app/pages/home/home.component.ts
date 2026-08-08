@@ -106,73 +106,124 @@ interface Banner {
 
 
       <!-- ── 4. FLASH SALE WITH COUNTDOWN TIMER ── -->
-      <section class="w-full bg-gradient-to-br from-gray-900 via-black to-slate-900 py-6 px-4 text-white shadow-xl relative overflow-hidden border-b border-gray-800">
-        <!-- Background accent glow -->
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-red-500/20 rounded-full blur-3xl"></div>
-        
+      <section class="w-full bg-[#0a0a0a] py-5 px-4 text-white relative overflow-hidden" style="border-top: 1px solid rgba(212,175,55,0.3)">
+        <!-- Background ember glow effects -->
+        <div class="absolute -top-16 -right-10 w-52 h-52 rounded-full blur-3xl pointer-events-none" style="background: radial-gradient(circle, rgba(220,38,38,0.18) 0%, transparent 70%)"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl pointer-events-none" style="background: radial-gradient(circle, rgba(234,88,12,0.12) 0%, transparent 70%)"></div>
+
+        <!-- Header Row -->
         <div class="flex items-center justify-between mb-4 relative z-10">
+          <!-- Left: Badge + Title -->
           <div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-red-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest mb-1 animate-pulse">
-              <i class="fa-solid fa-fire"></i> Flash Sale
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest mb-1.5" 
+                 style="background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 0 12px rgba(220,38,38,0.5)">
+              <i class="fa-solid fa-fire text-amber-300"></i>
+              <span>Flash Sale</span>
             </div>
-            <h3 class="text-base font-serif-brand font-black uppercase tracking-[0.15em] text-white">Ưu Đãi Giờ Vàng</h3>
+            <h3 class="text-lg font-black uppercase tracking-[0.12em] text-white leading-none" style="font-family: 'Playfair Display', Georgia, serif; letter-spacing: 0.1em">
+              Ưu Đãi Giờ Vàng
+            </h3>
           </div>
 
-          <!-- Countdown Box -->
+          <!-- Right: Countdown -->
           <div class="flex items-center gap-1 text-center font-mono">
-            <div *ngIf="days !== '00'" class="flex items-center gap-1">
-              <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
-                <span class="block text-xs font-black text-amber-400">{{ days }}</span>
-                <span class="block text-[8px] text-gray-400 uppercase">Ngày</span>
+            <ng-container *ngIf="days !== '00'">
+              <div class="flex flex-col items-center px-2 py-1.5 rounded-xl" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(8px)">
+                <span class="block text-sm font-black leading-none" style="color: #D4AF37">{{ days }}</span>
+                <span class="block text-[7px] uppercase tracking-wider mt-0.5" style="color: rgba(255,255,255,0.4)">Ngày</span>
               </div>
-              <span class="text-xs font-bold text-amber-400">:</span>
+              <span class="text-sm font-black mx-0.5" style="color: #D4AF37">:</span>
+            </ng-container>
+            <div class="flex flex-col items-center px-2 py-1.5 rounded-xl" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(8px)">
+              <span class="block text-sm font-black leading-none" style="color: #D4AF37">{{ hours }}</span>
+              <span class="block text-[7px] uppercase tracking-wider mt-0.5" style="color: rgba(255,255,255,0.4)">Giờ</span>
             </div>
-            <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
-              <span class="block text-xs font-black text-amber-400">{{ hours }}</span>
-              <span class="block text-[8px] text-gray-400 uppercase">Giờ</span>
+            <span class="text-sm font-black mx-0.5" style="color: #D4AF37">:</span>
+            <div class="flex flex-col items-center px-2 py-1.5 rounded-xl" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(8px)">
+              <span class="block text-sm font-black leading-none" style="color: #D4AF37">{{ minutes }}</span>
+              <span class="block text-[7px] uppercase tracking-wider mt-0.5" style="color: rgba(255,255,255,0.4)">Phút</span>
             </div>
-            <span class="text-xs font-bold text-amber-400">:</span>
-            <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
-              <span class="block text-xs font-black text-amber-400">{{ minutes }}</span>
-              <span class="block text-[8px] text-gray-400 uppercase">Phút</span>
-            </div>
-            <span class="text-xs font-bold text-amber-400">:</span>
-            <div class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
-              <span class="block text-xs font-black text-amber-400">{{ seconds }}</span>
-              <span class="block text-[8px] text-gray-400 uppercase">Giây</span>
+            <span class="text-sm font-black mx-0.5" style="color: #D4AF37">:</span>
+            <div class="flex flex-col items-center px-2 py-1.5 rounded-xl" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(8px)">
+              <span class="block text-sm font-black leading-none" style="color: #D4AF37">{{ seconds }}</span>
+              <span class="block text-[7px] uppercase tracking-wider mt-0.5" style="color: rgba(255,255,255,0.4)">Giây</span>
             </div>
           </div>
         </div>
 
-        <!-- Horizontal Scroll Slider Wrapper with Floating Side Buttons -->
-        <div class="relative group/slider">
-          <!-- Prev Button (Left) -->
-          <button (click)="scrollSlider(flashSaleSlider, -200)" 
-                  class="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-amber-400 border border-amber-400/50 backdrop-blur-md flex items-center justify-center text-xs transition-all shadow-2xl active:scale-95 opacity-90 hover:opacity-100"
-                  title="Lướt sang trái">
+        <!-- "Burn Line" Separator -->
+        <div class="w-full h-px mb-4 relative">
+          <div class="absolute inset-0" style="background: linear-gradient(90deg, transparent 0%, #7f1d1d 20%, #dc2626 40%, #ea580c 50%, #dc2626 60%, #7f1d1d 80%, transparent 100%)"></div>
+          <div class="absolute inset-0 blur-sm" style="background: linear-gradient(90deg, transparent 0%, #dc2626 35%, #f97316 50%, #dc2626 65%, transparent 100%); opacity: 0.6"></div>
+        </div>
+
+        <!-- Slider Wrapper -->
+        <div class="relative group/slider z-10">
+          <!-- Prev -->
+          <button (click)="scrollSlider(flashSaleSlider, -200)"
+                  class="absolute left-0 top-[40%] -translate-y-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center text-xs transition-all active:scale-90"
+                  style="background: rgba(10,10,10,0.9); border: 1px solid rgba(212,175,55,0.4); color: #D4AF37; box-shadow: 0 0 12px rgba(220,38,38,0.3)">
             <i class="fa-solid fa-chevron-left"></i>
           </button>
 
-          <!-- Horizontal Scroll Slider for Product Cards -->
-          <div #flashSaleSlider class="flex gap-3.5 overflow-x-auto pb-3.5 scrollbar-brand relative z-10 scroll-smooth px-1">
-            <div *ngFor="let p of flashSaleProducts" class="w-[165px] shrink-0 flex flex-col">
-              <app-product-card [product]="p"></app-product-card>
-              <!-- Thanh tiến độ Flash Sale -->
-              <div class="mt-2.5 w-full bg-red-100 rounded-full h-3.5 relative overflow-hidden flex items-center shadow-inner">
-                <div class="bg-gradient-to-r from-red-600 to-red-500 h-full absolute left-0 top-0 transition-all duration-1000 ease-out" 
-                     [style.width.%]="((p.flash_sold || 0) / (p.flash_limit || 1)) * 100"></div>
-                <div class="absolute inset-0 flex justify-between items-center px-2 text-[8px] font-black z-10 uppercase tracking-wider">
-                  <span class="text-white drop-shadow-md">Đã bán {{ p.flash_sold || 0 }}</span>
-                  <span class="text-red-800 drop-shadow-sm">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
+          <!-- Cards -->
+          <div #flashSaleSlider class="flex gap-3 overflow-x-auto pb-2 scroll-smooth px-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <div *ngFor="let p of flashSaleProducts" class="w-[158px] shrink-0 flex flex-col">
+
+              <!-- Product Card (custom override for dark theme) -->
+              <div class="rounded-2xl overflow-hidden flex flex-col relative cursor-pointer group/card transition-all duration-300"
+                   style="background: #141414; border: 1px solid rgba(255,255,255,0.07); box-shadow: 0 8px 24px rgba(0,0,0,0.5)"
+                   [routerLink]="['/product', p._id]">
+                <!-- Image -->
+                <div class="relative w-full overflow-hidden" style="aspect-ratio: 3/4">
+                  <img [src]="p.main_img" [alt]="p.name" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105">
+                  <!-- Brand tag -->
+                  <div class="absolute top-2 left-2 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-white" 
+                       style="background: #0a0a0a; letter-spacing: 0.15em">CLOSET</div>
+                  <!-- Discount badge -->
+                  <div class="absolute top-2 right-2 w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-black text-white"
+                       style="background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 0 10px rgba(220,38,38,0.6)">
+                    -{{ p.discount_percent }}%
+                  </div>
+                </div>
+                <!-- Info -->
+                <div class="p-2.5 flex-1">
+                  <p class="text-[8px] font-black uppercase tracking-widest mb-0.5" style="color: rgba(212,175,55,0.8)">Luxury Selection</p>
+                  <p class="text-xs font-black text-white line-clamp-1 mb-1.5 uppercase tracking-wide">{{ p.name }}</p>
+                  <div class="flex items-baseline gap-1.5 flex-wrap">
+                    <span class="text-sm font-black text-white">{{ p.sale_price | currency:'VND':'symbol':'1.0-0' }}</span>
+                    <span class="text-[9px] text-gray-600 line-through">{{ p.original_price | currency:'VND':'symbol':'1.0-0' }}</span>
+                  </div>
+                  <!-- Gold savings -->
+                  <div class="mt-1 text-[9px] font-black uppercase tracking-wider" style="color: #D4AF37">
+                    <i class="fa-solid fa-tag mr-0.5 text-[8px]"></i>
+                    Tiết kiệm {{ (p.original_price - p.sale_price) | currency:'VND':'symbol':'1.0-0' }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ember Progress Bar -->
+              <div class="mt-2 relative overflow-hidden rounded-full h-4" style="background: #1a1a1a; border: 1px solid rgba(255,255,255,0.06)">
+                <!-- Fill -->
+                <div class="absolute left-0 top-0 h-full rounded-full transition-all duration-1000 ease-out"
+                     [style.width.%]="((p.flash_sold || 0) / (p.flash_limit || 1)) * 100"
+                     style="background: linear-gradient(90deg, #7f1d1d 0%, #dc2626 45%, #ea580c 75%, #f59e0b 100%)">
+                  <!-- Glow tip -->
+                  <div class="absolute right-0 top-0 h-full w-3" style="background: linear-gradient(90deg, transparent, rgba(251,191,36,0.7)); filter: blur(2px)"></div>
+                </div>
+                <!-- Labels -->
+                <div class="absolute inset-0 flex justify-between items-center px-1.5 z-10">
+                  <span class="text-[8px] font-black text-white/90 drop-shadow">🔥 {{ p.flash_sold || 0 }}</span>
+                  <span class="text-[8px] font-black" style="color: #f59e0b">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Next Button (Right) -->
-          <button (click)="scrollSlider(flashSaleSlider, 200)" 
-                  class="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-amber-400 border border-amber-400/50 backdrop-blur-md flex items-center justify-center text-xs transition-all shadow-2xl active:scale-95 opacity-90 hover:opacity-100"
-                  title="Lướt sang phải">
+          <!-- Next -->
+          <button (click)="scrollSlider(flashSaleSlider, 200)"
+                  class="absolute right-0 top-[40%] -translate-y-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center text-xs transition-all active:scale-90"
+                  style="background: rgba(10,10,10,0.9); border: 1px solid rgba(212,175,55,0.4); color: #D4AF37; box-shadow: 0 0 12px rgba(220,38,38,0.3)">
             <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
