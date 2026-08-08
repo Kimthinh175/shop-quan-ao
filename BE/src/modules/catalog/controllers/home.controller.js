@@ -85,7 +85,6 @@ class HomeController {
             ]);
 
             // Enrich sản phẩm tính toán giá chuẩn và đính kèm biến thể
-            const now = Date.now();
             const enrichedRaw = await enrichProducts(rawProducts);
             // Thêm days_ago cho mỗi sản phẩm mới nhất
             const products = enrichedRaw.map(p => {
