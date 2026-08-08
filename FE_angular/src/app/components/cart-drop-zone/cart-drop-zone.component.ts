@@ -9,9 +9,9 @@ import { DragDropCartService } from '../../services/drag-drop-cart.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <!-- Vùng thả vô hình (mở rộng xuống tận đáy màn hình để dễ thả hơn) -->
+    <!-- Vùng thả vô hình (mở rộng chiếm 40% nửa dưới màn hình để cực kỳ dễ thả) -->
     <div *ngIf="isVisible || isDragOver" 
-         class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[150px] z-[50]"
+         class="fixed bottom-0 left-0 w-full h-[40vh] z-[9999]"
          (dragover)="onDragOver($event)"
          (dragleave)="onDragLeave($event)"
          (drop)="onDrop($event)">

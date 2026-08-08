@@ -15,6 +15,20 @@
   
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  <!-- Mobile Drag & Drop Polyfill for touch screens -->
+  <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/scroll-behaviour.min.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+      if (window.mobileDragDrop) {
+        window.mobileDragDrop.polyfill({
+          dragImageTranslateOverride: window.mobileDragDrop.scrollBehaviourDragImageTranslateOverride
+        });
+        window.addEventListener('touchmove', function() {}, {passive: false});
+      }
+    });
+  </script>
 </head>
 <body>
   <app-root></app-root>
