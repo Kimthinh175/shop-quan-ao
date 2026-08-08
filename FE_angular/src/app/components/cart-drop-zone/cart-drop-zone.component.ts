@@ -9,6 +9,15 @@ import { DragDropCartService } from '../../services/drag-drop-cart.service';
   standalone: true,
   imports: [CommonModule],
   template: `
+    <!-- Vùng thả vô hình (mở rộng xuống tận đáy màn hình để dễ thả hơn) -->
+    <div *ngIf="isVisible || isDragOver" 
+         class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[150px] z-[50]"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)">
+    </div>
+
+    <!-- Khối hiển thị visual -->
     <div class="fixed bottom-[65px] left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-gray-950 border-t border-amber-500/40 z-40 transition-all duration-300 ease-out select-none shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
          [ngClass]="{
            'translate-y-0 opacity-100 pointer-events-auto': isVisible || isDragOver || isHoveredSelf || lastDroppedItem,
@@ -144,7 +153,8 @@ export class CartDropZoneComponent implements OnInit, OnDestroy {
           id: product._id || product.id,
           product_id: product._id || product.id,
           name: product.name,
-          price: product.default_price || product.price || 0,
+          price: product.sale_price || product.price || product.default_price || 0,
+          original_price: product.original_price || product.default_price || 0,
           quantity: 1,
           image: product.main_img || 'https://via.placeholder.com/150'
         });
