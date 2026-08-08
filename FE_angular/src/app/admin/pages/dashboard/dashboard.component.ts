@@ -124,8 +124,11 @@ export class AdminDashboardComponent implements OnInit {
           y: {
             beginAtZero: true,
             ticks: {
-              callback: (value) => {
-                return (value as number).toLocaleString('vi-VN') + 'đ';
+              callback: (value: any) => {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + 'tr';
+                }
+                return value.toLocaleString('vi-VN') + 'đ';
               }
             }
           }
