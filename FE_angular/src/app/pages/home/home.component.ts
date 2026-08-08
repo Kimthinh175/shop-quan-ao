@@ -203,18 +203,19 @@ interface Banner {
               </div>
 
               <!-- Ember Progress Bar -->
-              <div class="mt-2 relative overflow-hidden rounded-full h-4" style="background: #1a1a1a; border: 1px solid rgba(255,255,255,0.06)">
-                <!-- Fill -->
-                <div class="absolute left-0 top-0 h-full rounded-full transition-all duration-1000 ease-out"
-                     [style.width.%]="((p.flash_sold || 0) / (p.flash_limit || 1)) * 100"
-                     style="background: linear-gradient(90deg, #7f1d1d 0%, #dc2626 45%, #ea580c 75%, #f59e0b 100%)">
-                  <!-- Glow tip -->
-                  <div class="absolute right-0 top-0 h-full w-3" style="background: linear-gradient(90deg, transparent, rgba(251,191,36,0.7)); filter: blur(2px)"></div>
+              <div class="mt-2">
+                <!-- Labels row above bar -->
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-[8px] font-black text-white/80">🔥 Đã bán <span class="text-white">{{ p.flash_sold || 0 }}</span></span>
+                  <span class="text-[8px] font-black px-1.5 py-0.5 rounded-full text-white" style="background: #1a1a1a; border: 1px solid rgba(245,158,11,0.5); color: #f59e0b">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
                 </div>
-                <!-- Labels -->
-                <div class="absolute inset-0 flex justify-between items-center px-1.5 z-10">
-                  <span class="text-[8px] font-black text-white/90 drop-shadow">🔥 {{ p.flash_sold || 0 }}</span>
-                  <span class="text-[8px] font-black text-white" style="text-shadow: 0 0 6px rgba(0,0,0,0.9), 1px 1px 0 rgba(0,0,0,0.8)">Còn {{ (p.flash_limit || 0) - (p.flash_sold || 0) }}</span>
+                <!-- Bar -->
+                <div class="relative overflow-hidden rounded-full h-2" style="background: #1a1a1a; border: 1px solid rgba(255,255,255,0.06)">
+                  <div class="absolute left-0 top-0 h-full rounded-full transition-all duration-1000 ease-out"
+                       [style.width.%]="((p.flash_sold || 0) / (p.flash_limit || 1)) * 100"
+                       style="background: linear-gradient(90deg, #7f1d1d 0%, #dc2626 45%, #ea580c 75%, #f59e0b 100%)">
+                    <div class="absolute right-0 top-0 h-full w-3" style="background: linear-gradient(90deg, transparent, rgba(251,191,36,0.8)); filter: blur(1px)"></div>
+                  </div>
                 </div>
               </div>
             </div>
