@@ -26,6 +26,10 @@ router.get("/welcome", (req, res) => {
   res.json({ message: "Welcome to the Lab Node.js API!" });
 });
 
+router.get("/ping", (req, res) => {
+  res.status(200).send("pong");
+});
+
 router.use("/auth", authRoutes);
 router.use("/home", homeRoutes);
 router.use("/admins", adminRoutes);
