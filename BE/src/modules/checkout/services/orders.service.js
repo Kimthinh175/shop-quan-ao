@@ -439,8 +439,26 @@ class OrderService {
     }
 
     async updateStatus(id, status) {
-        const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+        const order = await Order.findById(id);
         if (!order) throw new Error('Không tìm thấy đơn hàng');
+
+        // Validation for order status transition
+        const validTransitions = {
+            'PENDING': ['CONFIRMED', 'CANCELLED'],
+            'CONFIRMED': ['SHIPPING', 'CANCELLED'],
+            'SHIPPING': ['COMPLETED', 'CANCELLED'],
+            'COMPLETED': [], 
+            'CANCELLED': [] 
+        };
+
+        if (order.status === status) return order;
+
+        if (validTransitions[order.status] && !validTransitions[order.status].includes(status)) {
+            throw new Error(`Không thể chuyển trạng thái từ ${order.status} sang ${status}`);
+        }
+
+        order.status = status;
+        await order.save();
         
         // CỘNG ĐIỂM KHI HOÀN THÀNH
         if (status === 'COMPLETED' && order.points_earned > 0 && !order.points_awarded && order.customer_id) {

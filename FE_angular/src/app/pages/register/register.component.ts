@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
@@ -53,7 +53,7 @@ import { AuthService } from '../../services/auth.service';
         <!-- Login Link -->
         <div class="text-center">
           <span class="text-sm font-medium text-gray-500">Đã có tài khoản? </span>
-          <a routerLink="/login" class="text-sm font-bold text-black hover:underline">Đăng nhập ngay</a>
+          <a [routerLink]="['/login']" [queryParams]="{ returnUrl: route.snapshot.queryParams['returnUrl'] }" class="text-sm font-bold text-black hover:underline">Đăng nhập ngay</a>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@ export class RegisterComponent {
 
   private auth = inject(AuthService);
   private router = inject(Router);
+  route = inject(ActivatedRoute); // Public to be accessible in template
 
   register() {
     this.loading = true;
@@ -79,7 +80,8 @@ export class RegisterComponent {
         this.auth.login(this.phone, this.password).subscribe({
           next: () => {
             this.loading = false;
-            this.router.navigate(['/profile']);
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+            this.router.navigateByUrl(returnUrl);
           },
           error: () => {
             this.loading = false;

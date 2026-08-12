@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
@@ -57,7 +57,7 @@ declare var google: any;
         <!-- Register Link -->
         <div class="text-center">
           <span class="text-sm font-medium text-gray-500">Chưa có tài khoản? </span>
-          <a routerLink="/register" class="text-sm font-bold text-black hover:underline">Đăng ký ngay</a>
+          <a [routerLink]="['/register']" [queryParams]="{ returnUrl: route.snapshot.queryParams['returnUrl'] }" class="text-sm font-bold text-black hover:underline">Đăng ký ngay</a>
         </div>
       </div>
     </div>
@@ -71,6 +71,7 @@ export class LoginComponent implements AfterViewInit {
 
   private auth = inject(AuthService);
   private router = inject(Router);
+  route = inject(ActivatedRoute); // Public for template
 
   ngAfterViewInit() {
     this.initGoogleLogin();
@@ -107,7 +108,8 @@ export class LoginComponent implements AfterViewInit {
       this.auth.googleLogin(response.credential).subscribe({
         next: () => {
           this.loading = false;
-          this.router.navigate(['/profile']);
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+          this.router.navigateByUrl(returnUrl);
         },
         error: (err) => {
           this.loading = false;
@@ -124,7 +126,8 @@ export class LoginComponent implements AfterViewInit {
     this.auth.login(this.phone, this.password).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/profile']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+        this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {
         this.loading = false;

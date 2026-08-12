@@ -61,15 +61,23 @@ class ApiClient {
 
   async post<T>(endpoint: string, data?: any, options?: RequestOptions): Promise<T> {
     const url = this.buildUrl(endpoint, options?.params);
+    const isFormData = typeof FormData !== "undefined" && data instanceof FormData;
+    const defaultHeaders: any = {
+      ...this.getAuthHeaders(),
+      ...(options?.headers || {}),
+    };
+
+    if (!isFormData && !defaultHeaders["Content-Type"]) {
+      defaultHeaders["Content-Type"] = "application/json";
+    } else if (isFormData) {
+      delete defaultHeaders["Content-Type"];
+    }
+
     try {
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...this.getAuthHeaders(),
-          ...(options?.headers || {}),
-        },
-        body: JSON.stringify(data),
+        headers: defaultHeaders,
+        body: isFormData ? data : (data ? JSON.stringify(data) : undefined),
         ...options,
       });
 
@@ -87,15 +95,23 @@ class ApiClient {
 
   async put<T>(endpoint: string, data?: any, options?: RequestOptions): Promise<T> {
     const url = this.buildUrl(endpoint, options?.params);
+    const isFormData = typeof FormData !== "undefined" && data instanceof FormData;
+    const defaultHeaders: any = {
+      ...this.getAuthHeaders(),
+      ...(options?.headers || {}),
+    };
+
+    if (!isFormData && !defaultHeaders["Content-Type"]) {
+      defaultHeaders["Content-Type"] = "application/json";
+    } else if (isFormData) {
+      delete defaultHeaders["Content-Type"];
+    }
+
     try {
       const res = await fetch(url, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          ...this.getAuthHeaders(),
-          ...(options?.headers || {}),
-        },
-        body: JSON.stringify(data),
+        headers: defaultHeaders,
+        body: isFormData ? data : (data ? JSON.stringify(data) : undefined),
         ...options,
       });
 

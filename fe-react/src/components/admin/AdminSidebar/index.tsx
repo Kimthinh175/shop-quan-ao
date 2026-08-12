@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { apiClient } from "../../../services/apiClient";
 
 interface NavItem {
   label: string;
@@ -21,6 +22,23 @@ interface NavSection {
 export default function AdminSidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [pendingOrdersCount, setPendingOrdersCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchPendingOrders = async () => {
+      try {
+        const res: any = await apiClient.get('/orders?status=PENDING&limit=1');
+        if (res?.pagination?.total !== undefined) {
+          setPendingOrdersCount(res.pagination.total);
+        }
+      } catch (err) {
+        console.error('Failed to fetch pending orders count', err);
+      }
+    };
+    fetchPendingOrders();
+    const interval = setInterval(fetchPendingOrders, 60000); // refresh every minute
+    return () => clearInterval(interval);
+  }, []);
 
   const isActive = (path: string) => {
     if (path === "/admin") {
@@ -43,7 +61,7 @@ export default function AdminSidebar() {
           label: "Đơn hàng",
           href: "/admin/orders",
           icon: "fa-receipt",
-          badge: "12",
+          badge: pendingOrdersCount > 0 ? pendingOrdersCount.toString() : undefined,
           badgeColor: "bg-amber-500 text-slate-950 font-black",
         },
         {

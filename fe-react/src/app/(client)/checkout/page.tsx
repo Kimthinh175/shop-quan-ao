@@ -71,8 +71,8 @@ export default function CheckoutPage() {
   const formatPrice = (p: number) => p.toLocaleString('vi-VN') + 'đ';
 
   const handlePlaceOrder = async () => {
-    if (!formData?.fullName || !formData?.phone || !formData?.address || !formData?.province || !formData?.district || !formData?.ward) {
-      dispatch({ type: 'SUBMIT_ERROR', payload: 'Vui lòng điền đầy đủ Họ tên, Số điện thoại, Địa chỉ chi tiết, Tỉnh/Thành, Quận/Huyện và Phường/Xã.' });
+    if (!formData?.fullName || !formData?.phone || !formData?.address) {
+      dispatch({ type: 'SUBMIT_ERROR', payload: 'Vui lòng điền đầy đủ Họ tên, Số điện thoại và Địa chỉ chi tiết.' });
       return;
     }
     if (items.length === 0) {
@@ -83,12 +83,10 @@ export default function CheckoutPage() {
     dispatch({ type: 'SUBMIT_START' });
 
     try {
-      const fullAddress = [formData.address, formData.ward, formData.district, formData.province]
-        .filter(Boolean)
-        .join(', ');
+      const fullAddress = formData.address;
 
       const orderPayload = {
-        receiver_name: `${formData.title} ${formData.fullName}`.trim(),
+        receiver_name: formData.fullName.trim(),
         receiver_phone: formData.phone,
         receiver_address: fullAddress,
         note: formData.note || '',

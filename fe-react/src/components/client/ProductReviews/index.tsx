@@ -21,13 +21,7 @@ export default function ProductReviews({ productId }: { productId: string | numb
   const [loading, setLoading] = useState(true);
   const [activeStarFilter, setActiveStarFilter] = useState<number | null>(null);
 
-  // Form write review state
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [newRating, setNewRating] = useState(5);
-  const [newContent, setNewContent] = useState("");
-  const [newName, setNewName] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+
 
   // Fetch real reviews from Backend API `/api/reviews/product/:productId`
   useEffect(() => {
@@ -41,64 +35,19 @@ export default function ProductReviews({ productId }: { productId: string | numb
 
         const rawResults = res?.results || (Array.isArray(res) ? res : []);
 
-        if (rawResults.length > 0) {
-          const mapped: ReviewItem[] = rawResults.map((item: any, idx: number) => ({
-            id: item._id || item.id || `rev-${idx}`,
-            userName: item.user_id?.name || item.user_id?.username || "Khách hàng CLOSET",
-            userAvatar: item.user_id?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${idx + 1}`,
-            rating: item.rating || 5,
-            date: item.createdAt ? new Date(item.createdAt).toLocaleDateString("vi-VN") : "20/05/2026",
-            variantInfo: "Phân loại: Xanh Navy / Size M",
-            content: item.content || "Sản phẩm đẹp tuyệt vời, đường kim mũi chỉ vô cùng tỉ mỉ chuẩn Quiet Luxury.",
-            images: item.images || [],
-            isVerified: true,
-            likesCount: 12 + (idx * 5) % 20,
-          }));
-          setReviews(mapped);
-        } else {
-          // Default high quality initial sample reviews matching the luxury brand
-          const defaultReviews: ReviewItem[] = [
-            {
-              id: "r1",
-              userName: "Trần Hoàng Nam",
-              userAvatar: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150",
-              rating: 5,
-              date: "18/05/2026",
-              variantInfo: "Phân loại: Xanh Navy / Size L",
-              content: "Bộ suit vải mặc cực kỳ mát, phom ôm chuẩn tỉ lệ vai. Giao hàng siêu nhanh chỉ trong 2 tiếng tại TP.HCM. Rất xứng đáng số tiền bỏ ra!",
-              images: [
-                "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=300",
-              ],
-              isVerified: true,
-              likesCount: 24,
-            },
-            {
-              id: "r2",
-              userName: "Lê Minh Thảo",
-              userAvatar: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150",
-              rating: 5,
-              date: "12/05/2026",
-              variantInfo: "Phân loại: Đen Tuyền / Size M",
-              content: "Chất liệu Ex-Dry siêu nhẹ, mặc lên tôn dáng quý phái. Đóng gói hộp vô cùng sang trọng có kèm túi chống bụi tơ tằm. Sẽ ủng hộ shop dài lâu!",
-              images: [],
-              isVerified: true,
-              likesCount: 18,
-            },
-            {
-              id: "r3",
-              userName: "Nguyễn Quốc Bảo",
-              userAvatar: "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=150",
-              rating: 4,
-              date: "05/05/2026",
-              variantInfo: "Phân loại: Xám Than / Size XL",
-              content: "Áo đẹo đúng hình mô tả, vải mềm không bị dính da. Nhân viên hỗ trợ tư vấn size rất nhiệt tình.",
-              images: [],
-              isVerified: true,
-              likesCount: 9,
-            },
-          ];
-          setReviews(activeStarFilter ? defaultReviews.filter((r) => r.rating === activeStarFilter) : defaultReviews);
-        }
+        const mapped: ReviewItem[] = rawResults.map((item: any, idx: number) => ({
+          id: item._id || item.id || `rev-${idx}`,
+          userName: item.user_id?.name || item.user_id?.username || "Khách hàng CLOSET",
+          userAvatar: item.user_id?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${item.user_id?.name || "User"}`,
+          rating: item.rating || 5,
+          date: item.createdAt ? new Date(item.createdAt).toLocaleDateString("vi-VN") : "",
+          variantInfo: "",
+          content: item.content || "",
+          images: item.images || [],
+          isVerified: true, // If it's a real review, they must have bought it
+          likesCount: 0,
+        }));
+        setReviews(mapped);
       } catch (err) {
         console.error("Lỗi khi nạp đánh giá sản phẩm:", err);
       } finally {
@@ -108,42 +57,6 @@ export default function ProductReviews({ productId }: { productId: string | numb
 
     fetchReviews();
   }, [productId, activeStarFilter]);
-
-  // Handle submit review
-  const handleSubmitReview = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newContent.trim()) return;
-
-    setSubmitting(true);
-    try {
-      // Post to real backend API if authenticated or add to local state
-      const createdReview: ReviewItem = {
-        id: `rev-new-${Date.now()}`,
-        userName: newName.trim() || "Khách hàng CLOSET",
-        userAvatar: `https://api.dicebear.com/7.x/initials/svg?seed=${newName || "User"}`,
-        rating: newRating,
-        date: new Date().toLocaleDateString("vi-VN"),
-        variantInfo: "Đã xác nhận mua hàng",
-        content: newContent,
-        images: [],
-        isVerified: true,
-        likesCount: 1,
-      };
-
-      setReviews((prev) => [createdReview, ...prev]);
-      setSubmitSuccess(true);
-      setNewContent("");
-      setNewName("");
-      setTimeout(() => {
-        setSubmitSuccess(false);
-        setShowReviewModal(false);
-      }, 2000);
-    } catch (err) {
-      console.error("Lỗi gửi đánh giá:", err);
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   // Calculate rating stats
   const totalCount = reviews.length;
@@ -162,14 +75,6 @@ export default function ProductReviews({ productId }: { productId: string | numb
               ĐÁNH GIÁ TỪ KHÁCH HÀNG
             </h2>
           </div>
-
-          <button
-            onClick={() => setShowReviewModal(true)}
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-[#D4AF37] dark:hover:bg-[#EBC563] text-white dark:text-slate-950 font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg transition-all transform active:scale-95 flex items-center gap-2 self-start md:self-auto"
-          >
-            <i className="fa-solid fa-pen text-xs" />
-            <span>Viết đánh giá sản phẩm</span>
-          </button>
         </div>
 
         {/* Rating Summary Box */}
@@ -310,96 +215,7 @@ export default function ProductReviews({ productId }: { productId: string | numb
           </div>
         )}
 
-        {/* Modal Write Review */}
-        {showReviewModal && (
-          <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-[#171717] border border-slate-200 dark:border-[#D4AF37]/30 rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl relative animate-scaleIn">
-              <button
-                onClick={() => setShowReviewModal(false)}
-                className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-white"
-              >
-                <i className="fa-solid fa-xmark text-lg" />
-              </button>
 
-              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2">
-                ĐÁNH GIÁ SẢN PHẨM
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
-                Chia sẻ trải nghiệm thực tế của bạn về chất liệu, phom dáng và dịch vụ giao hàng.
-              </p>
-
-              {submitSuccess ? (
-                <div className="py-8 text-center text-emerald-600 dark:text-emerald-400 space-y-2">
-                  <i className="fa-solid fa-circle-check text-4xl animate-bounce" />
-                  <p className="text-sm font-extrabold">Cảm ơn bạn đã gửi đánh giá!</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmitReview} className="space-y-5">
-                  {/* Select Star Rating */}
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block mb-2">
-                      Số sao đánh giá:
-                    </label>
-                    <div className="flex items-center gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => setNewRating(star)}
-                          className="text-2xl transition-transform hover:scale-125 focus:outline-none"
-                        >
-                          <i
-                            className={`fa-solid fa-star ${
-                              star <= newRating ? "text-amber-400" : "text-slate-300 dark:text-slate-700"
-                            }`}
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Name Input */}
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block mb-1.5">
-                      Họ và tên của bạn:
-                    </label>
-                    <input
-                      type="text"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      placeholder="Nhập tên của bạn"
-                      className="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-amber-400"
-                    />
-                  </div>
-
-                  {/* Content Textarea */}
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block mb-1.5">
-                      Nội dung đánh giá:
-                    </label>
-                    <textarea
-                      rows={4}
-                      required
-                      value={newContent}
-                      onChange={(e) => setNewContent(e.target.value)}
-                      placeholder="Nhập nhận xét chi tiết về sản phẩm..."
-                      className="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-amber-400"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-[#D4AF37] dark:hover:bg-[#EBC563] text-white dark:text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all"
-                  >
-                    {submitting ? "Đang gửi đánh giá..." : "Gửi đánh giá ngay"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

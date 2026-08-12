@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
+import { apiClient } from "../../../services/apiClient";
 
 export interface CheckoutFormData {
-  title: string;
   fullName: string;
   phone: string;
   email: string;
   address: string;
-  province: string;
-  district: string;
-  ward: string;
   note: string;
 }
 
@@ -63,14 +60,10 @@ const LOCATION_DATA: Record<string, Record<string, string[]>> = {
 export default function CheckoutForm({ onChange }: CheckoutFormProps) {
   const { user } = useAuth() || {};
 
-  const [title, setTitle] = useState("Anh");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
-  const [ward, setWard] = useState("");
   const [note, setNote] = useState("");
 
   // Pre-fill user data if logged in
@@ -79,49 +72,38 @@ export default function CheckoutForm({ onChange }: CheckoutFormProps) {
       if (user.full_name && !fullName) setFullName(user.full_name);
       if (user.phone && !phone) setPhone(user.phone);
       if (user.email && !email) setEmail(user.email);
+
+      const fetchDefaultAddress = async () => {
+        try {
+          const res: any = await apiClient.get('/customers/me/addresses');
+          const addresses = res || [];
+          const defaultAddress = addresses.find((a: any) => a.is_default) || addresses[0];
+          
+          if (defaultAddress) {
+            setFullName(prev => prev || defaultAddress.recipient_name);
+            setPhone(prev => prev || defaultAddress.phone);
+            setAddress(prev => prev || defaultAddress.street_address);
+          }
+        } catch (err) {
+          console.error('Failed to fetch addresses', err);
+        }
+      };
+
+      fetchDefaultAddress();
     }
   }, [user]);
 
-  // Derived lists for dropdowns
-  const provinceList = Object.keys(LOCATION_DATA);
-  const districtList = province ? Object.keys(LOCATION_DATA[province] || {}) : [];
-  const wardList = (province && district) ? (LOCATION_DATA[province]?.[district] || []) : [];
-
-  // Handle province change
-  const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = e.target.value;
-    setProvince(selected);
-    setDistrict("");
-    setWard("");
-  };
-
-  // Handle district change
-  const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = e.target.value;
-    setDistrict(selected);
-    setWard("");
-  };
-
   useEffect(() => {
-    onChange?.({ title, fullName, phone, email, address, province, district, ward, note });
-  }, [title, fullName, phone, email, address, province, district, ward, note]);
+    onChange?.({ fullName, phone, email, address, note });
+  }, [fullName, phone, email, address, note]);
 
   return (
     <div className="card">
       <span className="section-label">Thông tin vận chuyển</span>
 
       <div className="space-y-4">
-        {/* Title & Full Name */}
+        {/* Full Name */}
         <div className="flex gap-3">
-          <select
-            className="input-field"
-            style={{ width: '120px', flexShrink: 0 }}
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-          >
-            <option value="Anh">Anh</option>
-            <option value="Chị">Chị</option>
-          </select>
           <input
             type="text"
             className="input-field"
@@ -151,50 +133,6 @@ export default function CheckoutForm({ onChange }: CheckoutFormProps) {
           onChange={e => setAddress(e.target.value)}
         />
 
-        {/* Province / District / Ward Dropdowns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {/* Province */}
-          <select
-            className="input-field cursor-pointer"
-            value={province}
-            onChange={handleProvinceChange}
-          >
-            <option value="">-- Chọn Tỉnh / Thành phố --</option>
-            {provinceList.map(p => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
-
-          {/* District */}
-          <select
-            className="input-field cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            value={district}
-            onChange={handleDistrictChange}
-            disabled={!province}
-          >
-            <option value="">
-              {province ? "-- Chọn Quận / Huyện --" : "-- Chọn Tỉnh / TP trước --"}
-            </option>
-            {districtList.map(d => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-
-          {/* Ward */}
-          <select
-            className="input-field cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            value={ward}
-            onChange={e => setWard(e.target.value)}
-            disabled={!district}
-          >
-            <option value="">
-              {district ? "-- Chọn Phường / Xã --" : "-- Chọn Quận / Huyện trước --"}
-            </option>
-            {wardList.map(w => (
-              <option key={w} value={w}>{w}</option>
-            ))}
-          </select>
-        </div>
 
         {/* Note */}
         <input

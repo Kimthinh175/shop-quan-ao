@@ -191,7 +191,7 @@ import { CartDropZoneComponent } from '../../components/cart-drop-zone/cart-drop
                 </div>
               </a>
               
-              <a *ngIf="!user" (click)="isMenuOpen = false" routerLink="/login" class="flex items-center gap-3 text-gray-900 font-bold uppercase tracking-widest text-xs group cursor-pointer">
+              <a *ngIf="!user" (click)="isMenuOpen = false" [routerLink]="['/login']" [queryParams]="{ returnUrl: currentUrl || '/' }" class="flex items-center gap-3 text-gray-900 font-bold uppercase tracking-widest text-xs group cursor-pointer">
                 <div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
                   <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 </div>
