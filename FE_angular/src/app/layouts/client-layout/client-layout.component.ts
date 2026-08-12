@@ -109,11 +109,17 @@ import { CartDropZoneComponent } from '../../components/cart-drop-zone/cart-drop
             <span class="text-[9px] font-extrabold tracking-tight">Tin tức</span>
           </a>
 
-          <!-- 5. Hồ sơ -->
-          <a routerLink="/profile" routerLinkActive="!text-black font-black scale-105" 
+          <!-- 5. Hồ sơ / Đăng nhập -->
+          <a *ngIf="user" routerLink="/profile" routerLinkActive="!text-black font-black scale-105" 
              class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-black transition-all w-14 h-full">
             <i class="fa-regular fa-user text-[19px]"></i>
             <span class="text-[9px] font-extrabold tracking-tight">Hồ sơ</span>
+          </a>
+
+          <a *ngIf="!user" [routerLink]="['/login']" [queryParams]="{ returnUrl: currentUrl || '/' }" routerLinkActive="!text-black font-black scale-105" 
+             class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-black transition-all w-14 h-full">
+            <i class="fa-solid fa-arrow-right-to-bracket text-[19px]"></i>
+            <span class="text-[9px] font-extrabold tracking-tight">Đăng nhập</span>
           </a>
         </nav>
 
