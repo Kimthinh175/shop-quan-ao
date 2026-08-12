@@ -69,38 +69,90 @@ interface Banner {
 
 
       <!-- ── 3. CLOSET BRAND CATEGORY CARDS ── -->
-      <section class="py-6 px-4 bg-white border-b border-gray-100">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xs font-serif-brand font-black uppercase tracking-[0.2em] text-gray-900 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-            Danh mục nổi bật
-          </h2>
-          <a routerLink="/catalog" class="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 hover:text-black">
-            Xem tất cả <i class="fa-solid fa-chevron-right text-[8px]"></i>
+      <section class="py-8 px-0 bg-white border-b border-gray-100 overflow-hidden">
+        <!-- Header -->
+        <div class="flex items-end justify-between mb-5 px-4">
+          <div>
+            <p class="text-[9px] font-extrabold uppercase tracking-[0.3em] text-amber-500 mb-1">Shop by Category</p>
+            <h2 class="text-lg font-black uppercase tracking-[0.12em] text-gray-900 leading-none" style="font-family: 'Playfair Display', Georgia, serif">
+              Danh mục nổi bật
+            </h2>
+          </div>
+          <a routerLink="/catalog" class="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">
+            Tất cả <i class="fa-solid fa-arrow-right text-[9px]"></i>
           </a>
         </div>
 
-        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-brand">
-          <a *ngFor="let cat of categories" 
-             [routerLink]="['/catalog']" 
+        <!-- Horizontal Scroll Cards -->
+        <div class="flex gap-3 overflow-x-auto pb-4 px-4 scrollbar-brand scroll-smooth">
+          <a *ngFor="let cat of categories; let i = index"
+             [routerLink]="['/catalog']"
              [queryParams]="{ category: cat.slug || cat._id }"
-             class="group relative w-28 aspect-[4/5] rounded-2xl overflow-hidden bg-gray-900 border border-gray-100 hover:border-amber-400/80 transition-all duration-300 shrink-0 shadow-sm">
-            
-            <img *ngIf="cat.image" [src]="cat.image" [alt]="cat.name" class="w-full h-full object-cover group-hover:scale-110 opacity-85 group-hover:opacity-100 transition-all duration-700">
-            
-            <div *ngIf="!cat.image" class="w-full h-full bg-gray-900 flex items-center justify-center text-gray-600">
-              <i class="fa-solid fa-layer-group text-2xl"></i>
+             class="group relative shrink-0 rounded-2xl overflow-hidden cursor-pointer"
+             style="width: 140px; height: 190px">
+
+            <!-- Background image -->
+            <img *ngIf="cat.image" [src]="cat.image" [alt]="cat.name"
+                 class="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-110">
+
+            <!-- Placeholder when no image -->
+            <div *ngIf="!cat.image"
+                 class="absolute inset-0 flex items-center justify-center"
+                 style="background: linear-gradient(145deg, #1a1a1a, #2d2d2d)">
+              <i class="fa-solid fa-layer-group text-3xl text-gray-600"></i>
             </div>
 
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+            <!-- Multi-layer gradient for depth -->
+            <div class="absolute inset-0 transition-opacity duration-500 group-hover:opacity-70"
+                 style="background: linear-gradient(175deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.75) 70%, rgba(0,0,0,0.92) 100%)"></div>
 
-            <!-- Category Title -->
-            <div class="absolute bottom-3 left-2 right-2 text-center">
-              <span class="text-[10px] font-extrabold uppercase tracking-wider text-white group-hover:text-amber-400 transition-colors line-clamp-1">
-                {{ cat.name }}
+            <!-- Gold top-left accent line -->
+            <div class="absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                 style="background: linear-gradient(90deg, #D4AF37, transparent)"></div>
+
+            <!-- Category index number -->
+            <div class="absolute top-3 right-3">
+              <span class="text-[10px] font-black tabular-nums opacity-40 text-white group-hover:opacity-70 transition-opacity"
+                    style="font-variant-numeric: tabular-nums">
+                0{{ i + 1 }}
               </span>
             </div>
+
+            <!-- Bottom content -->
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <!-- CLOSET brand tag -->
+              <div class="mb-1.5">
+                <span class="inline-block px-1.5 py-0.5 text-[7px] font-black uppercase tracking-[0.25em] rounded"
+                      style="background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); color: #D4AF37">
+                  CLOSET
+                </span>
+              </div>
+
+              <!-- Category name -->
+              <span class="block text-sm font-black uppercase tracking-wider text-white leading-tight group-hover:text-amber-300 transition-colors duration-300 line-clamp-2">
+                {{ cat.name }}
+              </span>
+
+              <!-- Shop now -->
+              <div class="flex items-center gap-1 mt-1.5 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300">
+                <span class="text-[9px] font-bold uppercase tracking-widest text-amber-400">Xem ngay</span>
+                <i class="fa-solid fa-arrow-right text-[8px] text-amber-400"></i>
+              </div>
+            </div>
+          </a>
+
+          <!-- Tất cả danh mục card -->
+          <a routerLink="/catalog"
+             class="group relative shrink-0 rounded-2xl overflow-hidden cursor-pointer flex flex-col items-center justify-center"
+             style="width: 100px; height: 190px; background: linear-gradient(145deg, #111, #1c1c1c); border: 1px solid rgba(212,175,55,0.2)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3 transition-all duration-300 group-hover:scale-110"
+                 style="background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3)">
+              <i class="fa-solid fa-grip text-base" style="color: #D4AF37"></i>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-[0.15em] text-center leading-tight"
+                  style="color: rgba(255,255,255,0.7)">
+              Tất cả<br>danh mục
+            </span>
           </a>
         </div>
       </section>
