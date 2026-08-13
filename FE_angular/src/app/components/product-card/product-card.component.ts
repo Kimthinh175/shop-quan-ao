@@ -3,6 +3,7 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { DragDropCartService } from '../../services/drag-drop-cart.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-product-card',
@@ -124,6 +125,7 @@ export class ProductCardComponent {
   @Input() mode: 'default' | 'new' | 'popular' = 'default';
 
   private cartService = inject(CartService);
+  private auth = inject(AuthService);
   private dragDropService = inject(DragDropCartService);
   private router = inject(Router);
 
@@ -173,6 +175,11 @@ export class ProductCardComponent {
     };
 
     this.cartService.setBuyNowItem(buyItem);
+    if (!this.auth.isLoggedIn()) {
+      localStorage.setItem('returnUrl', '/checkout');
+      this.router.navigate(['/login']);
+      return;
+    }
     this.router.navigate(['/checkout']);
   }
 }

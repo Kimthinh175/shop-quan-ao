@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { CartService, CartItem } from '../../services/cart.service';
 import { PromotionService } from '../../services/promotion.service';
+import { AuthService } from '../../services/auth.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 
 @Component({
@@ -18,6 +19,7 @@ export class ProductDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private cartService = inject(CartService);
   private promoService = inject(PromotionService);
+  private auth = inject(AuthService);
   private router = inject(Router);
 
   product: any = null;
@@ -263,6 +265,11 @@ export class ProductDetailComponent implements OnInit {
     };
 
     this.cartService.setBuyNowItem(item);
+    if (!this.auth.isLoggedIn()) {
+      localStorage.setItem('returnUrl', '/checkout');
+      this.router.navigate(['/login']);
+      return;
+    }
     this.router.navigate(['/checkout']);
   }
 

@@ -115,9 +115,8 @@ import { CartDropZoneComponent } from '../../components/cart-drop-zone/cart-drop
             <i class="fa-regular fa-user text-[19px]"></i>
             <span class="text-[9px] font-extrabold tracking-tight">Hồ sơ</span>
           </a>
-
-          <a *ngIf="!user" [routerLink]="['/login']" [queryParams]="{ returnUrl: currentUrl || '/' }" routerLinkActive="!text-black font-black scale-105" 
-             class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-black transition-all w-14 h-full">
+          <a *ngIf="!user" (click)="goToLogin()" 
+             class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-black transition-all w-14 h-full cursor-pointer">
             <i class="fa-solid fa-arrow-right-to-bracket text-[19px]"></i>
             <span class="text-[9px] font-extrabold tracking-tight">Đăng nhập</span>
           </a>
@@ -197,7 +196,7 @@ import { CartDropZoneComponent } from '../../components/cart-drop-zone/cart-drop
                 </div>
               </a>
               
-              <a *ngIf="!user" (click)="isMenuOpen = false" [routerLink]="['/login']" [queryParams]="{ returnUrl: currentUrl || '/' }" class="flex items-center gap-3 text-gray-900 font-bold uppercase tracking-widest text-xs group cursor-pointer">
+              <a *ngIf="!user" (click)="goToLogin()" class="flex items-center gap-3 text-gray-900 font-bold uppercase tracking-widest text-xs group cursor-pointer">
                 <div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
                   <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 </div>
@@ -237,6 +236,12 @@ export class ClientLayoutComponent implements OnInit {
     return url.includes('/checkout') || 
            url.includes('/order-complete') || 
            url.includes('/cart');
+  }
+
+  goToLogin() {
+    this.isMenuOpen = false;
+    localStorage.setItem('returnUrl', this.currentUrl || '/');
+    this.router.navigate(['/login']);
   }
 
   ngOnInit() {

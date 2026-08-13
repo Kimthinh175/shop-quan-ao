@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
@@ -55,22 +56,48 @@ import { PromotionService } from '../../services/promotion.service';
         </div>
 
         <!-- Shipping Info Form -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h2 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-5">Thông tin giao hàng</h2>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 relative">
+          <div class="flex flex-wrap items-center justify-between mb-5 gap-2">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-gray-900">Thông tin giao hàng</h2>
+            <button *ngIf="userAddresses.length > 1" (click)="showAddressModal = true" class="text-[10px] font-bold text-blue-600 uppercase tracking-wider hover:underline">
+              Chọn ĐC khác
+            </button>
+          </div>
           
           <div class="space-y-4">
             <div>
               <input type="text" [(ngModel)]="orderData.customerName" placeholder="Họ và tên" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
             </div>
-            <div>
-              <input type="tel" [(ngModel)]="orderData.phone" placeholder="Số điện thoại" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <select [(ngModel)]="selectedProvinceId" (change)="onProvinceChange()" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all font-medium appearance-none">
+                <option [ngValue]="null" disabled selected>Chọn Tỉnh/Thành</option>
+                <option *ngFor="let p of provinces" [value]="p.ProvinceID">{{ p.ProvinceName }}</option>
+              </select>
+
+              <select [(ngModel)]="selectedDistrictId" (change)="onDistrictChange()" [disabled]="!selectedProvinceId" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all font-medium appearance-none disabled:opacity-50">
+                <option [ngValue]="null" disabled selected>Chọn Quận/Huyện</option>
+                <option *ngFor="let d of districts" [value]="d.DistrictID">{{ d.DistrictName }}</option>
+              </select>
+
+              <select [(ngModel)]="selectedWardCode" (change)="onWardChange()" [disabled]="!selectedDistrictId" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all font-medium appearance-none disabled:opacity-50">
+                <option [ngValue]="null" disabled selected>Chọn Phường/Xã</option>
+                <option *ngFor="let w of wards" [value]="w.WardCode">{{ w.WardName }}</option>
+              </select>
             </div>
             <div>
-              <input type="text" [(ngModel)]="orderData.address" placeholder="Địa chỉ giao hàng (Số nhà, Đường...)" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
+              <input type="text" [(ngModel)]="orderData.address" placeholder="Địa chỉ giao hàng (Số nhà, Đường, Phường, Quận, Tỉnh...)" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
             </div>
             <div>
               <textarea [(ngModel)]="orderData.note" rows="2" placeholder="Ghi chú (Tùy chọn)" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium resize-none"></textarea>
             </div>
+          </div>
+
+          <div *ngIf="showSaveAddressBtn" class="mt-4 pt-4 border-t border-gray-100 animate-[fadeIn_0.3s_ease-out]">
+            <button (click)="saveAddress()" [disabled]="savingAddress" class="w-full sm:w-auto px-4 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-black transition-colors disabled:opacity-50">
+               <i *ngIf="!savingAddress" class="fa-solid fa-floppy-disk mr-1.5"></i>
+               <i *ngIf="savingAddress" class="fa-solid fa-spinner fa-spin mr-1.5"></i>
+               Lưu địa chỉ này vào sổ
+            </button>
           </div>
         </div>
 
@@ -130,7 +157,39 @@ import { PromotionService } from '../../services/promotion.service';
           </button>
         </div>
       </div>
+    </div>
 
+    <!-- Address Modal -->
+    <div *ngIf="showAddressModal" class="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-[fadeIn_0.2s_ease-out]">
+      <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 overflow-hidden flex flex-col max-h-[80vh] animate-[slideUp_0.3s_ease-out] sm:animate-[zoomIn_0.2s_ease-out]">
+        <div class="flex justify-between items-center mb-4 shrink-0">
+          <h3 class="text-base font-black uppercase tracking-widest">Chọn địa chỉ</h3>
+          <button (click)="showAddressModal = false" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="overflow-y-auto flex-1 space-y-3 pb-safe">
+          <div *ngFor="let addr of userAddresses" 
+               (click)="selectAddress(addr)"
+               class="p-4 border rounded-2xl cursor-pointer hover:border-black transition-colors"
+               [ngClass]="isSelectedAddress(addr) ? 'border-black bg-gray-50' : 'border-gray-100'">
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5"
+                   [ngClass]="isSelectedAddress(addr) ? 'border-black' : 'border-gray-300'">
+                <div *ngIf="isSelectedAddress(addr)" class="w-2.5 h-2.5 bg-black rounded-full"></div>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-sm font-bold text-gray-900">{{ addr.recipient_name }}</span>
+                  <span *ngIf="addr.is_default" class="text-[9px] font-bold px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded uppercase tracking-wider">Mặc định</span>
+                </div>
+                <div class="text-xs text-gray-500 mb-1"><i class="fa-solid fa-phone mr-1.5"></i>{{ addr.phone }}</div>
+                <div class="text-xs text-gray-500 leading-relaxed"><i class="fa-solid fa-location-dot mr-1.5"></i>{{ formatAddress(addr) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   `
 })
@@ -140,15 +199,29 @@ export class CheckoutComponent implements OnInit {
   private api = inject(ApiService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private http = inject(HttpClient);
 
   items: CartItem[] = [];
   totalPrice = 0;
   originalTotalPrice = 0;
   totalCount = 0;
   
-  isSummaryOpen = false;
+  user: any = null;
   submitting = false;
   isBuyNow = false;
+  isSummaryOpen = false;
+
+  userAddresses: any[] = [];
+  showAddressModal = false;
+  savingAddress = false;
+
+  ghnToken = 'd32ad384-5f5e-11f1-a973-aee5264794df';
+  provinces: any[] = [];
+  districts: any[] = [];
+  wards: any[] = [];
+  selectedProvinceId: number | null = null;
+  selectedDistrictId: number | null = null;
+  selectedWardCode: string | null = null;
 
   orderData = {
     customerName: '',
@@ -159,22 +232,25 @@ export class CheckoutComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.loadProvinces();
+
     this.auth.currentUser$.subscribe(user => {
+      this.user = user;
       if (user) {
         this.orderData.customerName = user.full_name || user.name || '';
         this.orderData.phone = user.phone || '';
         
-        if (user.addresses && user.addresses.length > 0) {
-          const defaultAddress = user.addresses.find((a: any) => a.is_default) || user.addresses[0];
-          this.orderData.customerName = defaultAddress.recipient_name || this.orderData.customerName;
-          this.orderData.phone = defaultAddress.phone || this.orderData.phone;
-          
-          let addr = defaultAddress.street_address || '';
-          if (defaultAddress.ward) addr += `, ${defaultAddress.ward}`;
-          if (defaultAddress.district) addr += `, ${defaultAddress.district}`;
-          if (defaultAddress.province) addr += `, ${defaultAddress.province}`;
-          this.orderData.address = addr;
-        }
+        // Lấy danh sách địa chỉ từ API
+        this.http.get<any>('/api/customers/me/addresses').subscribe({
+          next: (res) => {
+            const addrs = res.data || res.addresses || (Array.isArray(res) ? res : []);
+            if (addrs && addrs.length > 0) {
+              this.userAddresses = addrs;
+              const defaultAddress = addrs.find((a: any) => a.is_default) || addrs[0];
+              this.selectAddress(defaultAddress);
+            }
+          }
+        });
       }
     });
 
@@ -206,6 +282,137 @@ export class CheckoutComponent implements OnInit {
 
   isValid(): boolean {
     return !!(this.orderData.customerName.trim() && this.orderData.phone.trim() && this.orderData.address.trim());
+  }
+
+  formatAddress(addr: any): string {
+    let result = addr.street_address || '';
+    if (addr.ward) result += `, ${addr.ward}`;
+    if (addr.district) result += `, ${addr.district}`;
+    if (addr.province) result += `, ${addr.province}`;
+    return result;
+  }
+
+  // ── GHN API CALLS ──
+  loadProvinces() {
+    fetch('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+      headers: { Token: this.ghnToken }
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.data) this.provinces = res.data;
+    })
+    .catch(err => console.error('GHN Province error:', err));
+  }
+
+  autoAppendAddress() {
+    const p = this.provinces.find(x => x.ProvinceID == this.selectedProvinceId)?.ProvinceName || '';
+    const d = this.districts.find(x => x.DistrictID == this.selectedDistrictId)?.DistrictName || '';
+    const w = this.wards.find(x => x.WardCode == this.selectedWardCode)?.WardName || '';
+    
+    const suffix = [w, d, p].filter(Boolean).join(', ');
+    if (!suffix) return;
+
+    if (this.orderData.address) {
+       // Giữ lại phần số nhà (trước dấu phẩy đầu tiên)
+       let street = this.orderData.address.split(',')[0].trim();
+       this.orderData.address = street + (street ? ', ' : '') + suffix;
+    } else {
+       this.orderData.address = suffix;
+    }
+  }
+
+  onProvinceChange() {
+    this.districts = [];
+    this.wards = [];
+    this.selectedDistrictId = null;
+    this.selectedWardCode = null;
+    this.autoAppendAddress();
+
+    if (this.selectedProvinceId) {
+      fetch('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district', {
+        method: 'POST',
+        headers: { Token: this.ghnToken, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ province_id: Number(this.selectedProvinceId) })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.data) this.districts = res.data;
+      });
+    }
+  }
+
+  onDistrictChange() {
+    this.wards = [];
+    this.selectedWardCode = null;
+    this.autoAppendAddress();
+
+    if (this.selectedDistrictId) {
+      fetch('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + this.selectedDistrictId, {
+        headers: { Token: this.ghnToken }
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.data) this.wards = res.data;
+      });
+    }
+  }
+
+  onWardChange() {
+    this.autoAppendAddress();
+  }
+
+  selectAddress(addr: any) {
+    this.orderData.customerName = addr.recipient_name || '';
+    this.orderData.phone = addr.phone || '';
+    this.orderData.address = this.formatAddress(addr);
+
+    // Xóa lựa chọn cũ ở dropdown vì đã chọn từ sổ
+    this.selectedProvinceId = null;
+    this.selectedDistrictId = null;
+    this.selectedWardCode = null;
+    
+    this.showAddressModal = false;
+  }
+
+  isSelectedAddress(addr: any): boolean {
+    return this.orderData.customerName === addr.recipient_name &&
+           this.orderData.phone === addr.phone &&
+           this.orderData.address === this.formatAddress(addr);
+  }
+
+  get showSaveAddressBtn(): boolean {
+    if (!this.user) return false;
+    if (!this.orderData.customerName || !this.orderData.phone || !this.orderData.address) return false;
+    
+    // Kiểm tra xem dữ liệu hiện tại có khớp với ĐÚNG địa chỉ nào trong sổ không
+    const exists = this.userAddresses.some(a => this.isSelectedAddress(a));
+    return !exists;
+  }
+
+  saveAddress() {
+    this.savingAddress = true;
+    const payload = {
+      recipient_name: this.orderData.customerName,
+      phone: this.orderData.phone,
+      street_address: this.orderData.address, // Lưu toàn bộ vào street_address vì dropdown chỉ đóng vai trò auto-fill
+      province: '',
+      district: '',
+      ward: '',
+      is_default: this.userAddresses.length === 0
+    };
+
+    this.http.post('/api/customers/me/addresses', payload, { withCredentials: true }).subscribe({
+      next: (res: any) => {
+        this.savingAddress = false;
+        this.userAddresses = Array.isArray(res) ? res : (res.data || res.addresses || []);
+        // Cập nhật lại list ở auth service
+        this.auth.checkAuth(true).subscribe();
+      },
+      error: () => {
+        this.savingAddress = false;
+        alert('Không thể lưu địa chỉ. Vui lòng thử lại sau.');
+      }
+    });
   }
 
   placeOrder() {

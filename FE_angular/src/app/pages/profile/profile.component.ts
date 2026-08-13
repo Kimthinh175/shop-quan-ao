@@ -99,7 +99,8 @@ export class ProfileComponent implements OnInit {
       this.user = u;
       this.loading = false;
       if (!this.loading && !this.user) {
-        this.router.navigate(['/login'], { queryParams: { returnUrl: '/profile' } });
+        localStorage.setItem('returnUrl', '/profile');
+        this.router.navigate(['/login']);
       }
     });
   }

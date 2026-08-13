@@ -267,7 +267,8 @@ export class AddressesComponent implements OnInit {
         this.loadProvinces();
       } else {
         this.loading = false;
-        this.router.navigate(['/login'], { queryParams: { returnUrl: '/profile/addresses' } });
+        localStorage.setItem('returnUrl', '/profile/addresses');
+        this.router.navigate(['/login']);
       }
     });
   }

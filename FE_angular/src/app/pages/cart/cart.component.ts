@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
 import { PromotionService } from '../../services/promotion.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -83,9 +84,9 @@ import { PromotionService } from '../../services/promotion.service';
             <span class="text-lg font-black text-gray-900">{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
           </div>
         </div>
-        <a routerLink="/checkout" class="w-full flex items-center justify-center h-14 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-colors shadow-lg shadow-black/20">
+        <button (click)="goToCheckout()" class="w-full flex items-center justify-center h-14 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-colors shadow-lg shadow-black/20">
           Tiến hành thanh toán
-        </a>
+        </button>
       </div>
     </div>
   `
@@ -93,6 +94,8 @@ import { PromotionService } from '../../services/promotion.service';
 export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   private promoService = inject(PromotionService);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   items: CartItem[] = [];
   totalPrice = 0;
@@ -138,5 +141,14 @@ export class CartComponent implements OnInit {
 
   goBack() {
     window.history.back();
+  }
+
+  goToCheckout() {
+    if (!this.auth.isLoggedIn()) {
+      localStorage.setItem('returnUrl', '/checkout');
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.router.navigate(['/checkout']);
   }
 }

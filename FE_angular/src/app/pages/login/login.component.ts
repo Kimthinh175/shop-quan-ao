@@ -57,7 +57,7 @@ declare var google: any;
         <!-- Register Link -->
         <div class="text-center">
           <span class="text-sm font-medium text-gray-500">Chưa có tài khoản? </span>
-          <a [routerLink]="['/register']" [queryParams]="{ returnUrl: route.snapshot.queryParams['returnUrl'] }" class="text-sm font-bold text-black hover:underline">Đăng ký ngay</a>
+          <a routerLink="/register" class="text-sm font-bold text-black hover:underline">Đăng ký ngay</a>
         </div>
       </div>
     </div>
@@ -71,7 +71,6 @@ export class LoginComponent implements AfterViewInit {
 
   private auth = inject(AuthService);
   private router = inject(Router);
-  route = inject(ActivatedRoute); // Public for template
 
   ngAfterViewInit() {
     this.initGoogleLogin();
@@ -108,7 +107,8 @@ export class LoginComponent implements AfterViewInit {
       this.auth.googleLogin(response.credential).subscribe({
         next: () => {
           this.loading = false;
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+          const returnUrl = localStorage.getItem('returnUrl') || '/profile';
+          localStorage.removeItem('returnUrl');
           this.router.navigateByUrl(returnUrl);
         },
         error: (err) => {
@@ -126,7 +126,8 @@ export class LoginComponent implements AfterViewInit {
     this.auth.login(this.phone, this.password).subscribe({
       next: () => {
         this.loading = false;
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+        const returnUrl = localStorage.getItem('returnUrl') || '/profile';
+        localStorage.removeItem('returnUrl');
         this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {
