@@ -246,6 +246,8 @@ export class CheckoutComponent implements OnInit {
     paymentMethod: 'COD'
   };
 
+  lastAppendedAddress: string = '';
+
   ngOnInit() {
     this.loadProvinces();
 
