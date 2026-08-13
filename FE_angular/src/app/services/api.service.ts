@@ -29,16 +29,16 @@ export class ApiService {
   }
 
   createOrder(payload: any): Observable<any> {
-    return this.http.post('/api/orders', payload);
+    return this.http.post('/api/orders', payload, { withCredentials: true });
   }
 
   getMyOrders(): Observable<any> {
-    return this.http.get('/api/orders/my-orders');
+    return this.http.get('/api/orders/my-orders', { withCredentials: true });
   }
 
   // --- Reviews ---
   createReview(payload: any): Observable<any> {
-    return this.http.post('/api/reviews', payload);
+    return this.http.post('/api/reviews', payload, { withCredentials: true });
   }
 
   getProductReviews(productId: string | number): Observable<any> {
@@ -46,7 +46,7 @@ export class ApiService {
   }
 
   getMyReviews(): Observable<any> {
-    return this.http.get('/api/reviews/me');
+    return this.http.get('/api/reviews/me', { withCredentials: true });
   }
 
   // --- Upload ---

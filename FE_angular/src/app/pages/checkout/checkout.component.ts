@@ -241,7 +241,7 @@ export class CheckoutComponent implements OnInit {
         this.orderData.phone = user.phone || '';
         
         // Lấy danh sách địa chỉ từ API
-        this.http.get<any>('/api/customers/me/addresses').subscribe({
+        this.http.get<any>('/api/customers/me/addresses', { withCredentials: true }).subscribe({
           next: (res) => {
             const addrs = res.data || res.addresses || (Array.isArray(res) ? res : []);
             if (addrs && addrs.length > 0) {
@@ -249,6 +249,9 @@ export class CheckoutComponent implements OnInit {
               const defaultAddress = addrs.find((a: any) => a.is_default) || addrs[0];
               this.selectAddress(defaultAddress);
             }
+          },
+          error: (err) => {
+            console.warn('Lỗi load địa chỉ (có thể chưa có địa chỉ hoặc lỗi CORS):', err);
           }
         });
       }
