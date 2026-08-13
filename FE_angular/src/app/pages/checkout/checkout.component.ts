@@ -394,19 +394,32 @@ export class CheckoutComponent implements OnInit {
 
   saveAddress() {
     this.savingAddress = true;
+
+    const provName = this.provinces.find(p => p.ProvinceID === Number(this.selectedProvinceId))?.ProvinceName || '';
+    const distName = this.districts.find(d => d.DistrictID === Number(this.selectedDistrictId))?.DistrictName || '';
+    const wardName = this.wards.find(w => w.WardCode === String(this.selectedWardCode))?.WardName || '';
+
+    // Lấy phần street bằng cách bỏ đi phần suffix nếu có (để lưu vào DB chuẩn form)
+    let street = this.orderData.address;
+    if (this.lastAppendedAddress && street.endsWith(this.lastAppendedAddress)) {
+        street = street.substring(0, street.length - this.lastAppendedAddress.length).trim();
+        if (street.endsWith(',')) street = street.substring(0, street.length - 1).trim();
+    }
+
     const payload = {
       recipient_name: this.orderData.customerName,
       phone: this.orderData.phone,
-      street_address: this.orderData.address, // Lưu toàn bộ vào street_address vì dropdown chỉ đóng vai trò auto-fill
-      province: '',
-      district: '',
-      ward: '',
+      street_address: street || this.orderData.address,
+      province: provName,
+      district: distName,
+      ward: wardName,
       is_default: this.userAddresses.length === 0
     };
 
     this.http.post('/api/customers/me/addresses', payload, { withCredentials: true }).subscribe({
       next: (res: any) => {
         this.savingAddress = false;
+        alert('Lưu địa chỉ thành công!');
         this.userAddresses = Array.isArray(res) ? res : (res.data || res.addresses || []);
         // Cập nhật lại list ở auth service
         this.auth.checkAuth(true).subscribe();
