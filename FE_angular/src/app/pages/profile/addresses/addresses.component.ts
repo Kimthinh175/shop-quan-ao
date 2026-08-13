@@ -155,7 +155,7 @@ interface GHNItem {
 
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Quận/Huyện/TP/TX *</label>
+                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Quận / Huyện *</label>
                   <select [(ngModel)]="selectedDistrictId" (change)="onDistrictChange()" [disabled]="!selectedProvinceId"
                           class="w-full border border-gray-200 bg-gray-50 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 outline-none focus:border-black focus:bg-white transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                     <option [value]="null">-- Chọn Quận / Huyện --</option>
@@ -164,7 +164,7 @@ interface GHNItem {
                 </div>
 
                 <div>
-                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Phường/Xã/TT *</label>
+                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Phường / Xã *</label>
                   <select [(ngModel)]="selectedWardCode" (change)="onWardChange()" [disabled]="!selectedDistrictId"
                           class="w-full border border-gray-200 bg-gray-50 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 outline-none focus:border-black focus:bg-white transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                     <option [value]="null">-- Chọn Phường / Xã --</option>
