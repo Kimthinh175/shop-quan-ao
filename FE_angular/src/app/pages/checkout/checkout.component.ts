@@ -66,7 +66,16 @@ import { PromotionService } from '../../services/promotion.service';
           
           <div class="space-y-4">
             <div>
-              <input type="text" [(ngModel)]="orderData.customerName" placeholder="Họ và tên" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
+              <input type="text" id="customerName" [(ngModel)]="orderData.customerName" placeholder="Họ và tên *" 
+                     [ngClass]="{'ring-2 ring-red-500 border-red-500': submitted && !orderData.customerName.trim()}"
+                     class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
+            </div>
+
+            <div>
+              <input type="text" id="phone" [(ngModel)]="orderData.phone" placeholder="Số điện thoại *" 
+                     [ngClass]="{'ring-2 ring-red-500 border-red-500': submitted && (!orderData.phone.trim() || !isValidPhone(orderData.phone))}"
+                     class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
+              <div *ngIf="submitted && orderData.phone.trim() && !isValidPhone(orderData.phone)" class="text-xs text-red-500 mt-1 ml-1 font-medium">Số điện thoại không hợp lệ (phải là 10 chữ số).</div>
             </div>
             
             <!-- Phân cấp hành chính mới -->
@@ -100,7 +109,9 @@ import { PromotionService } from '../../services/promotion.service';
             </div>
             
             <div>
-              <input type="text" [(ngModel)]="orderData.address" placeholder="Địa chỉ giao hàng (Số nhà, Đường, Phường, Quận, Tỉnh...)" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
+              <input type="text" id="address" [(ngModel)]="orderData.address" placeholder="Địa chỉ giao hàng (Số nhà, Đường, Phường, Quận, Tỉnh...) *" 
+                     [ngClass]="{'ring-2 ring-red-500 border-red-500': submitted && !orderData.address.trim()}"
+                     class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium">
             </div>
             <div>
               <textarea [(ngModel)]="orderData.note" rows="2" placeholder="Ghi chú (Tùy chọn)" class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-gray-400 font-medium resize-none"></textarea>
@@ -165,7 +176,7 @@ import { PromotionService } from '../../services/promotion.service';
           </div>
         </div>
         <div class="p-4 pb-safe">
-          <button (click)="placeOrder()" [disabled]="submitting || !isValid()" 
+          <button (click)="placeOrder()" [disabled]="submitting" 
                   class="w-full flex items-center justify-center h-14 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-colors shadow-lg shadow-black/20 disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed">
             <span *ngIf="!submitting">Hoàn tất đặt hàng</span>
             <i *ngIf="submitting" class="fa-solid fa-spinner fa-spin text-xl"></i>
@@ -223,6 +234,7 @@ export class CheckoutComponent implements OnInit {
   
   user: any = null;
   submitting = false;
+  submitted = false;
   isBuyNow = false;
   isSummaryOpen = false;
 
@@ -300,8 +312,13 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
+  isValidPhone(phone: string): boolean {
+    const p = phone.trim();
+    return /^[0-9]{10}$/.test(p);
+  }
+
   isValid(): boolean {
-    return !!(this.orderData.customerName.trim() && this.orderData.phone.trim() && this.orderData.address.trim());
+    return !!(this.orderData.customerName.trim() && this.isValidPhone(this.orderData.phone) && this.orderData.address.trim());
   }
 
   formatAddress(addr: any): string {
@@ -462,7 +479,23 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
-    if (!this.isValid()) return alert('Vui lòng điền đủ thông tin giao hàng!');
+    this.submitted = true;
+    
+    if (!this.orderData.customerName.trim()) {
+      document.getElementById('customerName')?.focus();
+      return;
+    }
+    if (!this.orderData.phone.trim() || !this.isValidPhone(this.orderData.phone)) {
+      document.getElementById('phone')?.focus();
+      return;
+    }
+    if (!this.orderData.address.trim()) {
+      document.getElementById('address')?.focus();
+      return;
+    }
+
+    if (!this.isValid()) return;
+
     if (!this.auth.isLoggedIn()) {
       alert('Vui lòng đăng nhập để thanh toán');
       this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
