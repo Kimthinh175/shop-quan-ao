@@ -155,7 +155,7 @@ interface GHNItem {
 
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Quận / Huyện *</label>
+                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Quận/Huyện/TP/TX *</label>
                   <select [(ngModel)]="selectedDistrictId" (change)="onDistrictChange()" [disabled]="!selectedProvinceId"
                           class="w-full border border-gray-200 bg-gray-50 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 outline-none focus:border-black focus:bg-white transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                     <option [value]="null">-- Chọn Quận / Huyện --</option>
@@ -164,7 +164,7 @@ interface GHNItem {
                 </div>
 
                 <div>
-                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Phường / Xã *</label>
+                  <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Phường/Xã/TT *</label>
                   <select [(ngModel)]="selectedWardCode" (change)="onWardChange()" [disabled]="!selectedDistrictId"
                           class="w-full border border-gray-200 bg-gray-50 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 outline-none focus:border-black focus:bg-white transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                     <option [value]="null">-- Chọn Phường / Xã --</option>
@@ -334,7 +334,20 @@ export class AddressesComponent implements OnInit {
     })
     .then(r => r.json())
     .then(res => {
-      if (res.data) this.provinces = res.data;
+      if (res.data) {
+        let list = res.data;
+        const getSortName = (name: string) => name.replace(/^(Tỉnh|Thành phố)\s+/i, '').trim();
+        list.sort((a: any, b: any) => getSortName(a.ProvinceName).localeCompare(getSortName(b.ProvinceName)));
+        
+        const hn = list.find((p: any) => p.ProvinceName.includes('Hà Nội'));
+        const hcm = list.find((p: any) => p.ProvinceName.includes('Hồ Chí Minh'));
+        
+        list = list.filter((p: any) => !p.ProvinceName.includes('Hà Nội') && !p.ProvinceName.includes('Hồ Chí Minh'));
+        if (hn) list.unshift(hn);
+        if (hcm) list.unshift(hcm);
+        
+        this.provinces = list;
+      }
     })
     .catch(err => console.error('GHN Province error:', err));
   }
